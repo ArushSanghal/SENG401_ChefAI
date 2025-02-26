@@ -1,0 +1,3 @@
+CREATE DATABASE chefai401;
+USE chefai401;
+
