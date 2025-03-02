@@ -47,7 +47,8 @@ class RegisteredUser(User):
         self.last_used_recipes.add(recipe)
 
         if self.last_used_recipes.count() > 5:
-            self.last_viewed_recipes.remove(self.last_viewed_recipes.all().order_by("id").first())
+            first_viewed = self.last_viewed_recipes.all().order_by("id").first()
+            self.last_viewed_recipes.remove(first_viewed)
 
 class Recipe(models.Model):
     title = models.CharField(max_length=100, blank=False, null=False)
