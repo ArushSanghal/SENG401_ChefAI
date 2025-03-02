@@ -1,9 +1,30 @@
 from django.db import models
 
+class TimeChoices(models.TextChoices):
+    MIN_15 = "15", "15 minutes"
+    MIN_30 = "30", "30 minutes"
+    MIN_45 = "45", "45 minutes"
+    MIN_60 = "60", "1 hour"
+    MIN_90 = "90", "1.5 hours"
+    MIN_120 = "120", "2 hours"
+
+class SkillLevelChoices(models.TextChoices):
+    BEGINNER = "Beginner", "Beginner"
+    INTERMEDIATE = "Intermediate", "Intermediate"
+    ADVANCED = "Advanced", "Advanced"
+
 class User(models.Model):
     """Stores general information about the user, dropped after use if they are not necessary"""
-    available_time = models.TextChoices("Avaiable_Time_Minutes", "15 30 45 60 90 120")
-    skill_level = models.TextChoices("Skill_Level", "Beginner Intermediate Advanced")
+    available_time = models.CharField(
+        max_length=3,
+        choices=TimeChoices.choices,
+        default=TimeChoices.MIN_30
+    )
+    skill_level = models.CharField(
+        max_length=12,
+        choices=SkillLevelChoices.choices,
+        default=SkillLevelChoices.BEGINNER
+    )
 
 class DietaryRestriction(models.Model):
     user = models.ForeignKey(User, related_name="dietary_restrictions", on_delete=models.CASCADE)
@@ -30,8 +51,16 @@ class RegisteredUser(User):
 
 class Recipe(models.Model):
     title = models.CharField(max_length=100, blank=False, null=False)
-    estimated_time = models.TextChoices("estimated_time", "15 30 45 60 90 120")
-    skill_level = models.TextChoices("Skill_Level", "Beginner Intermediate Advanced")
+    estimated_time = models.models.CharField(
+        max_length=3,
+        choices=TimeChoices.choices,
+        default=TimeChoices.MIN_30
+    )
+    skill_level = models.CharField(
+        max_length=12,
+        choices=SkillLevelChoices.choices,
+        default=SkillLevelChoices.BEGINNER
+    )
     instructions = models.CharField(max_length=250, blank=False, null=False)
 
 class Ingredients(models.Model):
