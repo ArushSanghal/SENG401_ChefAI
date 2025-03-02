@@ -43,7 +43,6 @@ class RegisteredUser(User):
 
     def add_viewed_recipe(self, recipe):
         """Adds new recipes up to 5, uses FIFO to drop the oldest viewed recipe"""
-        from django.db.models. import Count
         self.last_used_recipes.add(recipe)
 
         if self.last_used_recipes.count() > 5:
