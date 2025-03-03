@@ -14,7 +14,7 @@ class SkillLevelChoices(models.TextChoices):
     ADVANCED = "Advanced", "Advanced"
 
 class User(models.Model):
-    """Stores general information about the user, dropped after use if they are not necessary"""
+    """Stores general information about the user, dropped after use if they are not needed"""
     available_time = models.CharField(
         max_length=3,
         choices=TimeChoices.choices,
@@ -51,7 +51,7 @@ class RegisteredUser(User):
 
 class Recipe(models.Model):
     title = models.CharField(max_length=100, blank=False, null=False)
-    estimated_time = models.models.CharField(
+    estimated_time = models.CharField(
         max_length=3,
         choices=TimeChoices.choices,
         default=TimeChoices.MIN_30
