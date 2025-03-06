@@ -82,12 +82,12 @@ const SignIn1 = (props) => {
             }}>
               <div className="sign-in1-email">
                 <label htmlFor="thq-sign-in-1-email" className="thq-body-large">
-                  Username
+                  Email
                 </label>
                 <input
                   id="thq-sign-in-1-email"
                   required="true"
-                  placeholder="Username"
+                  placeholder="example@email.com"
                   className="sign-in1-textinput1 thq-input thq-body-large"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
