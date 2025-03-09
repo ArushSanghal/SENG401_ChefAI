@@ -17,24 +17,31 @@ const SignIn1 = (props) => {
     const [members, setMembers] = useState(null);
     const [admins, setAdmins] = useState(null);
 
-    function checkCredentials (){
-        members?.map((members) => {
-            if ((members.MUsername == username)&&
-                (members.MPassword == password)){
-                    setCurrentUser({ currentUser: username })
-                }
-
-    })
-        admins?.map((admins) => {
-            if ((admins.AUsername == username)&&
-            (admins.APassword == password)){
-                setCurrentUser({ currentUser: username })
-            }
-
-    })
-
-
+    function checkCredentials() {
+      fetch("http://127.0.0.1:8000/login/", {
+        method: "POST",
+        body: JSON.stringify({
+          username: username,
+          password: password
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.token) {
+            localStorage.setItem("token", data.token.access);  // Store JWT token
+            setCurrentUser({ username: data.username, isAdmin: data.is_admin });
+            alert("Login successful!");
+          } else {
+            alert("Invalid credentials.");
+          }
+        })
+        .catch((error) => console.log(error));
     }
+    
 
     useEffect(() => {
         fetch("http://localhost:3000/members/members", {

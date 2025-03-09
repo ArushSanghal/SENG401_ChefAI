@@ -11,25 +11,31 @@ const SignUp2 = (props) => {
     const [email, setEmail] = useState("");
   
     function addNewUser() {
-      fetch(("http://localhost:3000/members/members"), {
+      fetch("http://127.0.0.1:8000/register/", {  // Adjust to your Django server URL
         method: "POST",
         body: JSON.stringify({
-            username: username,
-            email: email,
-            password: password,
-            description: 'New User Added From Website'
+          first_name: "John",
+          last_name: "Doe",
+          username: username,
+          email: email,
+          password: password
         }),
         headers: {
-            "Content-Type": "application/json"
+          "Content-Type": "application/json"
         }
       })
-        /*.then((response) => response.json())
+        .then((response) => response.json())
         .then((data) => {
-          setContent(data);
           console.log(data);
+          if (data.detail === "User registered successfully") {
+            alert("Registration successful! Please log in.");
+          } else {
+            alert("Error: " + data.detail);
+          }
         })
-        .catch((error) => console.log(error));*/
-    }    
+        .catch((error) => console.log(error));
+    }
+    
 
 
   return (
