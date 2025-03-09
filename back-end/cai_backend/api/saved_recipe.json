@@ -1,0 +1,87 @@
+{
+  "recipe": {
+    "recipe": {
+      "recipe_name": "Tomato Basil Tofu with Rice",
+      "skill_level": "Beginner",
+      "time": "30 minutes",
+      "dietary_restrictions": "None",
+      "ingredients": [
+        {
+          "name": "Tofu",
+          "amount": "1",
+          "unit": "block"
+        },
+        {
+          "name": "Rice",
+          "amount": "1",
+          "unit": "cup"
+        },
+        {
+          "name": "Tomato",
+          "amount": "2",
+          "unit": "medium"
+        },
+        {
+          "name": "Basil",
+          "amount": "1/4",
+          "unit": "cup"
+        },
+        {
+          "name": "Cheese",
+          "amount": "1/2",
+          "unit": "cup"
+        }
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "instruction": "Cook rice according to package directions."
+        },
+        {
+          "step": 2,
+          "instruction": "Press tofu to remove excess water and cut into cubes."
+        },
+        {
+          "step": 3,
+          "instruction": "Dice tomatoes."
+        },
+        {
+          "step": 4,
+          "instruction": "Sauté tofu in a pan until golden brown."
+        },
+        {
+          "step": 5,
+          "instruction": "Add diced tomatoes and basil to the pan with the tofu."
+        },
+        {
+          "step": 6,
+          "instruction": "Cook for 5-7 minutes, or until tomatoes are softened."
+        },
+        {
+          "step": 7,
+          "instruction": "Stir in cheese until melted."
+        },
+        {
+          "step": 8,
+          "instruction": "Serve tofu mixture over rice."
+        }
+      ],
+      "prep_time": "10 minutes",
+      "cook_time": "20 minutes",
+      "servings": "2",
+      "tips": [
+        "For extra flavor, add a pinch of garlic powder or red pepper flakes."
+      ],
+      "substitutions": [
+        {
+          "ingredient": "Tofu",
+          "substitute": "Chicken or chickpeas"
+        },
+        {
+          "ingredient": "Rice",
+          "substitute": "Quinoa or pasta"
+        }
+      ]
+    }
+  }
+}
