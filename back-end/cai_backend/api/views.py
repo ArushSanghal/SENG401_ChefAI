@@ -6,7 +6,7 @@ import json
 import os
 import google.generativeai as genai
 
-genai.configure(api_key="AIzaSyAnDxD9kAbcngSDw61KjeJzqiqfdCo_sSI")
+genai.configure(api_key="GEMINI_API_KEY")
 
 # Create the model
 generation_config = {
@@ -84,4 +84,4 @@ with open(json_filename, "w", encoding="utf-8") as file:
 
 # Print the new recipe
 print("\nGenerated Recipe:\n")
-print(recipe_json)
+# print(recipe_json)
