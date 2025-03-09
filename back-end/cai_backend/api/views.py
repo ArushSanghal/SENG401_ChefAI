@@ -73,7 +73,7 @@ def login_user(request):
         data = json.loads(body_unicode)
         print("Parsed JSON data:", data)
 
-        email = data.get("email")  # Make sure React sends "email", not "username"
+        email = data.get("email")
         password = data.get("password")
 
         if not email or not password:
