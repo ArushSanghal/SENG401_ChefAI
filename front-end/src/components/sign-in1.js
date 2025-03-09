@@ -20,27 +20,26 @@ const SignIn1 = (props) => {
     function checkCredentials() {
       fetch("http://127.0.0.1:8000/login/", {
         method: "POST",
-        body: JSON.stringify({
-          username: username,
-          password: password
-        }),
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: username, // Django expects "email"
+          password: password,
+        }),
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
-          if (data.token) {
-            localStorage.setItem("token", data.token.access);  // Store JWT token
-            setCurrentUser({ username: data.username, isAdmin: data.is_admin });
+          console.log("Login Response:", data);
+          if (data.message && data.message.includes("Welcome")) {
             alert("Login successful!");
           } else {
             alert("Invalid credentials.");
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.log("Fetch error:", error));
     }
+    
     
 
     useEffect(() => {
