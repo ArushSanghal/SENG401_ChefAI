@@ -6,7 +6,7 @@ import json
 import os
 import google.generativeai as genai
 
-genai.configure(api_key="GEMINI_API_KEY")
+genai.configure(api_key="AIzaSyAnDxD9kAbcngSDw61KjeJzqiqfdCo_sSI")
 
 # Create the model
 generation_config = {
@@ -51,16 +51,19 @@ model = genai.GenerativeModel(
 test_input = {
     "skill_level": "Beginner",
     "time": "30",
-    "dietary_restrictions": "Vegetarian",
-    "ingredients": ["tomato", "cheese", "basil", "pasta"],
+    "dietary_restrictions": [],
+    "ingredients": ["tomato", "cheese", "basil", "rice", "tofu"],
 }
+
+# Format dietary restrictions as a comma-separated string, or "None" if empty
+dietary_str = ", ".join(test_input["dietary_restrictions"]) if test_input["dietary_restrictions"] else "None"
 
 # Construct prompt
 prompt = (
     f"Create a recipe using the following details:\n"
     f"- Skill Level: {test_input['skill_level']}\n"
     f"- Time: {test_input['time']} minutes\n"
-    f"- Dietary Restrictions: {test_input['dietary_restrictions']}\n"
+    f"- Dietary Restrictions: {dietary_str}\n"
     f"- Ingredients: {', '.join(test_input['ingredients'])}\n"
     f"Provide a JSON output following the exact format given in the system instruction."
 )
