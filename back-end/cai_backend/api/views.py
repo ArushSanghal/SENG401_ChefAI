@@ -8,13 +8,7 @@ import google.generativeai as genai
 genai.configure(api_key="GEMINI_API_KEY")
 
 class LLM:
-    def __init__(self, skill_level, available_time, ingredients, dietary_restrictions, title):
-        self.skill_level = skill_level
-        self.available_time = available_time
-        self.ingredients = ingredients
-        self.dietary_restrictions = dietary_restrictions if isinstance(dietary_restrictions, list) else [dietary_restrictions]
-        self.title = title
-
+    def __init__(self):
         self.generation_config = {
             "temperature": 0,
             "top_p": 1,
@@ -53,15 +47,15 @@ class LLM:
             ),
         )
 
-    def generate_recipe(self):
-        dietary_str = ", ".join(self.dietary_restrictions) if self.dietary_restrictions else "None"
+    def generate_recipe(self, skill_level, available_time, dietary_restrictions, ingredients):
+        dietary_restrictions = ", ".join(self.dietary_restrictions) if self.dietary_restrictions else "None"
 
         prompt = (
             f"Create a recipe using the following details:\n"
-            f"- Skill Level: {self.skill_level}\n"
-            f"- Time: {self.available_time} minutes\n"
-            f"- Dietary Restrictions: {dietary_str}\n"
-            f"- Ingredients: {', '.join(self.ingredients)}\n"
+            f"- Skill Level: {skill_level}\n"
+            f"- Time: {available_time} minutes\n"
+            f"- Dietary Restrictions: {dietary_restrictions}\n"
+            f"- Ingredients: {', '.join(ingredients)}\n"
             f"Provide a JSON output following the exact format given in the system instruction."
         )
 
@@ -69,13 +63,14 @@ class LLM:
 
         if response.text:
             try:
-                return json.loads(response.text)  # Ensure valid JSON output
+                recipe_json = json.loads(response.text)
+                return recipe_json
             except json.JSONDecodeError:
                 return {"error": "Invalid JSON format received from API"}
         return {"error": "No recipe generated"}
 
-    def save_recipe(self, filename="saved_recipe.json"):
-        recipe_data = self.generate_recipe()
+    def save_recipe(self, recipe_data):
+        filename = "saved_recipe.json"
         with open(filename, "w", encoding="utf-8") as file:
             json.dump(recipe_data, file, indent=4)
         return filename
