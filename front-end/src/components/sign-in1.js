@@ -195,6 +195,18 @@ const SignIn1 = (props) => {
             </span>
           </button>
           </Link>
+
+          <Link to={props.guestAccount}>
+          <button type="button" className="sign-in1-button2 thq-button-outline">
+            <span className="sign-in1-text19 thq-body-small">
+              {props.action3 ?? (
+                <Fragment>
+                  <span className="sign-in1-text21">Continue as Guest</span>
+                </Fragment>
+              )}
+            </span>
+          </button>
+          </Link>
         </div>
       </div>
     </div>
@@ -203,18 +215,22 @@ const SignIn1 = (props) => {
 
 SignIn1.defaultProps = {
   heading1: undefined,
+  action3: undefined,
   action2: undefined,
   action1: undefined,
   content1: undefined,
-  newAccount: '/signup'
+  newAccount: '/signup',
+  guestAccount: '/guest'
 }
 
 SignIn1.propTypes = {
   heading1: PropTypes.element,
+  action3: PropTypes.element,
   action2: PropTypes.element,
   action1: PropTypes.element,
   content1: PropTypes.element,
-  newAccount: PropTypes.string
+  newAccount: PropTypes.string,
+  guestAccount: PropTypes.string
 }
 
 

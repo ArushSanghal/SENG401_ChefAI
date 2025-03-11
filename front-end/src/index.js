@@ -10,6 +10,7 @@ import {
 import './style.css'
 import Login from './views/login'
 import SignUp from './views/signup'
+import GuestHome from './views/guest-home'
 
 import NotFound from './views/not-found'
 
@@ -32,6 +33,7 @@ const App = () => {
       <Switch>
           <Route component={Login} exact path="/" />
           <Route component={SignUp} exact path="/signup" />
+          <Route component={GuestHome} exact path="/guest"/>
           
           <Route component={NotFound} path="**" />
           <Redirect to="**" />
@@ -39,7 +41,7 @@ const App = () => {
     </Router>
 </CurrentUserContext.Provider>
   )
-  
+
 }
 
 
