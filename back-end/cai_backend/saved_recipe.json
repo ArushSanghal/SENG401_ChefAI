@@ -1,0 +1,55 @@
+{
+    "recipe": {
+        "recipe_name": "Quick Tomato Onion Sauce",
+        "skill_level": "Advanced",
+        "time": "30 minutes",
+        "dietary_restrictions": null,
+        "ingredients": [
+            {
+                "name": "tomato",
+                "amount": "2",
+                "unit": "large"
+            },
+            {
+                "name": "onion",
+                "amount": "1",
+                "unit": "medium"
+            }
+        ],
+        "steps": [
+            {
+                "step": 1,
+                "instruction": "Dice the onion finely."
+            },
+            {
+                "step": 2,
+                "instruction": "Blanch and peel the tomatoes, then chop roughly."
+            },
+            {
+                "step": 3,
+                "instruction": "Saut\u00e9 the diced onion in olive oil until translucent."
+            },
+            {
+                "step": 4,
+                "instruction": "Add the chopped tomatoes to the pan and cook until softened."
+            },
+            {
+                "step": 5,
+                "instruction": "Season with salt, pepper, and any desired herbs."
+            }
+        ],
+        "prep_time": "10 minutes",
+        "cook_time": "20 minutes",
+        "servings": "2-4",
+        "tips": [
+            "Use fresh, ripe tomatoes for the best flavor.",
+            "Adjust the seasoning to your preference."
+        ],
+        "substitutions": [
+            {
+                "ingredient": "tomato",
+                "substitute": "canned diced tomatoes"
+            }
+        ]
+    }
+}

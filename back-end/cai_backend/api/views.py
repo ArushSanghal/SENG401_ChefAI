@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from .models import RegisteredUser, Recipe
+from .models import RegisteredUser, Recipe, Ingredients
 from django.contrib.auth.hashers import make_password, check_password
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -89,26 +89,6 @@ class LLM:
 
 
 
-# Create your views here.
-@csrf_exempt
-@require_http_methods(["GET","POST"])
-def generate_recipe(request):
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            required_fields = ["ingredients", "skill_level", "time"]
-            if not all(key in data for key in required_fields):
-                return JsonResponse({"error": "Missing required fields"}, status=400)
-            
-            llm = LLM()
-            response = llm.generate_recipe(data["skill_level"], data["time"], data["dietary_restrictions"], data["ingredients"])
-
-            llm.save_recipe(response)
-
-            return JsonResponse(response)
-        except Exception as e:
-            print(f"Unexpected Error: {str(e)}")
-            return JsonResponse({"error": str(e)}, status=500)
         
 
 # Create your views here.
@@ -118,9 +98,26 @@ class User:
         self.skill_level = skill_level
         self.available_time = available_time
 
-    def create_recipe(self):
-        pass
+    @csrf_exempt
+    @require_http_methods(["GET","POST"])
+    def generate_recipe(request):
+        if request.method == "POST":
+            try:
+                data = json.loads(request.body)
+                required_fields = ["ingredients", "skill_level", "time"]
+                if not all(key in data for key in required_fields):
+                    return JsonResponse({"error": "Missing required fields"}, status=400)
+                
+                llm = LLM()
+                response = llm.generate_recipe(data["skill_level"], data["time"], data["dietary_restrictions"], data["ingredients"])
 
+                llm.save_recipe(response)
+
+                return JsonResponse(response)
+            except Exception as e:
+                print(f"Unexpected Error: {str(e)}")
+                return JsonResponse({"error": str(e)}, status=500)
+            
     def restrictions(self):
         pass
 
@@ -161,9 +158,10 @@ class Admin(User):
 
 
 class Registered(User):
-    def __init__(self, name, phone_number, email_address, password, available_time):
+    def __init__(self, name, username, phone_number, email_address, password, available_time):
         super().__init__(None, available_time)
         self.name = name
+        self.username = username
         self.phone_number = phone_number
         self.email_address = email_address
         self.password = password
@@ -176,11 +174,37 @@ class Registered(User):
             return f"Welcome back, {user.first_name}!"
         return "Invalid credentials"
 
-    def save_recipe(self, recipe_id):
-        recipe = get_object_or_404(Recipe, id=recipe_id)
-        user = RegisteredUser.objects.get(email=self.email_address)
-        user.saved_recipes.add(recipe)
-        return f"Recipe '{recipe.title}' saved successfully"
+    def save_recipe(self):
+        #open save_recipe.json file
+        f = open('saved_recipe.json')
+
+        data = json.load(f)
+
+        required_fields = ["recipe_name", "time", "skill_level", "ingredients","steps"]
+
+        if not all(key in data for key in required_fields):
+            return JsonResponse({"error": "Missing required fields"}, status=400)
+        
+        new_recipe = Recipe.objects.create(
+            recipe_name= data["recipe_name"],
+            estimated_time = data["time"],
+            skill_level = data["skill_level"],
+            instructions = data["steps"] #saves as a json object
+        )
+
+        for ingredient in data["ingredients"]:
+            Ingredients.objects.create(
+                ingredient_name = ingredient["name"],
+                recipe = new_recipe
+        )
+
+        reg_user = RegisteredUser.objects.get( username = self.username)
+        reg_user.add_favourite_recipe(new_recipe)
+
+        # recipe = get_object_or_404(Recipe, id=recipe_id)
+        # user = RegisteredUser.objects.get(email=self.email_address)
+        # user.saved_recipes.add(recipe)
+        # return f"Recipe '{recipe.title}' saved successfully"
 
     def view_recipes(self):
         user = RegisteredUser.objects.get(email=self.email_address)
@@ -199,6 +223,7 @@ class Recipe:
 
     def generate_recipe(self):
         pass
+
 
 
 # class LLM:

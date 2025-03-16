@@ -59,10 +59,10 @@ class RegisteredUser(User):
     saved_recipes = models.ManyToManyField(Recipe, related_name="saved_recipes", blank=True)
     last_used_recipes = models.ManyToManyField(Recipe, related_name="last_used_recipes", blank=True)
 
-    def add_viewed_recipe(self, recipe):
+    def add_favourite_recipe(self, recipe):
         """Adds new recipes up to 5, uses FIFO to drop the oldest viewed recipe"""
         self.last_used_recipes.add(recipe)
 
-        if self.last_used_recipes.count() > 5:
-            first_viewed = self.last_used_recipes.all().order_by("id").first()
-            self.last_used_recipes.remove(first_viewed)
+        # if self.last_used_recipes.count() > 5:
+        #     first_viewed = self.last_used_recipes.all().order_by("id").first()
+        #     self.last_used_recipes.remove(first_viewed)
