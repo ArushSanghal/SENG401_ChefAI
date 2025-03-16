@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import PropTypes from 'prop-types';
-
 import './sign-up2.css';
 
 const SignUp2 = (props) => {
@@ -12,32 +11,39 @@ const SignUp2 = (props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     function addNewUser() {
-        fetch("http://127.0.0.1:8000/register/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                first_name: firstName,
-                last_name: lastName,
-                username: username,
-                email: email,
-                password: password,
-            }),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log("Response Data:", data);
-            if (data.message && data.message.includes("successfully")) {
-                alert("Registration successful! Please log in.");
-            } else {
-                alert("Error: " + (data.error || data.message));
-            }
-        })
-        .catch((error) => console.log("Fetch error:", error));
-    }
+      fetch("http://127.0.0.1:8000/register/", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+              first_name: firstName,
+              last_name: lastName,
+              username: username,
+              email: email,
+              password: password,
+          }),
+      })
+      .then(async (response) => {
+          const data = await response.json();
+          console.log("Response Data:", data);
+  
+          if (!response.ok) {
+              throw new Error(data.error || "An unknown error occurred");
+          }
+  
+          
+          history.push("/?success=true");
+      })
+      .catch((error) => {
+          console.error("Fetch error:", error);
+          setErrorMessage(error.message);
+      });
+  }
+  
 
     return (
         <div className="sign-up2-container1">
@@ -59,6 +65,11 @@ const SignUp2 = (props) => {
                                     </Fragment>
                                 )}
                             </h2>
+
+                            {errorMessage && (
+                                <p style={{ color: "red", fontWeight: "bold" }}>{errorMessage}</p>
+                            )}
+
                             <div className="sign-up2-have-an-account-login1">
                                 <p className="thq-body-large">
                                     Already have an account? 

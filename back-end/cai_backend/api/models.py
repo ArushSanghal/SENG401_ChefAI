@@ -52,7 +52,7 @@ class RegisteredUser(User):
     """Information about logged in user, boolean provides admin privelages"""
     first_name = models.CharField(max_length=50, blank=False, null=False)
     last_name = models.CharField(max_length=50, blank=False, null=False)
-    username = models.CharField(max_length=50, blank=False, null=False)
+    username = models.CharField(max_length=50, blank=False, null=False, unique=True)
     email = models.EmailField(max_length=254, blank=False, null=False)
     hashed_password = models.CharField(max_length=254, blank=False, null=False)
     is_admin = models.BooleanField(default=False)

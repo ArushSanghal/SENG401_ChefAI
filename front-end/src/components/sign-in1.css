@@ -198,6 +198,18 @@
   .sign-in1-text23 {
     display: inline-block;
   }
+  .sign-in1-success-message-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px; /* Adjust the space between success message and form */
+  }
+
+  .sign-in1-success-message {
+      color: green;
+      font-weight: bold;
+      text-align: center;
+  }
   @media(max-width: 991px) {
     .sign-in1-form-root {
       width: 100%;
