@@ -18,21 +18,21 @@ class SaveRecipeTestCase(TestCase):
         )
 
         # Instantiate the Registered user class from your code
-        self.registered = Registered(self.user)
+        self.registered = Registered(name="John Doe",username="jd",phone_number="1234567890", email_address="jd@gmail.com", password="test",available_time="Anytime")
 
     def test_save_recipe(self):
-        # Call the save_recipe method
+
         self.registered.save_recipe()
 
         # Assert the recipe was saved
-        recipe = Recipe.objects.get(recipe_name="Quick Tomato Onion Sauce")
+        recipe = Recipe.objects.get(title ="Quick Tomato Onion Sauce")
         self.assertIsNotNone(recipe)
         self.assertEqual(recipe.skill_level, "Advanced")
 
         # Assert ingredients were saved
         ingredients = Ingredients.objects.filter(recipe=recipe)
         self.assertEqual(len(ingredients), 2)
-        self.assertEqual(ingredients[0].ingredient_name, "tomato")
-        self.assertEqual(ingredients[1].ingredient_name, "onion")
+        self.assertEqual(ingredients[0].ingredient, "tomato")
+        self.assertEqual(ingredients[1].ingredient, "onion")
 
 

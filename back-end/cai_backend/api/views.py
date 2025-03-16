@@ -179,32 +179,34 @@ class Registered(User):
         f = open('saved_recipe.json')
 
         data = json.load(f)
+        recipe_data = data.get("recipe", {})
 
         required_fields = ["recipe_name", "time", "skill_level", "ingredients","steps"]
 
-        if not all(key in data for key in required_fields):
+        if not all(key in recipe_data for key in required_fields):
             return JsonResponse({"error": "Missing required fields"}, status=400)
         
         new_recipe = Recipe.objects.create(
-            recipe_name= data["recipe_name"],
-            estimated_time = data["time"],
-            skill_level = data["skill_level"],
-            instructions = data["steps"] #saves as a json object
+            title= recipe_data["recipe_name"],
+            estimated_time = recipe_data["time"],
+            skill_level = recipe_data["skill_level"],
+            instructions=json.dumps(recipe_data["steps"]) #saves as a json string
         )
 
-        for ingredient in data["ingredients"]:
+        for ingredient in recipe_data["ingredients"]:
             Ingredients.objects.create(
-                ingredient_name = ingredient["name"],
+                ingredient = ingredient["name"],
                 recipe = new_recipe
-        )
+                )
 
-        reg_user = RegisteredUser.objects.get( username = self.username)
-        reg_user.add_favourite_recipe(new_recipe)
+        try:
+            reg_user = RegisteredUser.objects.get(username=self.username)
+            reg_user.add_favourite_recipe(new_recipe)
+        except RegisteredUser.DoesNotExist:
+            return JsonResponse({"error": "User not found"}, status=404)
 
-        # recipe = get_object_or_404(Recipe, id=recipe_id)
-        # user = RegisteredUser.objects.get(email=self.email_address)
-        # user.saved_recipes.add(recipe)
-        # return f"Recipe '{recipe.title}' saved successfully"
+        return JsonResponse({"message": "Recipe saved successfully"}, status=201)
+
 
     def view_recipes(self):
         user = RegisteredUser.objects.get(email=self.email_address)
@@ -215,14 +217,14 @@ class Registered(User):
             "saved_recipes": [recipe.title for recipe in saved_recipes]
         }
     
-class Recipe:
-    def __init__(self, ingredient_list, recipe_id, title):
-        self.ingredient_list = ingredient_list
-        self.recipe_id = recipe_id
-        self.title = title
+# class Recipe:
+#     def __init__(self, ingredient_list, recipe_id, title):
+#         self.ingredient_list = ingredient_list
+#         self.recipe_id = recipe_id
+#         self.title = title
 
-    def generate_recipe(self):
-        pass
+#     def generate_recipe(self):
+#         pass
 
 
 
