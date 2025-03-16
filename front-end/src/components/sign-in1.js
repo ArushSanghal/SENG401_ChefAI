@@ -32,6 +32,7 @@ const SignIn1 = (props) => {
         .then((data) => {
           console.log("Login Response:", data);
           if (data.message && data.message.includes("Welcome")) {
+            setCurrentUser({ email: username, is_admin: data.is_admin }); // Store admin status
             alert("Login successful!");
           } else {
             alert("Invalid credentials.");

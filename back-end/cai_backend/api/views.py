@@ -84,7 +84,7 @@ def login_user(request):
 
         if user and check_password(password, user.hashed_password):
             print(f"Login successful for: {user.first_name}")  
-            return JsonResponse({"message": f"Welcome back, {user.first_name}!"}, status=200)
+            return JsonResponse({"message": f"Welcome back, {user.first_name}!", "is_admin": user.is_admin }, status=200)
 
         print("Invalid credentials")
         return JsonResponse({"error": "Invalid credentials"}, status=401)
