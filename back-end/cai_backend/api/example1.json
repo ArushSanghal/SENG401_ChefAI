@@ -1,0 +1,80 @@
+{
+  "recipe": {
+    "recipe": {
+      "recipe_name": "Tomato Basil Tofu with Rice",
+      "skill_level": "Beginner",
+      "time": "30 minutes",
+      "dietary_restrictions": "Vegetarian, Gluten-Free",
+      "ingredients": [
+        {
+          "name": "Tofu",
+          "amount": "14",
+          "unit": "oz"
+        },
+        {
+          "name": "Rice",
+          "amount": "1",
+          "unit": "cup"
+        },
+        {
+          "name": "Tomato",
+          "amount": "1",
+          "unit": "can (diced)"
+        },
+        {
+          "name": "Basil",
+          "amount": "1/4",
+          "unit": "cup"
+        },
+        {
+          "name": "Cheese (optional)",
+          "amount": "1/2",
+          "unit": "cup (shredded)"
+        }
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "instruction": "Cook rice according to package directions."
+        },
+        {
+          "step": 2,
+          "instruction": "Press tofu to remove excess water and cut into cubes."
+        },
+        {
+          "step": 3,
+          "instruction": "Heat a pan with oil and sauté tofu until golden brown."
+        },
+        {
+          "step": 4,
+          "instruction": "Add diced tomatoes and basil to the pan. Simmer for 10 minutes."
+        },
+        {
+          "step": 5,
+          "instruction": "If using, sprinkle cheese on top and cover until melted."
+        },
+        {
+          "step": 6,
+          "instruction": "Serve tofu mixture over rice."
+        }
+      ],
+      "prep_time": "10 minutes",
+      "cook_time": "20 minutes",
+      "servings": "2",
+      "tips": [
+        "For extra flavor, add a pinch of garlic powder or red pepper flakes.",
+        "Use fresh basil for a more vibrant flavor."
+      ],
+      "substitutions": [
+        {
+          "ingredient": "Tofu",
+          "substitute": "Tempeh"
+        },
+        {
+          "ingredient": "Rice",
+          "substitute": "Quinoa"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+    "recipe": {
+      "recipe": {
+        "recipe_name": "One-Pan Chicken and Rice with Tomato and Broccoli",
+        "skill_level": "Beginner",
+        "time": "30 minutes",
+        "dietary_restrictions": "Gluten-Free",
+        "ingredients": [
+          {
+            "name": "Chicken breast",
+            "amount": "1 lb",
+            "unit": null
+          },
+          {
+            "name": "Broccoli florets",
+            "amount": "1",
+            "unit": "head"
+          },
+          {
+            "name": "Tomatoes",
+            "amount": "2",
+            "unit": "medium"
+          },
+          {
+            "name": "Rice",
+            "amount": "1",
+            "unit": "cup"
+          },
+          {
+            "name": "Basil",
+            "amount": "1/4",
+            "unit": "cup"
+          },
+          {
+            "name": "Olive oil",
+            "amount": "2",
+            "unit": "tbsp"
+          },
+          {
+            "name": "Salt",
+            "amount": "1",
+            "unit": "tsp"
+          },
+          {
+            "name": "Pepper",
+            "amount": "1/2",
+            "unit": "tsp"
+          }
+        ],
+        "steps": [
+          {
+            "step": 1,
+            "instruction": "Preheat oven to 400°F (200°C)."
+          },
+          {
+            "step": 2,
+            "instruction": "Dice the chicken and tomatoes. Chop the broccoli into bite-sized pieces."
+          },
+          {
+            "step": 3,
+            "instruction": "In a large oven-safe skillet or baking dish, combine the chicken, broccoli, tomatoes, rice, basil, olive oil, salt, and pepper."
+          },
+          {
+            "step": 4,
+            "instruction": "Add 2 cups of water to the skillet. Stir to combine."
+          },
+          {
+            "step": 5,
+            "instruction": "Bake for 25-30 minutes, or until the chicken is cooked through and the rice is tender."
+          },
+          {
+            "step": 6,
+            "instruction": "Remove from oven and let rest for 5 minutes before serving."
+          }
+        ],
+        "prep_time": "10 minutes",
+        "cook_time": "20-25 minutes",
+        "servings": "4",
+        "tips": [
+          "For extra flavor, add a squeeze of lemon juice before serving.",
+          "You can substitute the chicken with shrimp or tofu for a vegetarian option."
+        ],
+        "substitutions": [
+          {
+            "ingredient": "Chicken",
+            "substitute": "Shrimp or Tofu"
+          },
+          {
+            "ingredient": "Rice",
+            "substitute": "Quinoa"
+          }
+        ]
+      }
+    }
+  }

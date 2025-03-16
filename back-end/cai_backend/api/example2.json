@@ -1,0 +1,71 @@
+{
+  "recipe": {
+    "recipe": {
+      "recipe_name": "Simple Tomato Basil Pasta",
+      "skill_level": "Beginner",
+      "time": "30 minutes",
+      "dietary_restrictions": "Vegetarian",
+      "ingredients": [
+        {
+          "name": "Pasta",
+          "amount": "8 oz",
+          "unit": "box"
+        },
+        {
+          "name": "Tomatoes",
+          "amount": "28 oz",
+          "unit": "can"
+        },
+        {
+          "name": "Fresh Basil",
+          "amount": "1/2 cup",
+          "unit": null
+        },
+        {
+          "name": "Mozzarella Cheese",
+          "amount": "1 cup",
+          "unit": "shredded"
+        }
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "instruction": "Cook pasta according to package directions."
+        },
+        {
+          "step": 2,
+          "instruction": "While pasta cooks, heat tomatoes in a saucepan over medium heat."
+        },
+        {
+          "step": 3,
+          "instruction": "Add basil to the tomato sauce and simmer for 10 minutes."
+        },
+        {
+          "step": 4,
+          "instruction": "Drain pasta and add it to the tomato sauce."
+        },
+        {
+          "step": 5,
+          "instruction": "Stir in mozzarella cheese until melted."
+        },
+        {
+          "step": 6,
+          "instruction": "Serve immediately."
+        }
+      ],
+      "prep_time": "5 minutes",
+      "cook_time": "25 minutes",
+      "servings": "4",
+      "tips": [
+        "Use fresh basil for the best flavor.",
+        "Add a pinch of red pepper flakes for a spicy kick."
+      ],
+      "substitutions": [
+        {
+          "ingredient": "Mozzarella Cheese",
+          "substitute": "Parmesan Cheese"
+        }
+      ]
+    }
+  }
+}
