@@ -181,6 +181,8 @@ def generate_recipe(request):
             llm = LLM()
             response = llm.generate_recipe(data["skill_level"], data["time"], data["dietary_restrictions"], data["ingredients"])
 
+            llm.save_recipe(response)
+
             return JsonResponse(response)
         except Exception as e:
             print(f"Unexpected Error: {str(e)}")
