@@ -1,4 +1,15 @@
 from django.http import JsonResponse
+from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from .models import RegisteredUser, Recipe
+from django.contrib.auth.hashers import make_password, check_password
+import json
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from .models import RegisteredUser, Recipe
+from django.contrib.auth.hashers import make_password, check_password
 # from django.shortcuts import render
 
 # Create your views here.
@@ -76,95 +87,6 @@ class LLM:
             json.dump(recipe_data, file, indent=4)
         return filename
 
-'''
-FOR REFERENCE PURPOSES ONLY
-# Create the model
-generation_config = {
-  "temperature": 0,
-  "top_p": 1,
-  "top_k": 1,
-  "max_output_tokens": 8192,
-  "response_mime_type": "application/json" # for better use in implementation for frontend use 
-}
-
-model = genai.GenerativeModel(
-  model_name="gemini-1.5-pro",
-  generation_config=generation_config,
-  system_instruction=(
-        "Generate a structured JSON recipe with the following format:\n"
-        "{\n"
-        '  "recipe": {\n'
-        '    "recipe_name": "string",\n'
-        '    "skill_level": "Beginner/Intermediate/Advanced",\n'
-        '    "time": "string (e.g., 30 minutes)",\n'
-        '    "dietary_restrictions": "string",\n'
-        '    "ingredients": [\n'
-        '      {"name": "string", "amount": "string", "unit": "string or null"}\n'
-        '    ],\n'
-        '    "steps": [\n'
-        '      {"step": int, "instruction": "string"}\n'
-        '    ],\n'
-        '    "prep_time": "string",\n'
-        '    "cook_time": "string",\n'
-        '    "servings": "string",\n'
-        '    "tips": ["string"],\n'
-        '    "substitutions": [\n'
-        '      {"ingredient": "string", "substitute": "string"}\n'
-        '    ]\n'
-        '  }\n'
-        "}\n"
-        "Ensure all keys match exactly and do not change key names."
-    ),
-)
-
-# Example test input 
-test_input = {
-    "skill_level": "Beginner",
-    "time": "30",
-    "dietary_restrictions": [],
-    "ingredients": ["tomato", "cheese", "basil", "rice", "tofu"],
-}
-
-# Format dietary restrictions as a comma-separated string, or "None" if empty
-dietary_str = ", ".join(test_input["dietary_restrictions"]) if test_input["dietary_restrictions"] else "None"
-
-# Construct prompt
-prompt = (
-    f"Create a recipe using the following details:\n"
-    f"- Skill Level: {test_input['skill_level']}\n"
-    f"- Time: {test_input['time']} minutes\n"
-    f"- Dietary Restrictions: {dietary_str}\n"
-    f"- Ingredients: {', '.join(test_input['ingredients'])}\n"
-    f"Provide a JSON output following the exact format given in the system instruction."
-)
-
-# Generate new recipe
-print("\nGenerating new recipe...\n")
-response = model.generate_content(prompt)
-
-# Extract recipe text
-recipe_json = response.text if response.text else "{}"
-
-# Define JSON file path
-json_filename = "saved_recipe.json"
-
-# Overwrite JSON file with new recipe
-with open(json_filename, "w", encoding="utf-8") as file:
-    json.dump({"recipe": recipe_json}, file, indent=4)
-
-# Print the new recipe
-print("\nGenerated Recipe:\n")
-# print(recipe_json)
-
-'''
-
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
-from .models import RegisteredUser, Recipe
-from django.contrib.auth.hashers import make_password, check_password
-import json
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
 
 
 # Create your views here.
@@ -187,3 +109,108 @@ def generate_recipe(request):
         except Exception as e:
             print(f"Unexpected Error: {str(e)}")
             return JsonResponse({"error": str(e)}, status=500)
+        
+
+# Create your views here.
+
+class User:
+    def __init__(self, skill_level, available_time):
+        self.skill_level = skill_level
+        self.available_time = available_time
+
+    def create_recipe(self):
+        pass
+
+    def restrictions(self):
+        pass
+
+
+class Guest(User):
+    def __init__(self, skill_level, available_time):
+        super().__init__(skill_level, available_time)
+
+    def sign_up(self, f_name, l_name, user_name, email_address, password):
+            if RegisteredUser.objects.filter(email=email_address).exists():
+                return "User already exists"
+            
+            hashed_pw = make_password(password)  
+            new_user = RegisteredUser.objects.create(
+                first_name=f_name,
+                last_name=l_name,
+                username=user_name,  
+                email=email_address,
+                hashed_password=hashed_pw,
+            )
+            return f"User {new_user.username} successfully registered"
+
+
+class Admin(User):
+    def __init__(self, email_address, password):
+        super().__init__(None, None)
+        self.email_address = email_address
+        self.password = password
+
+    def manage_llm(self):
+        pass
+
+    def manage_account(self):
+        pass
+
+    def manage_database(self):
+        pass
+
+
+class Registered(User):
+    def __init__(self, name, phone_number, email_address, password, available_time):
+        super().__init__(None, available_time)
+        self.name = name
+        self.phone_number = phone_number
+        self.email_address = email_address
+        self.password = password
+        self.favourite_recipe = None
+        self.last_few_recipes = []
+
+    def sign_in(email_address, password):
+        user = RegisteredUser.objects.filter(email=email_address).first()
+        if user and check_password(password, user.hashed_password):
+            return f"Welcome back, {user.first_name}!"
+        return "Invalid credentials"
+
+    def save_recipe(self, recipe_id):
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        user = RegisteredUser.objects.get(email=self.email_address)
+        user.saved_recipes.add(recipe)
+        return f"Recipe '{recipe.title}' saved successfully"
+
+    def view_recipes(self):
+        user = RegisteredUser.objects.get(email=self.email_address)
+        last_recipes = user.last_used_recipes.all().order_by('-id')[:5]
+        saved_recipes = user.saved_recipes.all()
+        return {
+            "last_viewed": [recipe.title for recipe in last_recipes],
+            "saved_recipes": [recipe.title for recipe in saved_recipes]
+        }
+    
+class Recipe:
+    def __init__(self, ingredient_list, recipe_id, title):
+        self.ingredient_list = ingredient_list
+        self.recipe_id = recipe_id
+        self.title = title
+
+    def generate_recipe(self):
+        pass
+
+
+# class LLM:
+#     def __init__(self, skill_level, available_time, ingredients, prompt, title):
+#         self.skill_level = skill_level
+#         self.available_time = available_time
+#         self.ingredients = ingredients
+#         self.prompt = prompt
+#         self.title = title
+
+#     def generate_recipe(self):
+#         pass
+
+#     def save_recipe(self):
+#         pass
