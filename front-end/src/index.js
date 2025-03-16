@@ -12,6 +12,7 @@ import Login from './views/login'
 import SignUp from './views/signup'
 
 import NotFound from './views/not-found'
+import Recipegenpage from './views/recipegenpage'
 
 export const  CurrentUserContext = createContext(null);
 
@@ -32,6 +33,7 @@ const App = () => {
       <Switch>
           <Route component={Login} exact path="/" />
           <Route component={SignUp} exact path="/signup" />
+          <Route component={Recipegenpage} exact path="/recipe" />
           
           <Route component={NotFound} path="**" />
           <Redirect to="**" />
