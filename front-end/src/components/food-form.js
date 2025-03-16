@@ -6,19 +6,19 @@ import './food-form.css'
 
 const FoodForm = (props) => {
 
-    const [title, setTitle] = useState("");
-    const [body, setBody] = useState("");
-    const [authUsername, setAuthUsername] = useState("");
-    const [adminFlag, setAdminFlag] = useState("");
+    const [diet_restrictions, set_diet_restrictions] = useState("");
+    const [ingredients, set_ingredients] = useState("");
+    const [available_time, set_available_time] = useState("");
+    const [skill_level, set_skill_level] = useState("");
   
-    function addNewBlogPost() {
-      fetch(("http://localhost:3000/blog/posts"), {
+    function createNewRecipe() {
+      fetch(("http://localhost:3000/"/* The rest of the path for the backend */), {
         method: "POST",
         body: JSON.stringify({
-          title: title,
-          body: body,
-          authorID: authUsername,
-          adminFlag : false,
+          ingredients: ingredients,
+          diet_restrictions: diet_restrictions,
+          available_time: available_time,
+          skill_level : skill_level,
         }),
         headers: {
             "Content-Type": "application/json"
@@ -54,56 +54,72 @@ const FoodForm = (props) => {
                 )}
               </h2>
             </div>
-              <div>
+              <div className = "ai-prompt-copy">
                 Whether it's leftover ingredients, canned beans you don't know what to do with,
-                let us help you make use of every cent of your food.
+                or a dinner that needs some more inspiration,
+                let ChefAI help you come up with a delicious recipe!
               </div>
           </div>
           <form className="thq-card"  onSubmit={(e) => {
             e.preventDefault();
-            addNewBlogPost();
+            createNewRecipe();
           }}>
+            <div></div>
             <div className="food-form-input1">
-              <label htmlFor="contact-form-3-name" className="thq-body-small">
-                Title
+              <label htmlFor="contact-form-3-name" className="thq-header-2">
+                First, do you have any dietary restrictions?
               </label>
               <input
                 type="text"
                 id="contact-form-3-name"
-                placeholder="Title"
+                placeholder="E.g. vegan, vegetarian, halal...etc."
                 rows="Title"
                 className="thq-input"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={diet_restrictions}
+                onChange={(e) => set_diet_restrictions(e.target.value)}
               />
             </div>
             <div className="food-form-input2">
               <label htmlFor="contact-form-3-email" className="thq-body-small">
-                Username
+                How much time do you have?
               </label>
               <input
                 type="text"
                 id="contact-form-3-email"
                 required={true}
-                placeholder="Username"
+                placeholder="15/30/60/120 minutes"
                 className="thq-input"
-                value={authUsername}
-                onChange={(e) => setAuthUsername(e.target.value)}
+                value={available_time}
+                onChange={(e) => set_available_time(e.target.value)}
+              />
+            </div>
+            <div className="food-form-input3">
+              <label htmlFor="contact-form-3-email" className="thq-body-small">
+                What is your skill level?
+              </label>
+              <input
+                type="text"
+                id="contact-form-3-email"
+                required={true}
+                placeholder="Beginner, Intermediate, Expert?"
+                className="thq-input"
+                value={skill_level}
+                onChange={(e) => set_skill_level(e.target.value)}
               />
             </div>
             <div className="food-form-container">
               <label
                 htmlFor="contact-form-3-message"
                 className="thq-body-small"
-              > Blog Post
+              > What ingredients do you have kicking around?
               </label>
               <textarea
                 id="contact-form-3-message"
                 rows="3"
-                placeholder="Enter your text here"
+                placeholder="E.g. Half a carrot, some onions, shredded cheese..."
                 className="thq-input"
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
+                value={ingredients}
+                onChange={(e) => set_ingredients(e.target.value)}
               ></textarea>
             </div>
             <button

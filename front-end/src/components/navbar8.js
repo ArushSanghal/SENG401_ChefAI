@@ -460,16 +460,13 @@ Navbar8.defaultProps = {
   link1: undefined,
   page3ImageAlt: 'image',
   page4Description: undefined,
-  page4ImageSrc:
-    'https://images.unsplash.com/photo-1474649111648-d95d30755186?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczMjAzODYyNHw&ixlib=rb-4.0.3&q=80&w=1080',
+  page4ImageSrc:undefined, 
   link3Url: '/shop',
   page1ImageAlt: 'image',
   logoAlt: 'Fishing Blog Logo',
-  page1ImageSrc:
-    'https://images.unsplash.com/photo-1660279403850-035db49c170b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczMjAzODYyNHw&ixlib=rb-4.0.3&q=80&w=1080',
+  page1ImageSrc: undefined, 
   page4ImageAlt: 'image',
-  page3ImageSrc:
-    'https://images.unsplash.com/photo-1506126613408-eca07ce68773?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczMjAzODYyNHw&ixlib=rb-4.0.3&q=80&w=1080',
+  page3ImageSrc: undefined,
   link3: undefined,
   link4: undefined,
   linkUrlPage3: 'https://example.com',

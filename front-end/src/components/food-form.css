@@ -43,6 +43,12 @@
     align-self: stretch;
     flex-direction: column;
   }
+  .food-form-input3 {
+    gap: var(--dl-space-space-halfunit);
+    display: flex;
+    align-self: stretch;
+    flex-direction: column;
+  }
   .food-form-container {
     gap: var(--dl-space-space-halfunit);
     display: flex;
