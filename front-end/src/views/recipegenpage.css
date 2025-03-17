@@ -1,0 +1,87 @@
+.formfield {
+    width: 100%;
+    height: 800px;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    background-color: whitesmoke;
+    padding: 25px;
+  }
+
+.recipe-button{
+    color: whitesmoke;
+    background-color: var(--dl-color-theme-primary1);
+    font-size: 17px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    border-radius: 50px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 5px 5px 5px 5px;
+}
+
+.recipe-button:hover {
+    background-color: #0099E6; 
+}
+
+.firstdiv {
+    border-color: var(--dl-color-theme-primary1); 
+    text-align: left; 
+    font-size: 17px;
+}
+
+input[type=text]:focus {
+    border: 3px solid #808080;
+  }
+
+.writebox{
+    width: 100%;
+    margin: 8px 0px;
+    padding: 12px;
+    border-color: var(--dl-color-theme-primary1);
+    border-width: 1px;
+    border-radius: 30px;
+    text-align: center;
+}
+
+.skill-level-div label{
+    display: flex; 
+    justify-content: left;
+    font-size: 14px;
+    padding: 1px;
+    margin: 10px;
+}
+
+.skill-level-div{
+
+}
+
+
+h1{
+    font-family:  Georgia, 'Times New Roman', Times, serif;
+    padding: 18px;
+    text-align: center;
+}
+
+.time-p label{
+    display: block; 
+    font-size: 14px;
+    padding: 2px;
+    margin:10px;
+}
+
+.generated-recipe{
+    text-align: left;
+    padding: 40px;
+}
+
+.generated-recipe h5{
+    margin: 4px;
+}
+
+.image{
+    width: 200px;
+    height: 150px;
+    background: transparent;
+    display: flex;
+}
