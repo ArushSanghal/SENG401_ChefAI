@@ -171,7 +171,7 @@ SignUp2.defaultProps = {
     'https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?ixid=M3w5MTMyMXwwfDF8c2VhcmNofDM3fHxhYnN0cmFjdHxlbnwwfHx8fDE3MTI5MzE4MzR8MA&ixlib=rb-4.0.3&w=1400',
   heading1: undefined,
   image1Alt: 'SignUp Image',
-  action1: undefined,
+  action1: '/recipe',
 }
 
 SignUp2.propTypes = {
