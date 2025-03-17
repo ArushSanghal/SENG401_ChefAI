@@ -220,7 +220,7 @@ SignIn1.defaultProps = {
   action1: undefined,
   content1: undefined,
   newAccount: '/signup',
-  guestAccount: '/guest'
+  guestAccount: '/recipegenpage'
 }
 
 SignIn1.propTypes = {
