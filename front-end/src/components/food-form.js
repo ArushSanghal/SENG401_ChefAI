@@ -67,7 +67,7 @@ const FoodForm = (props) => {
             <div></div>
             <div className="food-form-input1">
               <label htmlFor="contact-form-3-name" className="thq-header-2">
-                First, do you have any dietary restrictions?
+                Do you have any dietary restrictions?
               </label>
               <input
                 type="text"
