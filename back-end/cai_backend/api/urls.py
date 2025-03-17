@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import User
+from api.views import generate_recipe
 
 urlpatterns = [
-    path("generate_recipe/", User.generate_recipe, name="generate_recipe")
+    path("generate-recipe/", generate_recipe),
 ]
