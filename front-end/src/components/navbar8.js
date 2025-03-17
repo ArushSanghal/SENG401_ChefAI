@@ -31,7 +31,7 @@ const Navbar8 = (props) => {
             <Link to={props.link2Url} className="thq-link thq-body-small">
               {props.link2 ?? (
                 <Fragment>
-                  <span className="navbar8-text26">/blog</span>
+                  <span className="navbar8-text26">/history</span>
                 </Fragment>
               )}
             </Link>
@@ -42,7 +42,7 @@ const Navbar8 = (props) => {
             >
               {props.link3 ?? (
                 <Fragment>
-                  <span className="navbar8-text20">/shop</span>
+                  <span className="navbar8-text20">/saved</span>
                 </Fragment>
               )}
             </Link>
@@ -471,13 +471,12 @@ Navbar8.defaultProps = {
   link4: undefined,
   linkUrlPage3: 'https://example.com',
   page1: undefined,
-  page1Description: undefined,
+  page1Description: undefined, 
   page3: undefined,
   action1: undefined,
   cartAction: undefined,
   link2: undefined,
-  page2ImageSrc:
-    'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczMjAzODYyNHw&ixlib=rb-4.0.3&q=80&w=1080',
+  page2ImageSrc: undefined
 }
 
 Navbar8.propTypes = {
