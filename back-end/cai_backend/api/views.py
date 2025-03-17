@@ -1,21 +1,13 @@
 from django.http import JsonResponse
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
-from .models import RegisteredUser, Recipe, Ingredients
 from django.contrib.auth.hashers import make_password, check_password
-import json
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
-from .models import RegisteredUser, Recipe
-from django.contrib.auth.hashers import make_password, check_password
-# from django.shortcuts import render
 
-# Create your views here.
-
-import json
 import google.generativeai as genai
+import json
+
+from .models import RegisteredUser, Recipe, Ingredients
+
 
 genai.configure(api_key="AIzaSyAnDxD9kAbcngSDw61KjeJzqiqfdCo_sSI")
 
@@ -88,9 +80,6 @@ class LLM:
         return filename
 
 
-
-        
-
 # Create your views here.
 
 class User:
@@ -98,29 +87,9 @@ class User:
         self.skill_level = skill_level
         self.available_time = available_time
 
-    @csrf_exempt
-    @require_http_methods(["GET","POST"])
-    def generate_recipe(request):
-        if request.method == "POST":
-            try:
-                data = json.loads(request.body)
-                required_fields = ["ingredients", "skill_level", "time"]
-                if not all(key in data for key in required_fields):
-                    return JsonResponse({"error": "Missing required fields"}, status=400)
-                
-                llm = LLM()
-                response = llm.generate_recipe(data["skill_level"], data["time"], data["dietary_restrictions"], data["ingredients"])
-
-                llm.save_recipe(response)
-
-                return JsonResponse(response)
-            except Exception as e:
-                print(f"Unexpected Error: {str(e)}")
-                return JsonResponse({"error": str(e)}, status=500)
             
     def restrictions(self):
         pass
-
 
 class Guest(User):
     def __init__(self, skill_level, available_time):
@@ -216,6 +185,26 @@ class Registered(User):
             "last_viewed": [recipe.title for recipe in last_recipes],
             "saved_recipes": [recipe.title for recipe in saved_recipes]
         }
+
+@csrf_exempt
+@require_http_methods(["GET","POST"])
+def generate_recipe(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            required_fields = ["ingredients", "skill_level", "time"]
+            if not all(key in data for key in required_fields):
+                return JsonResponse({"error": "Missing required fields"}, status=400)
+            
+            llm = LLM()
+            response = llm.generate_recipe(data["skill_level"], data["time"], data["dietary_restrictions"], data["ingredients"])
+
+            llm.save_recipe(response)
+
+            return JsonResponse(response)
+        except Exception as e:
+            print(f"Unexpected Error: {str(e)}")
+            return JsonResponse({"error": str(e)}, status=500)
     
 # class Recipe:
 #     def __init__(self, ingredient_list, recipe_id, title):
