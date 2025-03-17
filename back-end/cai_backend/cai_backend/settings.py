@@ -38,7 +38,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'corsheaders',
+    'rest_framework',
+    'rest_framework.authtoken',
     "api",
+]
+
+AUTHENTICATION_BACKENDS = [
+    'api.custom_auth_backends.TokenAuthBackend',  # Replace "yourapp" with your actual app name
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 MIDDLEWARE = [

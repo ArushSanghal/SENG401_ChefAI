@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 class TimeChoices(models.TextChoices):
     MIN_15 = "15", "15 minutes"
@@ -58,6 +59,12 @@ class RegisteredUser(User):
     is_admin = models.BooleanField(default=False)
     saved_recipes = models.ManyToManyField(Recipe, related_name="saved_recipes", blank=True)
     last_used_recipes = models.ManyToManyField(Recipe, related_name="last_used_recipes", blank=True)
+    auth_token = models.CharField(max_length=128, blank=True, null=True, unique=True)
+
+    def generate_token(self):
+        """Generates a new authentication token for the user"""
+        self.auth_token = str(uuid.uuid4())
+        self.save()
 
     def add_viewed_recipe(self, recipe):
         """Adds new recipes up to 5, uses FIFO to drop the oldest viewed recipe"""

@@ -3,7 +3,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 import json
 from django.contrib.auth.hashers import make_password, check_password
-from .models import RegisteredUser
+from rest_framework.authtoken.models import Token
+from .models import RegisteredUser, DietaryRestriction, SkillLevelChoices
 
 class User:
     def __init__(self, skill_level=None, available_time=None):
@@ -99,6 +100,26 @@ def login_user(request):
 
         registered_user = Registered(email, password)
         response_data, status_code = registered_user.sign_in()
+
+        if status_code == 200:
+            user = RegisteredUser.objects.get(email=email)
+            user.generate_token()  # Generate a token manually
+
+            # Fetch dietary restrictions
+            dietary_restrictions = list(user.dietary_restrictions.values_list("restriction", flat=True))
+
+            response_data.update({
+                "token": user.auth_token,
+                "user_id": user.id,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "username": user.username,
+                "email": user.email,
+                "skill_level": user.skill_level,
+                "dietary_restrictions": dietary_restrictions,
+            })
+            return JsonResponse(response_data, status=status_code)
+
         return JsonResponse(response_data, status=status_code)
 
     except json.JSONDecodeError:
@@ -107,8 +128,42 @@ def login_user(request):
         return JsonResponse({"error": str(e)}, status=500)
 
 
+
+
+
 @csrf_exempt
 @require_http_methods(["GET"])
 def get_user_data(request):
     users = RegisteredUser.objects.all().values("first_name", "last_name", "email", "username")
     return JsonResponse(list(users), safe=False)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def update_user_profile(request):
+    try:
+        auth_token = request.headers.get("Authorization").split(" ")[1]
+        user = RegisteredUser.objects.filter(auth_token=auth_token).first()
+
+        if not user:
+            return JsonResponse({"error": "Invalid token"}, status=401)
+
+        body_unicode = request.body.decode("utf-8")
+        data = json.loads(body_unicode)
+
+        # Update skill level
+        skill_level = data.get("skill_level")
+        if skill_level and skill_level in [choice[0] for choice in SkillLevelChoices.choices]:
+            user.skill_level = skill_level
+
+        # Update dietary restrictions
+        dietary_restrictions = data.get("dietary_restrictions", [])
+        user.dietary_restrictions.all().delete()  # Remove existing restrictions
+        for restriction in dietary_restrictions:
+            DietaryRestriction.objects.create(user=user, restriction=restriction)
+
+        user.save()
+        return JsonResponse({"success": "Profile updated successfully"}, status=200)
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

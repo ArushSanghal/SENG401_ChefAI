@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import './sign-in1.css';
 import { CurrentUserContext } from '../index';
 import { Link } from 'react-router-dom/cjs/react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const SignIn1 = (props) => {
     const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
@@ -13,6 +14,7 @@ const SignIn1 = (props) => {
     const [admins, setAdmins] = useState(null);
     const location = useLocation();
     const [successMessage, setSuccessMessage] = useState("");
+    const history = useHistory();
 
     // Check for success query parameter
     useEffect(() => {
@@ -29,22 +31,36 @@ const SignIn1 = (props) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                email: username, // Django expects "email"
+                email: username,
                 password: password,
             }),
         })
         .then((response) => response.json())
         .then((data) => {
             console.log("Login Response:", data);
-            if (data.message && data.message.includes("Welcome")) {
-                setCurrentUser({ email: username, is_admin: data.is_admin }); // Store admin status
+            if (data.token) {
+                localStorage.setItem("authToken", data.token); // Store token
+
+                // Update current user context
+                setCurrentUser({
+                    email: data.email,
+                    username: data.username,
+                    first_name: data.first_name,
+                    last_name: data.last_name,
+                    skill_level: data.skill_level,
+                    dietary_restrictions: data.dietary_restrictions || [],
+                    is_admin: data.is_admin
+                });
+
                 alert("Login successful!");
+                history.push("/user-profile"); // ✅ Use history.push() properly
             } else {
                 alert("Invalid credentials.");
             }
         })
         .catch((error) => console.log("Fetch error:", error));
     }
+    
 
     useEffect(() => {
         fetch("http://localhost:3000/members/members", {
