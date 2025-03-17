@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react'
 
 import './recipegenpage.css'
+import '../components/food-form.css'
 
 function Recipegenpage(){
 
@@ -45,10 +46,26 @@ function Recipegenpage(){
 
     return (
     <>
-    <img src="https://static.vecteezy.com/system/resources/thumbnails/017/221/436/small_2x/spaghetti-with-vegetables-cooking-in-a-pan-png.png" alt="frying pan" className="image"></img>
+    <title>ChefAI</title>
+    <meta property="og:title" content="ChefAI" />
+
+    <img src="/images/spaghetti-with-vegetables-cooking-in-a-pan.png" alt="frying pan" className="image"></img>
+    <div className="thq-section-padding ">
     <div className = "formfield">
-        <form onSubmit={handleSubmit} >
+    <img
+          alt= "A variety of vegetables and ingredients"
+          src="/images/ingredients_image.jpg"
+          className="thq-img-ratio-4-3 thq-flex-row thq-section-max-width food-form-max-width"
+    />
+
+        <form onSubmit={handleSubmit}>
+    <div className = "form-content thq-section-padding"> 
         <h1>Make Your Recipe</h1>
+        <div className = "ai-prompt-copy">
+                Whether it's leftover ingredients, canned beans you don't know what to do with,
+                or a dinner that needs some more inspiration,
+                let ChefAI help you come up with a delicious recipe!
+        </div>
         <div className = "firstdiv">
             <label>Ingredients: <hr />
                 <input type = "text" name = "ingredients" required placeholder="tomatoes, onions, etc." className="writebox"/>
@@ -91,7 +108,10 @@ function Recipegenpage(){
         <div className = "recipe-button">
         <button type="submit" >Generate Recipe!</button>
         </div>
+        </div> 
+        
         </form>
+        </div>
         <div className="generated-recipe">
             <h1 >Recipes! </h1>
             {loading && <h1>Loading.....</h1>}
