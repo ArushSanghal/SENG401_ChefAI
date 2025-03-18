@@ -43,10 +43,10 @@ const UserProfile = () => {
     const handleSave = () => {
         const token = localStorage.getItem("access_token");
         if (!token) {
-            history.push("/");
+            history.push("/"); //Back to main page when token is expired
             return;
         }
-
+    
         fetch("http://127.0.0.1:8000/update-user/", {
             method: "POST",
             headers: {
@@ -62,7 +62,7 @@ const UserProfile = () => {
         .then(data => {
             if (data.success) {
                 alert("Profile updated!");
-                // Update local state with the new data
+                
                 setUserData(prev => ({
                     ...prev,
                     skill_level: skillLevel,
