@@ -110,20 +110,20 @@ class Guest(User):
             return f"User {new_user.username} successfully registered"
 
 
-class Admin(User):
-    def __init__(self, email_address, password):
-        super().__init__(None, None)
-        self.email_address = email_address
-        self.password = password
+# class Admin(User):
+#     def __init__(self, email_address, password):
+#         super().__init__(None, None)
+#         self.email_address = email_address
+#         self.password = password
 
-    def manage_llm(self):
-        pass
+#     def manage_llm(self):
+#         pass
 
-    def manage_account(self):
-        pass
+#     def manage_account(self):
+#         pass
 
-    def manage_database(self):
-        pass
+#     def manage_database(self):
+#         pass
 
 
 class Registered(User):
@@ -143,34 +143,25 @@ class Registered(User):
             return f"Welcome back, {user.first_name}!"
         return "Invalid credentials"
 
-    def save_recipe(self):
-        #open save_recipe.json file
-        f = open('saved_recipe.json')
-
-        data = json.load(f)
-        recipe_data = data.get("recipe", {})
-
-        required_fields = ["recipe_name", "time", "skill_level", "ingredients","steps"]
-
-        if not all(key in recipe_data for key in required_fields):
-            return JsonResponse({"error": "Missing required fields"}, status=400)
-        
-        new_recipe = Recipe.objects.create(
-            title= recipe_data["recipe_name"],
-            estimated_time = recipe_data["time"],
-            skill_level = recipe_data["skill_level"],
-            instructions=json.dumps(recipe_data["steps"]) #saves as a json string
-        )
-
-        for ingredient in recipe_data["ingredients"]:
-            Ingredients.objects.create(
-                ingredient = ingredient["name"],
-                recipe = new_recipe
-                )
+    def add_to_history(self):
+        recipe = Recipe_Generator()
+        new_recipe = recipe.parse_recipe()
 
         try:
             reg_user = RegisteredUser.objects.get(username=self.username)
-            reg_user.add_favourite_recipe(new_recipe)
+            reg_user.add_to_history(new_recipe)
+        except:
+            return JsonResponse({"error": "User not found"}, status=404)
+
+        return JsonResponse({"message": "Recipe saved successfully"}, status=201)
+
+    def save_recipe(self):
+        recipe = Recipe_Generator()
+        new_recipe = recipe.parse_recipe()
+
+        try:
+            reg_user = RegisteredUser.objects.get(username=self.username)
+            reg_user.saved_recipes.add(new_recipe)
         except RegisteredUser.DoesNotExist:
             return JsonResponse({"error": "User not found"}, status=404)
 
@@ -206,27 +197,33 @@ def generate_recipe(request):
             print(f"Unexpected Error: {str(e)}")
             return JsonResponse({"error": str(e)}, status=500)
     
-# class Recipe:
-#     def __init__(self, ingredient_list, recipe_id, title):
-#         self.ingredient_list = ingredient_list
-#         self.recipe_id = recipe_id
-#         self.title = title
+class Recipe_Generator:
+    def __init__(self):
+        pass
 
-#     def generate_recipe(self):
-#         pass
+    def parse_recipe(self):
+        f = open('saved_recipe.json')   # Parse the latest saved recipe
 
+        data = json.load(f)
+        recipe_data = data.get("recipe", {})
 
+        required_fields = ["recipe_name", "time", "skill_level", "ingredients","steps"]
 
-# class LLM:
-#     def __init__(self, skill_level, available_time, ingredients, prompt, title):
-#         self.skill_level = skill_level
-#         self.available_time = available_time
-#         self.ingredients = ingredients
-#         self.prompt = prompt
-#         self.title = title
+        if not all(key in recipe_data for key in required_fields):
+            return JsonResponse({"error": "Missing required fields"}, status=400)
+        
+        # Save to database and create new object
+        new_recipe = Recipe.objects.create(
+            title= recipe_data["recipe_name"],
+            estimated_time = recipe_data["time"],
+            skill_level = recipe_data["skill_level"],
+            instructions=json.dumps(recipe_data["steps"]) #saves as a json string
+        )
 
-#     def generate_recipe(self):
-#         pass
-
-#     def save_recipe(self):
-#         pass
+        for ingredient in recipe_data["ingredients"]:
+            Ingredients.objects.create(
+                ingredient = ingredient["name"],
+                recipe = new_recipe
+            )
+        
+        return new_recipe

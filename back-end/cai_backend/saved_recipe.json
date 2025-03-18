@@ -1,96 +1,55 @@
 {
     "recipe": {
-        "recipe_name": "Roasted Tomato and Onion Soup (Vegan)",
-        "skill_level": "Advanced",
-        "time": "90 minutes",
-        "dietary_restrictions": "vegan",
+        "recipe_name": "Simple Tomato Soup",
+        "skill_level": "Intermediate",
+        "time": "60 minutes",
+        "dietary_restrictions": "Vegetarian",
         "ingredients": [
             {
                 "name": "Tomatoes",
-                "amount": "2 lbs",
-                "unit": "lbs"
+                "amount": "28",
+                "unit": "oz"
             },
             {
-                "name": "Yellow Onion",
-                "amount": "2",
+                "name": "Onion",
+                "amount": "1",
                 "unit": "medium"
             },
             {
-                "name": "Vegetable Broth",
-                "amount": "6 cups",
-                "unit": "cups"
-            },
-            {
-                "name": "Olive Oil",
-                "amount": "2 tbsp",
-                "unit": "tbsp"
-            },
-            {
-                "name": "Garlic",
-                "amount": "4 cloves",
-                "unit": "cloves"
-            },
-            {
-                "name": "Fresh Thyme",
-                "amount": "2 sprigs",
-                "unit": "sprigs"
-            },
-            {
-                "name": "Salt",
-                "amount": "1 tsp",
-                "unit": "tsp"
-            },
-            {
-                "name": "Black Pepper",
-                "amount": "1/2 tsp",
-                "unit": "tsp"
-            },
-            {
-                "name": "Maple syrup",
-                "amount": "1 tbsp",
-                "unit": "tbsp"
+                "name": "Vegetable Soup",
+                "amount": "32",
+                "unit": "oz"
             }
         ],
         "steps": [
             {
                 "step": 1,
-                "instruction": "Preheat oven to 400\u00b0F (200\u00b0C)."
+                "instruction": "Dice the onion and saut\u00e9 in a large pot until translucent."
             },
             {
                 "step": 2,
-                "instruction": "Cut the tomatoes and onions into quarters. Peel and roughly chop the garlic."
+                "instruction": "Add the tomatoes (diced or crushed) to the pot and cook for 10 minutes, stirring occasionally."
             },
             {
                 "step": 3,
-                "instruction": "Toss the tomatoes, onions, garlic, olive oil, thyme, salt, pepper and maple syrup on a baking sheet."
+                "instruction": "Pour in the vegetable soup. Bring to a boil, then reduce heat and simmer for 30 minutes."
             },
             {
                 "step": 4,
-                "instruction": "Roast for 45-60 minutes, or until the vegetables are softened and slightly caramelized."
-            },
-            {
-                "step": 5,
-                "instruction": "Remove the thyme sprigs. Transfer the roasted vegetables to a large pot or blender."
-            },
-            {
-                "step": 6,
-                "instruction": "Add the vegetable broth. If using a pot, bring the mixture to a simmer and cook for 15 minutes. If using a blender, carefully blend until smooth."
-            },
-            {
-                "step": 7,
-                "instruction": "Season with additional salt and pepper to taste. Serve hot."
+                "instruction": "Use an immersion blender or carefully transfer the soup to a regular blender to blend until smooth. Season with salt and pepper to taste."
             }
         ],
-        "prep_time": "20 minutes",
-        "cook_time": "70 minutes",
+        "prep_time": "15 minutes",
+        "cook_time": "45 minutes",
         "servings": "4-6",
         "tips": [
-            "For a smoky flavor, roast the vegetables under the broiler for the last few minutes."
+            "For a richer flavor, use fire-roasted tomatoes.",
+            "Add a dollop of cream or a sprinkle of fresh herbs before serving."
         ],
         "substitutions": [
             {
-                "ingredient": "Vegetable Broth",
-                "substitute": "Water with vegetable bouillon cube"
+                "ingredient": "Vegetable Soup",
+                "substitute": "Chicken Broth"
             }
         ]
     }
