@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect, useContext, createContext} from 'react'
+import React, {Fragment, useState, useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import {
   BrowserRouter as Router,
@@ -15,21 +15,12 @@ import UserProfile from './components/user-profile'
 
 import NotFound from './views/not-found'
 
-export const  CurrentUserContext = createContext(null);
-
 const App = () => {
 
   const [currentUser, setCurrentUser] = useState(null);
 
 
   return (
-
-      <CurrentUserContext.Provider
-          value={{
-            currentUser,
-            setCurrentUser
-          }}
-       >
     <Router>
       <Switch>
           <Route component={Login} exact path="/" />
@@ -40,7 +31,6 @@ const App = () => {
           <Redirect to="**" />
       </Switch>
     </Router>
-</CurrentUserContext.Provider>
   )
   
 }

@@ -1,13 +1,10 @@
-import React, { Fragment, useEffect, useContext, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { Fragment, useEffect, useState } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './sign-in1.css';
-import { CurrentUserContext } from '../index';
 import { Link } from 'react-router-dom/cjs/react-router-dom';
-import { useHistory } from 'react-router-dom';
 
 const SignIn1 = (props) => {
-    const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [members, setMembers] = useState(null);
@@ -38,29 +35,22 @@ const SignIn1 = (props) => {
         .then((response) => response.json())
         .then((data) => {
             console.log("Login Response:", data);
-            if (data.token) {
-                localStorage.setItem("authToken", data.token); // Store token
-
-                // Update current user context
-                setCurrentUser({
-                    email: data.email,
-                    username: data.username,
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    skill_level: data.skill_level,
-                    dietary_restrictions: data.dietary_restrictions || [],
-                    is_admin: data.is_admin
-                });
-
+            if (data.access) { // Check if the access token exists
+                // Store JWT tokens in localStorage
+                localStorage.setItem("access_token", data.access);
+                localStorage.setItem("refresh_token", data.refresh);
+                console.log("Access Token:", localStorage.getItem("access_token"));
+                console.log("Refresh Token:", localStorage.getItem("refresh_token"));
+    
+                // Redirect to user profile
                 alert("Login successful!");
-                history.push("/user-profile"); // ✅ Use history.push() properly
+                history.push("/user-profile");
             } else {
                 alert("Invalid credentials.");
             }
         })
         .catch((error) => console.log("Fetch error:", error));
     }
-    
 
     useEffect(() => {
         fetch("http://localhost:3000/members/members", {

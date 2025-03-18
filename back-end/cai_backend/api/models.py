@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth.hashers import check_password
+from django.utils import timezone
+from django.contrib.auth.models import AnonymousUser
 import uuid
 
 class TimeChoices(models.TextChoices):
@@ -50,16 +53,31 @@ class Ingredients(models.Model):
     ingredient = models.CharField(max_length=50, blank=False, null=False)
 
 class RegisteredUser(User):
-    """Information about logged in user, boolean provides admin privelages"""
+    """Information about logged in user, boolean provides admin privileges"""
     first_name = models.CharField(max_length=50, blank=False, null=False)
     last_name = models.CharField(max_length=50, blank=False, null=False)
     username = models.CharField(max_length=50, blank=False, null=False, unique=True)
-    email = models.EmailField(max_length=254, blank=False, null=False)
+    email = models.EmailField(max_length=254, blank=False, null=False, unique=True)
     hashed_password = models.CharField(max_length=254, blank=False, null=False)
     is_admin = models.BooleanField(default=False)
     saved_recipes = models.ManyToManyField(Recipe, related_name="saved_recipes", blank=True)
     last_used_recipes = models.ManyToManyField(Recipe, related_name="last_used_recipes", blank=True)
-    auth_token = models.CharField(max_length=128, blank=True, null=True, unique=True)
+    #auth_token = models.CharField(max_length=128, blank=True, null=True, unique=True)
+
+    # Required fields for Django's authentication system
+    USERNAME_FIELD = "email"  # Use email as the username field
+    REQUIRED_FIELDS = ["username"]  # Fields required when creating a user via createsuperuser
+
+    # Add these methods
+    @property
+    def is_anonymous(self):
+        """Always returns False for registered users."""
+        return False
+
+    @property
+    def is_authenticated(self):
+        """Always returns True for registered users."""
+        return True
 
     def generate_token(self):
         """Generates a new authentication token for the user"""
@@ -73,3 +91,17 @@ class RegisteredUser(User):
         if self.last_used_recipes.count() > 5:
             first_viewed = self.last_used_recipes.all().order_by("id").first()
             self.last_used_recipes.remove(first_viewed)
+            
+class Token(models.Model):
+    """Model to store JWT tokens in the database."""
+    user = models.ForeignKey(RegisteredUser, on_delete=models.CASCADE, related_name="tokens")
+    token = models.CharField(max_length=500, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+
+    def is_valid(self):
+        """Check if the token is still valid."""
+        return timezone.now() < self.expires_at
+
+    def __str__(self):
+        return f"Token for {self.user.username} (Expires: {self.expires_at})"

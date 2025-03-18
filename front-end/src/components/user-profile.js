@@ -1,17 +1,57 @@
-import React, { useContext, useState } from "react";
-import { CurrentUserContext } from "../index";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const UserProfile = () => {
-    const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
-    const [skillLevel, setSkillLevel] = useState(currentUser.skill_level);
-    const [dietaryRestrictions, setDietaryRestrictions] = useState(currentUser.dietary_restrictions.join(", "));
+    const [userData, setUserData] = useState(null);
+    const [skillLevel, setSkillLevel] = useState("");
+    const [dietaryRestrictions, setDietaryRestrictions] = useState("");
+    const history = useHistory();
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const token = localStorage.getItem("access_token");
+            if (!token) {
+                history.push("/");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://127.0.0.1:8000/user/", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                    },
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    setUserData(data);
+                    setSkillLevel(data.skill_level);
+                    setDietaryRestrictions(data.dietary_restrictions.join(", "));
+                } else {
+                    localStorage.removeItem("access_token");
+                    localStorage.removeItem("refresh_token");
+                    history.push("/");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        };
+
+        fetchUserData();
+    }, [history]);
 
     const handleSave = () => {
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+            history.push("/");
+            return;
+        }
+
         fetch("http://127.0.0.1:8000/update-user/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Token ${localStorage.getItem("authToken")}`
+                "Authorization": `Bearer ${token}`,
             },
             body: JSON.stringify({
                 skill_level: skillLevel,
@@ -22,7 +62,8 @@ const UserProfile = () => {
         .then(data => {
             if (data.success) {
                 alert("Profile updated!");
-                setCurrentUser(prev => ({
+                // Update local state with the new data
+                setUserData(prev => ({
                     ...prev,
                     skill_level: skillLevel,
                     dietary_restrictions: dietaryRestrictions.split(",").map(r => r.trim()),
@@ -34,11 +75,41 @@ const UserProfile = () => {
         .catch(error => console.log(error));
     };
 
+    const handleSignOut = async () => {
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+            history.push("/");
+            return;
+        }
+    
+        try {
+            const response = await fetch("http://127.0.0.1:8000/logout/", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+            if (response.ok) {
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("refresh_token");
+                history.push("/");
+            } else {
+                alert("Error logging out.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+    if (!userData) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div>
-            <h1>Welcome, {currentUser.first_name}!</h1>
-            <p><strong>Email:</strong> {currentUser.email}</p>
-            <p><strong>Username:</strong> {currentUser.username}</p>
+            <h1>Welcome, {userData.first_name}!</h1>
+            <p><strong>Email:</strong> {userData.email}</p>
+            <p><strong>Username:</strong> {userData.username}</p>
 
             <label>Skill Level:</label>
             <select value={skillLevel} onChange={(e) => setSkillLevel(e.target.value)}>
@@ -56,6 +127,7 @@ const UserProfile = () => {
             />
 
             <button onClick={handleSave}>Save Changes</button>
+            <button onClick={handleSignOut}>Sign Out</button>
         </div>
     );
 };
