@@ -1,54 +1,96 @@
 {
     "recipe": {
-        "recipe_name": "Quick Tomato Onion Sauce",
+        "recipe_name": "Roasted Tomato and Onion Soup (Vegan)",
         "skill_level": "Advanced",
-        "time": "30 minutes",
-        "dietary_restrictions": null,
+        "time": "90 minutes",
+        "dietary_restrictions": "vegan",
         "ingredients": [
             {
-                "name": "tomato",
-                "amount": "2",
-                "unit": "large"
+                "name": "Tomatoes",
+                "amount": "2 lbs",
+                "unit": "lbs"
             },
             {
-                "name": "onion",
-                "amount": "1",
+                "name": "Yellow Onion",
+                "amount": "2",
                 "unit": "medium"
+            },
+            {
+                "name": "Vegetable Broth",
+                "amount": "6 cups",
+                "unit": "cups"
+            },
+            {
+                "name": "Olive Oil",
+                "amount": "2 tbsp",
+                "unit": "tbsp"
+            },
+            {
+                "name": "Garlic",
+                "amount": "4 cloves",
+                "unit": "cloves"
+            },
+            {
+                "name": "Fresh Thyme",
+                "amount": "2 sprigs",
+                "unit": "sprigs"
+            },
+            {
+                "name": "Salt",
+                "amount": "1 tsp",
+                "unit": "tsp"
+            },
+            {
+                "name": "Black Pepper",
+                "amount": "1/2 tsp",
+                "unit": "tsp"
+            },
+            {
+                "name": "Maple syrup",
+                "amount": "1 tbsp",
+                "unit": "tbsp"
             }
         ],
         "steps": [
             {
                 "step": 1,
-                "instruction": "Dice the onion finely."
+                "instruction": "Preheat oven to 400\u00b0F (200\u00b0C)."
             },
             {
                 "step": 2,
-                "instruction": "Blanch and peel the tomatoes, then chop roughly."
+                "instruction": "Cut the tomatoes and onions into quarters. Peel and roughly chop the garlic."
             },
             {
                 "step": 3,
-                "instruction": "Saut\u00e9 the diced onion in olive oil until translucent."
+                "instruction": "Toss the tomatoes, onions, garlic, olive oil, thyme, salt, pepper and maple syrup on a baking sheet."
             },
             {
                 "step": 4,
-                "instruction": "Add the chopped tomatoes to the pan and cook until softened."
+                "instruction": "Roast for 45-60 minutes, or until the vegetables are softened and slightly caramelized."
             },
             {
                 "step": 5,
-                "instruction": "Season with salt, pepper, and any desired herbs."
+                "instruction": "Remove the thyme sprigs. Transfer the roasted vegetables to a large pot or blender."
+            },
+            {
+                "step": 6,
+                "instruction": "Add the vegetable broth. If using a pot, bring the mixture to a simmer and cook for 15 minutes. If using a blender, carefully blend until smooth."
+            },
+            {
+                "step": 7,
+                "instruction": "Season with additional salt and pepper to taste. Serve hot."
             }
         ],
-        "prep_time": "10 minutes",
-        "cook_time": "20 minutes",
-        "servings": "2-4",
+        "prep_time": "20 minutes",
+        "cook_time": "70 minutes",
+        "servings": "4-6",
         "tips": [
-            "Use fresh, ripe tomatoes for the best flavor.",
-            "Adjust the seasoning to your preference."
+            "For a smoky flavor, roast the vegetables under the broiler for the last few minutes."
         ],
         "substitutions": [
             {
-                "ingredient": "tomato",
-                "substitute": "canned diced tomatoes"
+                "ingredient": "Vegetable Broth",
+                "substitute": "Water with vegetable bouillon cube"
             }
         ]
     }
