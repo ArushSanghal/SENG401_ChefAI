@@ -3,6 +3,7 @@ import React, { Fragment, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import './sign-up2.css'
+import { Link } from 'react-router-dom/cjs/react-router-dom'
 
 const SignUp2 = (props) => {
 
@@ -52,11 +53,6 @@ const SignUp2 = (props) => {
                   </Fragment>
                 )}
               </h2>
-              <div className="sign-up2-have-an-account-login1">
-                <p className="thq-body-large">
-                  Already have an account? Sign in
-                </p>
-              </div>
             </div>
             <form className="sign-up2-form2" onSubmit={(e) => {
             e.preventDefault();
@@ -125,20 +121,22 @@ const SignUp2 = (props) => {
                   )}
                 </span>
               </div>
-              <button type="submit" className="thq-button-filled sign-up2-button">
-              <span className="sign-up2-text21 thq-body-small">
-                {props.action1 ?? (
-                  <Fragment>
-                    <span className="sign-up2-text25">Create an account</span>
-                  </Fragment>
-                )}
-              </span>
-            </button>
+              <Link to={props.createAccount}>
+                <button type="submit" className="thq-button-filled sign-up2-button">
+                <span className="sign-up2-text21 thq-body-small">
+                  {props.action1 ?? (
+                    <Fragment>
+                      <span className="sign-up2-text25">Create an account</span>
+                    </Fragment>
+                  )}
+                </span>
+              </button>
+            </Link>
             </form>
             <div className="sign-up2-terms-agree">
               <p className="thq-body-large">
                 <span>
-                  By creating an account, you agree to the Terms of use and
+                  By creating an account, you agree to the Terms of Use and
                   Privacy Policy.
                   <span
                     dangerouslySetInnerHTML={{
@@ -156,7 +154,12 @@ const SignUp2 = (props) => {
               </p>
             </div>
             <div className="sign-up2-have-an-account-login2">
-              <p className="thq-body-large">Already have an account? Sign in</p>
+              <p className="thq-body-large">Already have an account?</p>
+              <Link to={props.signIn}>
+                <span className="sign-up2-text21 thq-body-large" >
+                    Sign in.          
+                </span>
+            </Link>
             </div>
           </div>
         </div>
@@ -167,11 +170,12 @@ const SignUp2 = (props) => {
 
 SignUp2.defaultProps = {
   content1: undefined,
-  image1Src:
-    'https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?ixid=M3w5MTMyMXwwfDF8c2VhcmNofDM3fHxhYnN0cmFjdHxlbnwwfHx8fDE3MTI5MzE4MzR8MA&ixlib=rb-4.0.3&w=1400',
+  image1Src: '/images/hallway.jpg',
   heading1: undefined,
   image1Alt: 'SignUp Image',
-  action1: '/recipe',
+  action1: undefined,
+  createAccount: '/recipe',
+  signIn: '/'
 }
 
 SignUp2.propTypes = {
@@ -180,6 +184,8 @@ SignUp2.propTypes = {
   heading1: PropTypes.element,
   image1Alt: PropTypes.string,
   action1: PropTypes.element,
+  createAccount: PropTypes.string,
+  signIn: PropTypes.string
 }
 
 export default SignUp2

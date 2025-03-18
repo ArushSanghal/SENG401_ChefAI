@@ -13,7 +13,7 @@ const SignUp = (props) => {
 
 
   return (
-    <div className="blog-container">
+    <div className="blog-container thq-section-padding">
       <Helmet>
         <title>ChefAI</title>
         <meta property="og:title" content="ChefAI" />
@@ -21,6 +21,7 @@ const SignUp = (props) => {
 
     <SignUp2
     ></SignUp2>
+
 
     </div>
   )

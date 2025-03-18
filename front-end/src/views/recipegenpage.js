@@ -57,9 +57,9 @@ function Recipegenpage(){
           src="/images/ingredients_image.jpg"
           className="thq-img-ratio-4-3 thq-flex-row thq-section-max-width food-form-max-width"
     />
-
-        <form onSubmit={handleSubmit}>
-    <div className = "form-content thq-section-padding"> 
+    <div className = 'form-text thq-section-padding'>
+    <form onSubmit={handleSubmit}>
+    <div className = "form-content"> 
         <h1>Make Your Recipe</h1>
         <div className = "ai-prompt-copy">
                 Whether it's leftover ingredients, canned beans you don't know what to do with,
@@ -111,6 +111,7 @@ function Recipegenpage(){
         </div> 
         
         </form>
+        </div>
         </div>
         <div className="generated-recipe">
             <h1 >Recipes! </h1>
