@@ -9,6 +9,7 @@ const UserProfile = () => {
     const [loading, setLoading] = useState(null);
     const [increment, setIncrement] = useState(0);
     const [save, setSave] = useState(false);
+    const [savedRecipes, setSavedRecipes] = useState(false);
     const history = useHistory();
 
     useEffect(() => {
@@ -184,7 +185,32 @@ const UserProfile = () => {
         });
     }
 
-
+    function handleViewRecipes(e){
+        e.preventDefault();
+        
+        const token = localStorage.getItem("access_token");
+            if (!token) {
+                history.push("/");
+                return;
+        }
+        setLoading(true);
+        fetch("http://127.0.0.1:8000/view_recipes/", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },      
+        })
+        // Converting to JSON
+        .then(response => response.json())
+        // Displaying results to console
+        .then(json => {
+            console.log(json);
+            setSavedRecipes(json.saved_recipes);  // only the saved_recipes part of the response
+            setLoading(false);
+            setSave(true);    
+        });
+    }
+    
     return (
         <div>
             <h1>Welcome, {userData.first_name}!</h1>
@@ -208,6 +234,38 @@ const UserProfile = () => {
 
             <button onClick={handleSave}>Save Changes</button>
             <button onClick={handleSignOut}>Sign Out</button>
+            <div>
+            <button onClick={handleViewRecipes}>View Saved Recipes</button>
+
+            {loading && <p>Loading...</p>}
+
+            <div>
+                {savedRecipes.length > 0 ? (
+                    savedRecipes.map((recipe, index) => (
+                        <div key={index} style={{ marginBottom: "20px", border: "1px solid #ddd", padding: "10px" }}>
+                            <p><strong>Recipe Name:</strong>{recipe.recipe_name}</p>
+                            <p><strong>Estimated Time:</strong> {recipe.estimated_time}</p>
+                            <p><strong>Skill Level:</strong> {recipe.skill_level}</p>
+
+                            <h4>Instructions:</h4>
+                            {recipe.instructions && typeof recipe.instructions === 'string' ? (
+                                <ol style={{ paddingLeft: "20px" }}>
+                                    {JSON.parse(recipe.instructions).map((instruction, stepIndex) => (
+                                        <li key={stepIndex}>
+                                            {instruction.instruction || "No instruction available."}
+                                        </li>
+                                    ))}
+                                </ol>
+                            ) : (
+                                <p>No instructions available.</p>
+                            )}
+                        </div>
+                    ))
+                ) : (
+                    <p>No saved recipes found.</p>
+                )}
+            </div>
+        </div>
             <title>ChefAI</title>
     <meta property="og:title" content="ChefAI" />
 

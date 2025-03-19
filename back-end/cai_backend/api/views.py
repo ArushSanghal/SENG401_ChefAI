@@ -39,7 +39,7 @@ Refactoring notes:
 """
 class LLM:
     def __init__(self):
-        genai.configure(api_key="AIzaSyAnDxD9kAbcngSDw61KjeJzqiqfdCo_sSI")
+        genai.configure(api_key="AIzaSyAWLFIGVTdsn-OxejhBhkzK4tbyKhc8hoM")
         self.generation_config = {
             "temperature": 0,
             "top_p": 1,
@@ -464,6 +464,42 @@ def save_button(request):
             user.save() 
 
             return JsonResponse({"message": "Recipe saved successfully"}, status=200)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+        
+@csrf_exempt
+@require_http_methods(["GET", "OPTIONS"])
+def view_recipes(request):
+     if request.method == "GET":
+        try:
+            token = request.headers.get("Authorization").split(" ")[1]
+            db_token = Token.objects.filter(token=token).first()
+            if not db_token:
+                return JsonResponse({"error": "Invalid or expired token"}, status=401)
+
+            user = db_token.user
+            if not user:
+                return JsonResponse({"error": "User not found"}, status=404)
+            
+            saved_recipes = user.saved_recipes.all()
+            
+            # If no saved recipes, return a message
+            if not saved_recipes.exists():
+               return JsonResponse({"saved_recipes": "No saved recipes"}, status=200)
+
+            # Serialize the full recipe objects to return the necessary details
+            recipe_data = [
+                {
+                    "recipe_name": recipe.title,
+                    "estimated_time": recipe.estimated_time, 
+                    "skill_level": recipe.skill_level,
+                    "instructions": recipe.instructions,
+                }
+                for recipe in saved_recipes
+            ]
+
+            return JsonResponse({"saved_recipes": recipe_data}, status=200)
 
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
