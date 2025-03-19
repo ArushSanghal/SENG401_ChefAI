@@ -1,7 +1,7 @@
 {
     "recipe": {
-        "recipe_name": "Simple Chicken with Tomatoes",
-        "skill_level": "Beginner",
+        "recipe_name": "Quick Chicken with Tomatoes",
+        "skill_level": "Intermediate",
         "time": "30 minutes",
         "dietary_restrictions": null,
         "ingredients": [
@@ -21,48 +21,66 @@
                 "unit": "tablespoons"
             },
             {
+                "name": "Garlic",
+                "amount": "2",
+                "unit": "cloves"
+            },
+            {
                 "name": "Salt",
                 "amount": "1/2",
                 "unit": "teaspoon"
             },
             {
-                "name": "Pepper",
+                "name": "Black pepper",
                 "amount": "1/4",
                 "unit": "teaspoon"
+            },
+            {
+                "name": "Basil",
+                "amount": "1/4",
+                "unit": "cup"
+            },
+            {
+                "name": "Onion",
+                "amount": "1/2",
+                "unit": "medium"
             }
         ],
         "steps": [
             {
                 "step": 1,
-                "instruction": "Cut the chicken breasts into bite-sized pieces."
+                "instruction": "Dice the onion and mince the garlic."
             },
             {
                 "step": 2,
-                "instruction": "Dice the tomatoes."
+                "instruction": "Cut the chicken breasts into bite-sized pieces."
             },
             {
                 "step": 3,
-                "instruction": "Heat the olive oil in a pan over medium heat."
+                "instruction": "Heat the olive oil in a pan over medium-high heat. Add the chicken and cook until browned on all sides."
             },
             {
                 "step": 4,
-                "instruction": "Add the chicken to the pan and cook until browned on all sides."
+                "instruction": "Add the onion and garlic to the pan and cook until softened, about 5 minutes."
             },
             {
                 "step": 5,
-                "instruction": "Add the diced tomatoes, salt, and pepper to the pan."
+                "instruction": "Chop the tomatoes and add them to the pan. Season with salt, pepper, and basil."
             },
             {
                 "step": 6,
-                "instruction": "Reduce heat to low, cover, and simmer for 15-20 minutes, or until the chicken is cooked through and the tomatoes have softened."
+                "instruction": "Reduce heat to low, cover, and simmer for 15 minutes, or until the chicken is cooked through and the tomatoes have broken down into a sauce."
+            },
+            {
+                "step": 7,
+                "instruction": "Serve hot with rice or pasta."
             }
         ],
         "prep_time": "10 minutes",
         "cook_time": "20 minutes",
         "servings": "2",
         "tips": [
-            "Serve with rice or pasta.",
-            "Add fresh herbs like basil or oregano for extra flavor."
+            "For extra flavor, add a pinch of red pepper flakes."
         ],
         "substitutions": [
             {
@@ -70,8 +88,8 @@
                 "substitute": "Chicken thighs"
             },
             {
-                "ingredient": "Tomatoes",
-                "substitute": "Canned diced tomatoes"
+                "ingredient": "Basil",
+                "substitute": "Oregano"
             }
         ]
     }
