@@ -205,7 +205,7 @@ const UserProfile = () => {
         // Displaying results to console
         .then(json => {
             console.log(json);
-            setSavedRecipes(json.saved_recipes);  // only the saved_recipes part of the response
+            setSavedRecipes(json.saved_recipes); 
             setLoading(false);
             setSave(true);    
         });
@@ -240,7 +240,7 @@ const UserProfile = () => {
             {loading && <p>Loading...</p>}
 
             <div>
-                {savedRecipes.length > 0 ? (
+                {Array.isArray(savedRecipes) && savedRecipes.length > 0 ? (
                     savedRecipes.map((recipe, index) => (
                         <div key={index} style={{ marginBottom: "20px", border: "1px solid #ddd", padding: "10px" }}>
                             <p><strong>Recipe Name:</strong>{recipe.recipe_name}</p>
@@ -248,7 +248,6 @@ const UserProfile = () => {
                             <p><strong>Skill Level:</strong> {recipe.skill_level}</p>
 
                             <h4>Instructions:</h4>
-                            {recipe.instructions && typeof recipe.instructions === 'string' ? (
                                 <ol style={{ paddingLeft: "20px" }}>
                                     {JSON.parse(recipe.instructions).map((instruction, stepIndex) => (
                                         <li key={stepIndex}>
@@ -256,9 +255,6 @@ const UserProfile = () => {
                                         </li>
                                     ))}
                                 </ol>
-                            ) : (
-                                <p>No instructions available.</p>
-                            )}
                         </div>
                     ))
                 ) : (
