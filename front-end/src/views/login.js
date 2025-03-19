@@ -5,8 +5,8 @@ import './home.css'
 import SignIn1 from '../components/sign-in1'
 
 const Login = (props) => {
-
-
+  const [members, setMembers] = useState([]);
+  const [admins, setAdmins] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3000/members/members", {

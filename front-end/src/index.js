@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect, useContext, createContext} from 'react'
+import React, {Fragment, useState, useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import {
   BrowserRouter as Router,
@@ -11,11 +11,11 @@ import './style.css'
 import Login from './views/login'
 import SignUp from './views/signup'
 import GuestHome from './views/guest-home'
+import UserProfile from './components/user-profile'
+
 
 import NotFound from './views/not-found'
 import Recipegenpage from './views/recipegenpage'
-
-export const  CurrentUserContext = createContext(null);
 
 const App = () => {
 
@@ -35,12 +35,13 @@ const App = () => {
           <Route component={SignUp} exact path="/signup" />
           <Route component={Recipegenpage} exact path="/recipe" />
           <Route component={GuestHome} exact path="/guest"/>
+          <Route component={UserProfile} exact path="/user-profile" />
           
           <Route component={NotFound} path="**" />
           <Redirect to="**" />
       </Switch>
     </Router>
-</CurrentUserContext.Provider>
+      </CurrentUserContext.Provider>
   )
 
 }

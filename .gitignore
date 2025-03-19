@@ -1,3 +1,4 @@
 .env
+/back-end/db.sqlite3
 /front-end/node_modules/
 /node_modules/
