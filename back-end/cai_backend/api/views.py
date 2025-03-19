@@ -9,7 +9,7 @@ import json
 from .models import RegisteredUser, Recipe, Ingredients
 
 
-genai.configure(api_key="AIzaSyAnDxD9kAbcngSDw61KjeJzqiqfdCo_sSI")
+genai.configure(api_key="AIzaSyAnDxD9kAbcngSDw61KjeJzqiqfdCo_sSI") # type: ignore
 
 class LLM:
     def __init__(self):
@@ -23,7 +23,7 @@ class LLM:
 
         self.model = genai.GenerativeModel(
             model_name="gemini-1.5-pro",
-            generation_config=self.generation_config,
+            generation_config=self.generation_config, # type: ignore
             system_instruction=(
                 "Generate a structured JSON recipe with the following format:\n"
                 "{\n"
