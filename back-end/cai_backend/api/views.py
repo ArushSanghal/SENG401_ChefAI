@@ -439,3 +439,32 @@ def logout_user(request):
             return JsonResponse({"error": "Authorization header missing or invalid"}, status=401)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
+
+@csrf_exempt
+@require_http_methods(["POST", "OPTIONS"])
+def save_button(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            token = request.headers.get("Authorization").split(" ")[1]
+
+            db_token = Token.objects.filter(token=token).first()
+            if not db_token:
+                return JsonResponse({"error": "Invalid or expired token"}, status=401)
+
+            user = db_token.user
+            if not user:
+                return JsonResponse({"error": "User not found"}, status=404)
+
+            recipe = Recipe_Generator() 
+            new_recipe = recipe.parse_recipe()
+
+            user.saved_recipes.add(new_recipe)
+            user.save() 
+
+            return JsonResponse({"message": "Recipe saved successfully"}, status=200)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
