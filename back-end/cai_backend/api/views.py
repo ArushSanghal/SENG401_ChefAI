@@ -29,6 +29,7 @@ from .models import RegisteredUser, DietaryRestriction, SkillLevelChoices, Token
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+import os
 
 REGISTERED_USER_EXPIRY = 30
 
@@ -38,8 +39,11 @@ Refactoring notes:
     api key should live in a .env file
 """
 class LLM:
-    def __init__(self):
-        genai.configure(api_key="AIzaSyAnDxD9kAbcngSDw61KjeJzqiqfdCo_sSI")
+    def __init__(self,):
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY was not found in .env file")
+        genai.configure(api_key=api_key)
         self.generation_config = {
             "temperature": 0,
             "top_p": 1,

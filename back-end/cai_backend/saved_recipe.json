@@ -1,105 +1,77 @@
 {
     "recipe": {
-        "recipe_name": "Pesto Chicken with Roasted Vegetables",
-        "skill_level": "Intermediate",
-        "time": "60 minutes",
+        "recipe_name": "Simple Chicken with Tomatoes",
+        "skill_level": "Beginner",
+        "time": "30 minutes",
         "dietary_restrictions": null,
         "ingredients": [
             {
-                "name": "Chicken breasts",
-                "amount": "4",
+                "name": "Chicken breast",
+                "amount": "2",
                 "unit": null
             },
             {
-                "name": "Pesto",
-                "amount": "1/2 cup",
-                "unit": null
-            },
-            {
-                "name": "Cherry tomatoes",
-                "amount": "1 pint",
-                "unit": null
-            },
-            {
-                "name": "Zucchini",
-                "amount": "2 medium",
-                "unit": null
-            },
-            {
-                "name": "Bell pepper (any color)",
-                "amount": "1",
-                "unit": null
-            },
-            {
-                "name": "Red onion",
-                "amount": "1/2",
-                "unit": null
+                "name": "Tomatoes",
+                "amount": "2",
+                "unit": "medium"
             },
             {
                 "name": "Olive oil",
-                "amount": "2 tablespoons",
-                "unit": null
+                "amount": "2",
+                "unit": "tablespoons"
             },
             {
                 "name": "Salt",
-                "amount": "1 teaspoon",
-                "unit": null
+                "amount": "1/2",
+                "unit": "teaspoon"
             },
             {
-                "name": "Black pepper",
-                "amount": "1/2 teaspoon",
-                "unit": null
+                "name": "Pepper",
+                "amount": "1/4",
+                "unit": "teaspoon"
             }
         ],
         "steps": [
             {
                 "step": 1,
-                "instruction": "Preheat oven to 400\u00b0F (200\u00b0C)."
+                "instruction": "Cut the chicken breasts into bite-sized pieces."
             },
             {
                 "step": 2,
-                "instruction": "Chop the vegetables into bite-sized pieces."
+                "instruction": "Dice the tomatoes."
             },
             {
                 "step": 3,
-                "instruction": "In a large bowl, toss the vegetables with olive oil, salt, and pepper."
+                "instruction": "Heat the olive oil in a pan over medium heat."
             },
             {
                 "step": 4,
-                "instruction": "Spread the vegetables in a single layer on a baking sheet."
+                "instruction": "Add the chicken to the pan and cook until browned on all sides."
             },
             {
                 "step": 5,
-                "instruction": "Place the chicken breasts on top of the vegetables."
+                "instruction": "Add the diced tomatoes, salt, and pepper to the pan."
             },
             {
                 "step": 6,
-                "instruction": "Spread the pesto evenly over the chicken breasts."
-            },
-            {
-                "step": 7,
-                "instruction": "Bake for 30-35 minutes, or until the chicken is cooked through and the vegetables are tender."
-            },
-            {
-                "step": 8,
-                "instruction": "Let rest for 5 minutes before serving."
+                "instruction": "Reduce heat to low, cover, and simmer for 15-20 minutes, or until the chicken is cooked through and the tomatoes have softened."
             }
         ],
-        "prep_time": "20 minutes",
-        "cook_time": "35 minutes",
-        "servings": "4",
+        "prep_time": "10 minutes",
+        "cook_time": "20 minutes",
+        "servings": "2",
         "tips": [
-            "For extra flavor, add a sprinkle of Parmesan cheese before serving.",
-            "You can use any vegetables you like, such as broccoli, carrots, or potatoes."
+            "Serve with rice or pasta.",
+            "Add fresh herbs like basil or oregano for extra flavor."
         ],
         "substitutions": [
             {
-                "ingredient": "Chicken breasts",
+                "ingredient": "Chicken breast",
                 "substitute": "Chicken thighs"
             },
             {
-                "ingredient": "Pesto",
-                "substitute": "Sun-dried tomato pesto"
+                "ingredient": "Tomatoes",
+                "substitute": "Canned diced tomatoes"
             }
         ]
     }
