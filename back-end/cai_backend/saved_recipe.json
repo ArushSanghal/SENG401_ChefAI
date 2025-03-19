@@ -1,55 +1,105 @@
 {
     "recipe": {
-        "recipe_name": "Simple Tomato Soup",
+        "recipe_name": "Pesto Chicken with Roasted Vegetables",
         "skill_level": "Intermediate",
         "time": "60 minutes",
-        "dietary_restrictions": "Vegetarian",
+        "dietary_restrictions": null,
         "ingredients": [
             {
-                "name": "Tomatoes",
-                "amount": "28",
-                "unit": "oz"
+                "name": "Chicken breasts",
+                "amount": "4",
+                "unit": null
             },
             {
-                "name": "Onion",
+                "name": "Pesto",
+                "amount": "1/2 cup",
+                "unit": null
+            },
+            {
+                "name": "Cherry tomatoes",
+                "amount": "1 pint",
+                "unit": null
+            },
+            {
+                "name": "Zucchini",
+                "amount": "2 medium",
+                "unit": null
+            },
+            {
+                "name": "Bell pepper (any color)",
                 "amount": "1",
-                "unit": "medium"
+                "unit": null
             },
             {
-                "name": "Vegetable Soup",
-                "amount": "32",
-                "unit": "oz"
+                "name": "Red onion",
+                "amount": "1/2",
+                "unit": null
+            },
+            {
+                "name": "Olive oil",
+                "amount": "2 tablespoons",
+                "unit": null
+            },
+            {
+                "name": "Salt",
+                "amount": "1 teaspoon",
+                "unit": null
+            },
+            {
+                "name": "Black pepper",
+                "amount": "1/2 teaspoon",
+                "unit": null
             }
         ],
         "steps": [
             {
                 "step": 1,
-                "instruction": "Dice the onion and saut\u00e9 in a large pot until translucent."
+                "instruction": "Preheat oven to 400\u00b0F (200\u00b0C)."
             },
             {
                 "step": 2,
-                "instruction": "Add the tomatoes (diced or crushed) to the pot and cook for 10 minutes, stirring occasionally."
+                "instruction": "Chop the vegetables into bite-sized pieces."
             },
             {
                 "step": 3,
-                "instruction": "Pour in the vegetable soup. Bring to a boil, then reduce heat and simmer for 30 minutes."
+                "instruction": "In a large bowl, toss the vegetables with olive oil, salt, and pepper."
             },
             {
                 "step": 4,
-                "instruction": "Use an immersion blender or carefully transfer the soup to a regular blender to blend until smooth. Season with salt and pepper to taste."
+                "instruction": "Spread the vegetables in a single layer on a baking sheet."
+            },
+            {
+                "step": 5,
+                "instruction": "Place the chicken breasts on top of the vegetables."
+            },
+            {
+                "step": 6,
+                "instruction": "Spread the pesto evenly over the chicken breasts."
+            },
+            {
+                "step": 7,
+                "instruction": "Bake for 30-35 minutes, or until the chicken is cooked through and the vegetables are tender."
+            },
+            {
+                "step": 8,
+                "instruction": "Let rest for 5 minutes before serving."
             }
         ],
-        "prep_time": "15 minutes",
-        "cook_time": "45 minutes",
-        "servings": "4-6",
+        "prep_time": "20 minutes",
+        "cook_time": "35 minutes",
+        "servings": "4",
         "tips": [
-            "For a richer flavor, use fire-roasted tomatoes.",
-            "Add a dollop of cream or a sprinkle of fresh herbs before serving."
+            "For extra flavor, add a sprinkle of Parmesan cheese before serving.",
+            "You can use any vegetables you like, such as broccoli, carrots, or potatoes."
         ],
         "substitutions": [
             {
-                "ingredient": "Vegetable Soup",
-                "substitute": "Chicken Broth"
+                "ingredient": "Chicken breasts",
+                "substitute": "Chicken thighs"
+            },
+            {
+                "ingredient": "Pesto",
+                "substitute": "Sun-dried tomato pesto"
             }
         ]
     }
