@@ -163,17 +163,20 @@ class Admin(User):
 """
     It's technically not a recipe generator, but this class is good,
     maybe add a dependency injection for the filename instead of hardcoding it
+    -- i think is done
 """
 class Recipe_Generator:
-    @staticmethod
-    def parse_recipe(filename="saved_recipe.json"):
+    def __init__(self, filename="saved_recipe.json"):
+        self.filename = filename
+        
+    def parse_recipe(self):
         try:
-            with open(filename, "r", encoding="utf-8") as f:
+            with open(self.filename, "r", encoding="utf-8") as f:
                 data = json.load(f)
         except FileNotFoundError:
-            return {"FileNotFound": f"{filename} does not exist or is in the wrong directory"}, 400
+            return {"FileNotFound": f"{self.filename} does not exist or is in the wrong directory"}, 400
         except PermissionError:
-            return {"PermissionError": f"You do not have the correct permissions to access {filename}"}, 400
+            return {"PermissionError": f"You do not have the correct permissions to access {self.filename}"}, 400
         except Exception as e:
             return {"Uknown error": e}, 400
         
@@ -207,123 +210,125 @@ Refactoring notes:
     Follow the single responsibility principle and break this down into multiple classes
     Potentially removing this class and creating, "controllers" for the features listed
 """
-# class Registered(User):
-#     def __init__(self, email_address=None, password=None, user=None):
-#         super().__init__(None, None)
-#         self.email_address = email_address.strip().lower() if email_address else None
-#         self.password = password
-#         self.user = user
 
-#     def sign_in(self):
-#         user = RegisteredUser.objects.filter(email=self.email_address).first()
-#         if user and check_password(self.password, user.hashed_password):
-#             refresh = RefreshToken.for_user(user)
-#             access_token = str(refresh.access_token)
-#             expires_at = timezone.now() + timedelta(minutes=10)
+'''
+class Registered(User):
+    def __init__(self, email_address=None, password=None, user=None):
+        super().__init__(None, None)
+        self.email_address = email_address.strip().lower() if email_address else None
+        self.password = password
+        self.user = user
 
-#             #Token In Database
-#             Token.objects.create(user=user, token=access_token, expires_at=expires_at)
+    def sign_in(self):
+        user = RegisteredUser.objects.filter(email=self.email_address).first()
+        if user and check_password(self.password, user.hashed_password):
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            expires_at = timezone.now() + timedelta(minutes=10)
 
-#             return {
-#                 "message": f"Welcome back, {user.first_name}!",
-#                 "is_admin": user.is_admin,
-#                 "refresh": str(refresh),
-#                 "access": access_token,
-#                 "user_id": user.id,
-#                 "first_name": user.first_name,
-#                 "last_name": user.last_name,
-#                 "username": user.username,
-#                 "email": user.email,
-#                 "skill_level": user.skill_level,
-#                 "dietary_restrictions": list(user.dietary_restrictions.values_list("restriction", flat=True)),
-#             }, 200
-#         return {"error": "Invalid credentials"}, 401
+            #Token In Database
+            Token.objects.create(user=user, token=access_token, expires_at=expires_at)
 
-#     def get_user_data(self, token):
-#         db_token = Token.objects.filter(token=token).first()   #Checks token
-#         if not db_token or not db_token.is_valid():
-#             return {"error": "Invalid or expired token"}, 401
+            return {
+                "message": f"Welcome back, {user.first_name}!",
+                "is_admin": user.is_admin,
+                "refresh": str(refresh),
+                "access": access_token,
+                "user_id": user.id,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "username": user.username,
+                "email": user.email,
+                "skill_level": user.skill_level,
+                "dietary_restrictions": list(user.dietary_restrictions.values_list("restriction", flat=True)),
+            }, 200
+        return {"error": "Invalid credentials"}, 401
 
-#         user = db_token.user
-#         if not user:
-#             return {"error": "User not found"}, 404
+    def get_user_data(self, token):
+        db_token = Token.objects.filter(token=token).first()   #Checks token
+        if not db_token or not db_token.is_valid():
+            return {"error": "Invalid or expired token"}, 401
 
-#         return {
-#             "user_id": user.id,
-#             "first_name": user.first_name,
-#             "last_name": user.last_name,
-#             "username": user.username,
-#             "email": user.email,
-#             "skill_level": user.skill_level,
-#             "dietary_restrictions": list(user.dietary_restrictions.values_list("restriction", flat=True)),
-#         }, 200
+        user = db_token.user
+        if not user:
+            return {"error": "User not found"}, 404
 
-#     def update_profile(self, token, data):
-#         try:
-#             jwt_auth = JWTAuthentication()
-#             validated_token = jwt_auth.get_validated_token(token)
-#             user_id = validated_token["user_id"]
+        return {
+            "user_id": user.id,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "username": user.username,
+            "email": user.email,
+            "skill_level": user.skill_level,
+            "dietary_restrictions": list(user.dietary_restrictions.values_list("restriction", flat=True)),
+        }, 200
 
-#             user = RegisteredUser.objects.filter(id=user_id).first()
-#             if not user:
-#                 return {"error": "User not found"}, 404
+    def update_profile(self, token, data):
+        try:
+            jwt_auth = JWTAuthentication()
+            validated_token = jwt_auth.get_validated_token(token)
+            user_id = validated_token["user_id"]
 
-#             #Skill level
-#             skill_level = data.get("skill_level")
-#             if skill_level and skill_level in [choice[0] for choice in SkillLevelChoices.choices]:
-#                 user.skill_level = skill_level
+            user = RegisteredUser.objects.filter(id=user_id).first()
+            if not user:
+                return {"error": "User not found"}, 404
 
-#             #Dietary restrictions
-#             dietary_restrictions = data.get("dietary_restrictions", [])
-#             user.dietary_restrictions.all().delete()
-#             for restriction in dietary_restrictions:
-#                 DietaryRestriction.objects.create(user=user, restriction=restriction)
+            #Skill level
+            skill_level = data.get("skill_level")
+            if skill_level and skill_level in [choice[0] for choice in SkillLevelChoices.choices]:
+                user.skill_level = skill_level
 
-#             user.save()
-#             return {"success": "Profile updated successfully"}, 200
-#         except (InvalidToken, TokenError) as e:
-#             print(f"Token error: {e}")
-#             return {"error": "Invalid token"}, 401
+            #Dietary restrictions
+            dietary_restrictions = data.get("dietary_restrictions", [])
+            user.dietary_restrictions.all().delete()
+            for restriction in dietary_restrictions:
+                DietaryRestriction.objects.create(user=user, restriction=restriction)
 
-#     def logout(self, token):
-#         Token.objects.filter(token=token).delete()  #Deletes token from database
-#         return {"message": "Logged out successfully"}, 200
+            user.save()
+            return {"success": "Profile updated successfully"}, 200
+        except (InvalidToken, TokenError) as e:
+            print(f"Token error: {e}")
+            return {"error": "Invalid token"}, 401
 
-#     def add_to_history(self):
-#         recipe = Recipe_Generator()
-#         new_recipe = recipe.parse_recipe()
+    def logout(self, token):
+        Token.objects.filter(token=token).delete()  #Deletes token from database
+        return {"message": "Logged out successfully"}, 200
 
-#         try:
-#             reg_user = RegisteredUser.objects.get(username=self.username)
-#             reg_user.add_viewed_recipe(new_recipe)
-#         except:
-#             return JsonResponse({"error": "User not found"}, status=404)
+    def add_to_history(self):
+        recipe = Recipe_Generator()
+        new_recipe = recipe.parse_recipe()
 
-#         return JsonResponse({"message": "Recipe saved successfully"}, status=201)
+        try:
+            reg_user = RegisteredUser.objects.get(username=self.username)
+            reg_user.add_viewed_recipe(new_recipe)
+        except:
+            return JsonResponse({"error": "User not found"}, status=404)
 
-
-#     def save_recipe(self):
-#         recipe = Recipe_Generator()
-#         new_recipe = recipe.parse_recipe()
-
-#         try:
-#             reg_user = RegisteredUser.objects.get(username=self.username)
-#             reg_user.saved_recipes.add(new_recipe)
-#         except RegisteredUser.DoesNotExist:
-#             return JsonResponse({"error": "User not found"}, status=404)
-
-#         return JsonResponse({"message": "Recipe saved successfully"}, status=201)
+        return JsonResponse({"message": "Recipe saved successfully"}, status=201)
 
 
-#     def view_recipes(self):
-#         user = RegisteredUser.objects.get(email=self.email_address)
-#         last_recipes = user.last_used_recipes.all().order_by('-id')[:5]
-#         saved_recipes = user.saved_recipes.all()
-#         return {
-#             "last_viewed": [recipe.title for recipe in last_recipes],
-#             "saved_recipes": [recipe.title for recipe in saved_recipes]
-#         }
+    def save_recipe(self):
+        recipe = Recipe_Generator()
+        new_recipe = recipe.parse_recipe()
 
+        try:
+            reg_user = RegisteredUser.objects.get(username=self.username)
+            reg_user.saved_recipes.add(new_recipe)
+        except RegisteredUser.DoesNotExist:
+            return JsonResponse({"error": "User not found"}, status=404)
+
+        return JsonResponse({"message": "Recipe saved successfully"}, status=201)
+
+
+    def view_recipes(self):
+        user = RegisteredUser.objects.get(email=self.email_address)
+        last_recipes = user.last_used_recipes.all().order_by('-id')[:5]
+        saved_recipes = user.saved_recipes.all()
+        return {
+            "last_viewed": [recipe.title for recipe in last_recipes],
+            "saved_recipes": [recipe.title for recipe in saved_recipes]
+        }
+'''
 
 class Authentication:
     def __init__(self, email_address=None, password=None):
@@ -467,7 +472,7 @@ def generate_recipe(request):
             response = llm.generate_recipe(data["skill_level"], data["time"], data["dietary_restrictions"], data["ingredients"])
 
             llm.save_recipe(response)
-
+            
             return JsonResponse(response)
         except Exception as e:
             print(f"Unexpected Error: {str(e)}")
