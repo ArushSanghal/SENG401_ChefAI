@@ -46,6 +46,7 @@ const SignIn1 = (props) => {
                 alert("Login successful!");
                 history.push("/user-profile");
             } else {
+                console.log("Details:", data)
                 alert("Invalid credentials.");
             }
         })
@@ -204,67 +205,6 @@ const SignIn1 = (props) => {
                 </div>
             </div>
         </div>
-<<<<<<< HEAD
-        <div className="sign-in1-container6">
-          <div className="sign-in1-divider1">
-            <div className="sign-in1-divider2"></div>
-            <span className="thq-body-large">
-              {props.content1 ?? (
-                <Fragment>
-                  <span className="sign-in1-text23">New to our community</span>
-                </Fragment>
-              )}
-            </span>
-            <div className="sign-in1-divider3"></div>
-          </div>
-          <Link to={props.newAccount}>
-          <button type="button" className="sign-in1-button2 thq-button-outline">
-            <span className="sign-in1-text19 thq-body-small">
-              {props.action2 ?? (
-                <Fragment>
-                  <span className="sign-in1-text21">Create an account</span>
-                </Fragment>
-              )}
-            </span>
-          </button>
-          </Link>
-
-          <Link to={props.guestAccount}>
-          <button type="button" className="sign-in1-button2 thq-button-outline">
-            <span className="sign-in1-text19 thq-body-small">
-              {props.action3 ?? (
-                <Fragment>
-                  <span className="sign-in1-text21">Continue as Guest</span>
-                </Fragment>
-              )}
-            </span>
-          </button>
-          </Link>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-SignIn1.defaultProps = {
-  heading1: undefined,
-  action3: undefined,
-  action2: undefined,
-  action1: undefined,
-  content1: undefined,
-  newAccount: '/signup',
-  guestAccount: '/recipe'
-}
-
-SignIn1.propTypes = {
-  heading1: PropTypes.element,
-  action3: PropTypes.element,
-  action2: PropTypes.element,
-  action1: PropTypes.element,
-  content1: PropTypes.element,
-  newAccount: PropTypes.string,
-  guestAccount: PropTypes.string
-=======
     );
 }
 
@@ -282,7 +222,6 @@ SignIn1.propTypes = {
     action1: PropTypes.element,
     content1: PropTypes.element,
     newAccount: PropTypes.string
->>>>>>> tokenizer
 }
 
 export default SignIn1;

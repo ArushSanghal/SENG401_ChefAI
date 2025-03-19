@@ -23,12 +23,6 @@ const App = () => {
 
 
   return (
-      <CurrentUserContext.Provider
-          value={{
-            currentUser,
-            setCurrentUser
-          }}
-       >
     <Router>
       <Switch>
           <Route component={Login} exact path="/" />
@@ -36,12 +30,10 @@ const App = () => {
           <Route component={Recipegenpage} exact path="/recipe" />
           <Route component={GuestHome} exact path="/guest"/>
           <Route component={UserProfile} exact path="/user-profile" />
-          
           <Route component={NotFound} path="**" />
           <Redirect to="**" />
       </Switch>
     </Router>
-      </CurrentUserContext.Provider>
   )
 
 }
