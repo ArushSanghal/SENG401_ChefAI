@@ -19,7 +19,7 @@ class SkillLevelChoices(models.TextChoices):
     ADVANCED = "Advanced", "Advanced"
 
 
-class User(AbstractUser):
+class User(models.Model):
     """Stores general information about the user, dropped after use if they are not needed"""
     available_time = models.CharField(
         max_length=3,

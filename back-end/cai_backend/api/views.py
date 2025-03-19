@@ -204,20 +204,18 @@ Refactoring notes:
     Potentially removing this class and creating, "controllers" for the features listed
 """
 class Registered(User):
-    def __init__(self, username=None, email_address=None, password=None, user=None):
+    def __init__(self, email_address=None, password=None, user=None):
         super().__init__(None, None)
         self.email_address = email_address.strip().lower() if email_address else None
-        self.username = username
         self.password = password
         self.user = user
 
-
     def sign_in(self):
         user = RegisteredUser.objects.filter(email=self.email_address).first()
-        if isinstance(user, RegisteredUser) and check_password(self.password, user.hashed_password):
+        if user and check_password(self.password, user.hashed_password):
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
-            expires_at = timezone.now() + timedelta(minutes=REGISTERED_USER_EXPIRY)
+            expires_at = timezone.now() + timedelta(minutes=10)
 
             #Token In Database
             Token.objects.create(user=user, token=access_token, expires_at=expires_at)
@@ -237,7 +235,6 @@ class Registered(User):
             }, 200
         return {"error": "Invalid credentials"}, 401
 
-
     def get_user_data(self, token):
         db_token = Token.objects.filter(token=token).first()   #Checks token
         if not db_token or not db_token.is_valid():
@@ -256,7 +253,6 @@ class Registered(User):
             "skill_level": user.skill_level,
             "dietary_restrictions": list(user.dietary_restrictions.values_list("restriction", flat=True)),
         }, 200
-
 
     def update_profile(self, token, data):
         try:
@@ -285,11 +281,9 @@ class Registered(User):
             print(f"Token error: {e}")
             return {"error": "Invalid token"}, 401
 
-
     def logout(self, token):
         Token.objects.filter(token=token).delete()  #Deletes token from database
         return {"message": "Logged out successfully"}, 200
-    
 
     def add_to_history(self):
         recipe = Recipe_Generator()
