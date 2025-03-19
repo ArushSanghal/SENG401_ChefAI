@@ -6,7 +6,11 @@ from .models import DietaryRestriction
 from .models import Recipe
 from .models import Ingredients
 from .models import RegisteredUser
-
+from django.core.files.base import ContentFile
+from django.contrib.auth.hashers import make_password
+from .views import Registered, Recipe_Generator
+import json
+import os
 # Create your tests here.
 
 '''
@@ -110,3 +114,147 @@ class RegisteredUserTest(TestCase):
         self.assertIn(self.recipe6, self.rUser.last_used_recipes.all())
         #the 1st recipe should not be in last_used_recipe
         self.assertNotIn(self.recipe1, self.rUser.last_used_recipes.all())
+
+'''need to use a fake_json file because the sevaed_recipe json will change everytime
+
+
+class SaveRecipeTestCase(TestCase):
+    def setUp(self):
+        # Create a mock registered user
+        self.user = RegisteredUser.objects.create(
+            first_name="John",
+            last_name="Doe",
+            username="jd",
+            email="jd@gmail.com",
+            hashed_password=make_password("test")
+        )
+
+        # Instantiate the Registered user class from your code
+        self.registered = Registered(name="John Doe",username="jd",phone_number="1234567890",
+                                      email_address="jd@gmail.com", password="test",available_time="Anytime")
+
+    def test_save_recipe(self):
+
+        self.registered.save_recipe()
+
+        # Assert the recipe was saved
+        recipe = Recipe.objects.get(title ="Quick Tomato Onion Sauce")
+        self.assertIsNotNone(recipe)
+        self.assertEqual(recipe.skill_level, "Advanced")
+
+        # Assert ingredients were saved
+        ingredients = Ingredients.objects.filter(recipe=recipe)
+        self.assertEqual(len(ingredients), 2)
+        self.assertEqual(ingredients[0].ingredient, "tomato")
+        self.assertEqual(ingredients[1].ingredient, "onion")
+
+'''
+
+import tempfile
+import json
+import os
+
+class SaveRecipeTestCase(TestCase):
+    def setUp(self):
+        # Path to saved_recipe.json
+        self.file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'saved_recipe.json')
+
+        # Backup existing file
+        if os.path.exists(self.file_path):
+            with open(self.file_path, 'r') as original:
+                self.original_content = original.read()
+        else:
+            self.original_content = None
+
+        # Create test JSON content
+        test_data = {
+            "recipe": {
+                "recipe_name": "Simple Tomato Soup",
+                "skill_level": "Intermediate",
+                "time": "60 minutes",
+                "dietary_restrictions": "Vegetarian",
+                "ingredients": [
+                    {"name": "Tomatoes", "amount": "28", "unit": "oz"},
+                    {"name": "Onion", "amount": "1", "unit": "medium"},
+                    {"name": "Vegetable Soup", "amount": "32", "unit": "oz"}
+                ],
+                "steps": [
+                    {"step": 1, "instruction": "Dice the onion and sauté in a large pot until translucent."},
+                    {"step": 2, "instruction": "Add the tomatoes..."},
+                    {"step": 3, "instruction": "Pour in the vegetable soup..."},
+                    {"step": 4, "instruction": "Blend and season with salt and pepper."}
+                ]
+            }
+        }
+
+        # Write test JSON to saved_recipe.json
+        with open(self.file_path, 'w') as f:
+            json.dump(test_data, f)
+
+        # Create mock registered user
+        self.user = RegisteredUser.objects.create(
+            first_name="John",
+            last_name="Doe",
+            username="jd",
+            email="jd@gmail.com",
+            hashed_password=make_password("test")
+        )
+
+        self.registered = Registered(name="John Doe", username="jd", phone_number="1234567890",
+                                     email_address="jd@gmail.com", password="test", available_time="Anytime")
+
+    def tearDown(self):
+        # Restore the original saved_recipe.json
+        if self.original_content is not None:
+            with open(self.file_path, 'w') as f:
+                f.write(self.original_content)
+        else:
+            os.remove(self.file_path)
+
+    def test_save_recipe(self):
+        self.registered.save_recipe()
+
+        # Assert the recipe was saved
+        recipe = Recipe.objects.get(title="Simple Tomato Soup")
+        self.assertIsNotNone(recipe)
+        self.assertEqual(recipe.skill_level, SkillLevelChoices.INTERMEDIATE)
+
+        # Assert ingredients were saved
+        ingredients = Ingredients.objects.filter(recipe=recipe)
+        self.assertEqual(len(ingredients), 3)
+        self.assertEqual(ingredients[0].ingredient, "Tomatoes")
+        self.assertEqual(ingredients[1].ingredient, "Onion")
+        self.assertEqual(ingredients[2].ingredient, "Vegetable Soup")
+
+'''Testing API calls'''
+from django.test import TestCase
+from rest_framework.test import APIRequestFactory, force_authenticate, APIClient,RequestsClient
+import json
+
+
+class TestApiCalls(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+   
+
+    def test_post_to_gen_recipe(self):
+        data = {
+            'ingredients': ['onion', 'tomato', 'celery'],
+            'skill_level': "Beginner",
+            'dietary_restrictions': [],
+            'time': "60 minutes"
+        }
+        response = self.client.post('/generate_recipe/', json.dumps(data), content_type='application/json')
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_incorrect_post_to_gen_recipe(self):
+        data = {
+            'ingredients': ['onion', 'tomato', 'celery'],
+            'dietary_restrictions': [],
+            'time': "60 minutes"
+        }
+        response = self.client.post('/generate_recipe/', json.dumps(data), content_type='application/json')
+
+        self.assertEqual(response.status_code, 400)
+
