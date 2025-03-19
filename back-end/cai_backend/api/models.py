@@ -64,11 +64,10 @@ class RegisteredUser(User):
     last_used_recipes = models.ManyToManyField(Recipe, related_name="last_used_recipes", blank=True)
     #auth_token = models.CharField(max_length=128, blank=True, null=True, unique=True)
 
-    # Required fields for Django's authentication system
-    USERNAME_FIELD = "email"  # Use email as the username field
-    REQUIRED_FIELDS = ["username"]  # Fields required when creating a user via createsuperuser
+    
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
 
-    # Add these methods
     @property
     def is_anonymous(self):
         """Always returns False for registered users."""

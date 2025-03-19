@@ -13,7 +13,7 @@ const SignIn1 = (props) => {
     const [successMessage, setSuccessMessage] = useState("");
     const history = useHistory();
 
-    // Check for success query parameter
+    
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         if (queryParams.get('success') === 'true') {
@@ -35,8 +35,8 @@ const SignIn1 = (props) => {
         .then((response) => response.json())
         .then((data) => {
             console.log("Login Response:", data);
-            if (data.access) { // Check if the access token exists
-                // Store JWT tokens in localStorage
+            if (data.access) { 
+                
                 localStorage.setItem("access_token", data.access);
                 localStorage.setItem("refresh_token", data.refresh);
                 console.log("Access Token:", localStorage.getItem("access_token"));
