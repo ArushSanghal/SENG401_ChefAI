@@ -51,7 +51,6 @@ def generate_recipe(request):
             return JsonResponse({"error": str(e)}, status=500)
         
         # Save the recipe to user history IF LOGGED IN
-        # Doesn't work
         auth_header = request.headers.get("Authorization")
         if auth_header and auth_header.startswith("Bearer "):
             token = auth_header.split(" ")[1]
@@ -196,7 +195,6 @@ def view_recipes(request):
             save_manager = SaveManager.from_token(token)
             json_recipes = save_manager.view_saved_recipes()
             
-
             return JsonResponse({"saved_recipes": json_recipes}, status=200)
 
         except Exception as e:
