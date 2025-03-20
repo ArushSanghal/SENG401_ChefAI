@@ -2,7 +2,9 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.utils import timezone
 from rest_framework_simplejwt.tokens import RefreshToken
 from datetime import timedelta
-from .models import RegisteredUser, Token
+from ..models import RegisteredUser, Token
+
+TOKEN_EXPIRY_MINUTES = 30
 
 class Authenticator:
     def __init__(self, email_address=None, password=None):
@@ -12,9 +14,9 @@ class Authenticator:
     def sign_in(self):
         user = RegisteredUser.objects.filter(email=self.email_address).first()
         if user and check_password(self.password, user.hashed_password):
-            refresh = RefreshToken.for_user(user)
+            refresh = RefreshToken.for_user(user) # type: ignore
             access_token = str(refresh.access_token)
-            expires_at = timezone.now() + timedelta(minutes=10)
+            expires_at = timezone.now() + timedelta(minutes=TOKEN_EXPIRY_MINUTES)
 
             #Token In Database
             Token.objects.create(user=user, token=access_token, expires_at=expires_at)
@@ -24,13 +26,13 @@ class Authenticator:
                 "is_admin": user.is_admin,
                 "refresh": str(refresh),
                 "access": access_token,
-                "user_id": user.id,
+                "user_id": user.pk,
                 "first_name": user.first_name,
                 "last_name": user.last_name,
                 "username": user.username,
                 "email": user.email,
                 "skill_level": user.skill_level,
-                "dietary_restrictions": list(user.dietary_restrictions.values_list("restriction", flat=True)),
+                "dietary_restrictions": list(user.dietary_restrictions.values_list("restriction", flat=True)), # type: ignore
             }, 200
         return {"error": "Invalid credentials"}, 401
     

@@ -1,9 +1,8 @@
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .models import RegisteredUser, DietaryRestriction, Token
-from .models import SkillLevelChoices
+from ..models import RegisteredUser, DietaryRestriction, Token, SkillLevelChoices
 
-class profileManager:
+class ProfileManager:
     def __init__(self, user=None):
         self.user = user
     
@@ -17,13 +16,13 @@ class profileManager:
             return {"error": "User not found"}, 404
 
         return {
-            "user_id": user.id,
+            "user_id": user.pk,
             "first_name": user.first_name,
             "last_name": user.last_name,
             "username": user.username,
             "email": user.email,
             "skill_level": user.skill_level,
-            "dietary_restrictions": list(user.dietary_restrictions.values_list("restriction", flat=True)),
+            "dietary_restrictions": list(user.dietary_restrictions.values_list("restriction", flat=True)), # type: ignore
         }, 200
 
     def update_profile(self, token, data):
@@ -43,7 +42,7 @@ class profileManager:
 
             #Dietary restrictions
             dietary_restrictions = data.get("dietary_restrictions", [])
-            user.dietary_restrictions.all().delete()
+            user.dietary_restrictions.all().delete() # type: ignore
             for restriction in dietary_restrictions:
                 DietaryRestriction.objects.create(user=user, restriction=restriction)
 

@@ -3,7 +3,6 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 import uuid
 
-
 class TimeChoices(models.TextChoices):
     MIN_15 = "15", "15 minutes"
     MIN_30 = "30", "30 minutes"
