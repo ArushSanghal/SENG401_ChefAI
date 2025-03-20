@@ -50,13 +50,13 @@ def generate_recipe(request):
         
         # Save the recipe to user history IF LOGGED IN
         # Doesn't work
-        # auth_header = request.headers.get("Authorization")
-        # if auth_header and auth_header.startswith("Bearer "):
-        #     token = auth_header.split(" ")[1]
-        #     save_manager = SaveManager.from_token(token)
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            token = auth_header.split(" ")[1]
+            save_manager = SaveManager.from_token(token)
 
-        #     recipe = parser.to_model()
-        #     save_manager.add_to_history(recipe)  
+            recipe = parser.to_model()
+            save_manager.add_to_history(recipe)  
         
         return JsonResponse(recipe_json)
         

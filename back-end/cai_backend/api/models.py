@@ -67,7 +67,6 @@ class RegisteredUser(User):
     is_admin = models.BooleanField(default=False)
     saved_recipes = models.ManyToManyField(Recipe, related_name="saved_recipes", blank=True)
     last_used_recipes = models.ManyToManyField(Recipe, related_name="last_used_recipes", blank=True)
-    #auth_token = models.CharField(max_length=128, blank=True, null=True, unique=True)
 
     # Required fields for Django's authentication system
     USERNAME_FIELD = "email"  # Use email as the username field
