@@ -119,3 +119,61 @@ class LoginTest(TestCase):
 
         self.assertIn("access", response)
         self.assertIn("refresh", response)
+        
+        
+        
+class SignUpTest(TestCase):
+    def test_working_sign_up(self):
+        # Create a mock registered user
+        
+        new_user_data = {
+            "first_name" : "Jane",
+            "last_name" : "Doe",
+            "username" : "jane_doe",
+            "email" : "jane.doe@gmail.com",
+            "password" : "testing1"
+        }
+        
+        authenticator = Authenticator()
+        response, status_code = authenticator.sign_up(new_user_data)
+        
+        self.assertEqual(status_code, 201)
+        self.assertEqual(response["message"], f"User {new_user_data['username']} successfully registered")
+        
+        user = RegisteredUser.objects.filter(username=new_user_data["username"]).first()
+        self.assertIsNotNone(user)
+        self.assertEqual(user.first_name, new_user_data["first_name"])
+        self.assertEqual(user.last_name, new_user_data["last_name"])
+        self.assertEqual(user.email, new_user_data["email"].strip().lower())
+        self.assertTrue(user.check_password(new_user_data["password"]))
+        
+        
+
+
+class LogoutTest(TestCase):
+    def setUp(self):
+        # Create a mock registered user
+        self.user = RegisteredUser.objects.create(
+            first_name="John",
+            last_name="Doe",
+            username="jd2",
+            email="jd2@gmail.com",
+            hashed_password=make_password("testing1")
+        )
+        
+        self.token = Token.objects.create(
+            user=self.user,
+            token=str(uuid.uuid4()),
+            expires_at=timezone.now() + timedelta(minutes=10)
+        )
+
+    def test_logout(self):
+        authenticator = Authenticator()
+        
+        response, status_code = authenticator.logout(self.token.token)
+        
+        self.assertEqual(status_code, 200)
+        self.assertEqual(response["message"], "Logged out successfully")
+        
+        token_exists = Token.objects.filter(token=self.token.token).exists()
+        self.assertFalse(token_exists)
