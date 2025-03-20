@@ -39,8 +39,9 @@ def generate_recipe(request):
             )
 
             # Could also index inside the parser object
-            parser = RecipeParser(recipe_json["recipe"])
+            parser = RecipeParser(recipe_json)
             parser.to_file("saved_recipe.json")
+            parser.update_data(recipe_json["recipe"])
 
         except (json.JSONDecodeError, TypeError) as je:
             return JsonResponse({"error": f"failed to load JSON {je}"}, status=400)

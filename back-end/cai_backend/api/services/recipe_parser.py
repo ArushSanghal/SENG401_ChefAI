@@ -48,3 +48,6 @@ class RecipeParser:
     def to_file(self, filename:str):
         with open(filename, "w", encoding="utf-8") as file:
             json.dump(self.recipe_data, file, indent=4)
+            
+    def update_data(self, new_recipe_data):
+        self.recipe_data = new_recipe_data
