@@ -123,12 +123,15 @@ const UserProfile = () => {
         const ingredientsList = formData.get("ingredients").split(",").map(item => item.trim());
         //const dietaryList = formData.get("dietary_restrictions").split(",").map(item => item.trim());
 
+        const token = localStorage.getItem("access_token");
+
         setLoading(true);
         // POST request using fetch()
         fetch("http://127.0.0.1:8000/generate_recipe/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
             },    
             body: JSON.stringify({
                 ingredients: ingredientsList,
