@@ -158,7 +158,70 @@ class UpdateProfileTest(TestCase):
         self.assertEqual(status_code, 404)
         self.assertEqual(response, {"error": "User not found"})
 
+class GetUserDataTest(TestCase):
+    def setUp(self):
+        # Create a mock registered user
+        self.user = RegisteredUser.objects.create(
+            first_name="John",
+            last_name="Doe",
+            username="jd1",
+            email="jd1@gmail.com",
+            hashed_password=make_password("testing1")
+        )
+        
+        # Create a valid token for the user
+        self.valid_token = Token.objects.create(
+            user=self.user,
+            token=str(uuid.uuid4()),
+            expires_at=timezone.now() + timedelta(minutes=10)
+        )
 
+        # Create an expired token for the user
+        self.expired_token = Token.objects.create(
+            user=self.user,
+            token=str(uuid.uuid4()),
+            expires_at=timezone.now() - timedelta(minutes=10)
+        )
+
+        # Create a token with no associated user
+        self.token_with_no_user = Token.objects.create(
+            user=None,
+            token=str(uuid.uuid4()),
+            expires_at=timezone.now() + timedelta(minutes=10)
+        )
+
+        # Instantiate the ProfileManager
+        self.profile_manager = ProfileManager(self.user)
+
+    def test_get_user_data_valid_token(self):
+        response, status_code = self.profile_manager.get_user_data(self.valid_token.token)
+        
+        self.assertEqual(status_code, 200)
+        self.assertEqual(response["user_id"], self.user.pk)
+        self.assertEqual(response["first_name"], self.user.first_name)
+        self.assertEqual(response["last_name"], self.user.last_name)
+        self.assertEqual(response["username"], self.user.username)
+        self.assertEqual(response["email"], self.user.email)
+        self.assertEqual(response["skill_level"], self.user.skill_level)
+        self.assertEqual(response["dietary_restrictions"], list(self.user.dietary_restrictions.values_list("restriction", flat=True))) # type: ignore
+
+    def test_get_user_data_invalid_token(self):
+        response, status_code = self.profile_manager.get_user_data("invalid_token")
+        
+        self.assertEqual(status_code, 401)
+        self.assertEqual(response["error"], "Invalid or expired token")
+
+    def test_get_user_data_expired_token(self):
+        response, status_code = self.profile_manager.get_user_data(self.expired_token.token)
+        
+        self.assertEqual(status_code, 401)
+        self.assertEqual(response["error"], "Invalid or expired token")
+
+    def test_get_user_data_non_existent_user(self):
+        response, status_code = self.profile_manager.get_user_data(self.token_with_no_user.token)
+        
+        self.assertEqual(status_code, 404)
+        self.assertEqual(response["error"], "User not found")
 
 
 class LoginTest(TestCase):
