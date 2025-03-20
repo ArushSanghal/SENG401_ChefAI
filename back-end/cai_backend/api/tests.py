@@ -83,6 +83,82 @@ class UpdateProfileTest(TestCase):
         dietary_restrictions = list(self.user.dietary_restrictions.value_list("restriction",  flat=True)) # type: ignore
         self.assertEqual(len(dietary_restrictions), 1)
         self.assertEqual("Beef", dietary_restrictions)
+        
+    def test_update_profile_skill_level_only(self):
+        new_data = {
+            "skill_level": SkillLevelChoices.ADVANCED
+        }
+            
+        response, status_code = self.profile_manager.update_profile(self.token.token, new_data)
+        
+        self.assertEqual(status_code, 200)
+        self.assertEqual(response, {"success": "Profile updated successfully"})
+        
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.skill_level, SkillLevelChoices.ADVANCED)
+
+    def test_update_profile_dietary_restrictions_only(self):
+        new_data = {
+            "dietary_restrictions": {"Beef", "Milk"}
+        }
+            
+        response, status_code = self.profile_manager.update_profile(self.token.token, new_data)
+        
+        self.assertEqual(status_code, 200)
+        self.assertEqual(response, {"success": "Profile updated successfully"})
+        
+        self.user.refresh_from_db()
+        dietary_restrictions = list(self.user.dietary_restrictions.values_list("restriction", flat=True)) # type: ignore
+        self.assertEqual(len(dietary_restrictions), 2)
+        self.assertIn("Beef", dietary_restrictions)
+        self.assertIn("Milk", dietary_restrictions)
+    
+    def test_update_profile_empty_dietary_restrictions(self):
+        new_data = {
+            "dietary_restrictions": []
+        }
+            
+        response, status_code = self.profile_manager.update_profile(self.token.token, new_data)
+        
+        self.assertEqual(status_code, 200)
+        self.assertEqual(response, {"success": "Profile updated successfully"})
+        
+        self.user.refresh_from_db()
+        dietary_restrictions = list(self.user.dietary_restrictions.values_list("restriction", flat=True)) # type: ignore
+        self.assertEqual(len(dietary_restrictions), 0)
+    
+    def test_update_profile_invalid_token(self):
+        response, status_code = self.profile_manager.update_profile("invalid_token", {"skill_level": SkillLevelChoices.INTERMEDIATE})
+        self.assertEqual(status_code, 401)
+        self.assertEqual(response["error"], "Invalid token")
+        
+    def test_update_profile_expired_token(self):
+        expired_token = Token.objects.create(
+            user=self.user,
+            token=str(uuid.uuid4()),
+            expires_at=timezone.now() - timedelta(minutes=10)
+        )
+        response, status_code = self.profile_manager.update_profile(expired_token.token, {"skill_level": SkillLevelChoices.INTERMEDIATE})
+        self.assertEqual(status_code, 401)
+        self.assertEqual(response["error"], "Invalid token")
+
+    def test_update_profile_non_existent_user(self):
+        non_existent_user_token = Token.objects.create(
+            user=None,
+            token=str(uuid.uuid4()),
+            expires_at=timezone.now() + timedelta(minutes=10)
+        )
+        
+        new_data = {
+            "skill_level": SkillLevelChoices.INTERMEDIATE
+        }
+            
+        response, status_code = self.profile_manager.update_profile(non_existent_user_token.token, new_data)
+        
+        self.assertEqual(status_code, 404)
+        self.assertEqual(response, {"error": "User not found"})
+
+
 
 
 class LoginTest(TestCase):
