@@ -120,6 +120,30 @@ class LoginTest(TestCase):
         self.assertIn("access", response)
         self.assertIn("refresh", response)
         
+class LoginEdgeCaseTest(TestCase):
+    def setUp(self):
+        # Create a mock registered user
+        self.user = RegisteredUser.objects.create(
+            first_name="John",
+            last_name="Doe",
+            username="jd2",
+            email="jd2@gmail.com",
+            hashed_password=make_password("testing1")
+        )
+    
+    def test_login_with_wrong_password(self):
+        authenticator = Authenticator(email_address="jd2@gmail.com", password="wrongpassword")
+        response, status_code = authenticator.sign_in()
+        
+        self.assertEqual(status_code, 401)
+        self.assertEqual(response["error"], "Invalid credentials")
+    
+    def test_login_with_wrong_email(self):
+        authenticator = Authenticator(email_address="wrongemail@gmail.com", password="testing1")
+        response, status_code = authenticator.sign_in()
+        
+        self.assertEqual(status_code, 401)
+        self.assertEqual(response["error"], "Invalid credentials")
         
         
 class SignUpTest(TestCase):
@@ -148,6 +172,77 @@ class SignUpTest(TestCase):
         self.assertTrue(user.check_password(new_user_data["password"]))
         
         
+class SignUpValidationTest(TestCase):
+    def test_sign_up_missing_fields(self):
+        # Missing username and password
+        incomplete_data = {
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "email": "jane.doe@gmail.com"
+        }  
+        
+        authenticator = Authenticator()
+        response, status_code = authenticator.sign_up(incomplete_data)
+        self.assertEqual(status_code, 400)
+        self.assertEqual(response["error"], "Missing required fields")
+
+    def test_sign_up_weak_password(self):
+        weak_password_data = {
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "username": "jane_doe",
+            "email": "jane.doe@gmail.com",
+            "password": "123"
+        }
+        
+        authenticator = Authenticator()
+        response, status_code = authenticator.sign_up(weak_password_data)
+        self.assertEqual(status_code, 400)
+        self.assertEqual(response["error"], "Password must be at least 8 characters long.")
+    
+    def test_sign_up_duplicate_username(self):
+        RegisteredUser.objects.create(
+            first_name="Jane",
+            last_name="Doe",
+            username="jane_doe",
+            email="jane.doe@gmail.com",
+            hashed_password=make_password("testing123")
+        )
+        
+        duplicate_data = {
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "username": "jane_doe",
+            "email": "janedoe.new@gmail.com",
+            "password": "testing123"
+        }
+        
+        authenticator = Authenticator()
+        response, status_code = authenticator.sign_up(duplicate_data)
+        self.assertEqual(status_code, 400)
+        self.assertEqual(response["error"], "Username already exists. Please choose another one.")
+    
+    def test_sign_up_duplicate_email(self):
+        RegisteredUser.objects.create(
+            first_name="Jane",
+            last_name="Doe",
+            username="janedoe1",
+            email="jane.doe@gmail.com",
+            hashed_password=make_password("testing123")
+        )
+        
+        duplicate_email_data = {
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "username": "janedoe2",
+            "email": "jane.doe@gmail.com",
+            "password": "testing123"
+        }
+        
+        authenticator = Authenticator()
+        response, status_code = authenticator.sign_up(duplicate_email_data)
+        self.assertEqual(status_code, 400)
+        self.assertEqual(response["error"], "User with this email already exists.")
 
 
 class LogoutTest(TestCase):
@@ -177,3 +272,5 @@ class LogoutTest(TestCase):
         
         token_exists = Token.objects.filter(token=self.token.token).exists()
         self.assertFalse(token_exists)
+        
+
