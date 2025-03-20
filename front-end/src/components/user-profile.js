@@ -10,6 +10,7 @@ const UserProfile = () => {
     const [increment, setIncrement] = useState(0);
     const [save, setSave] = useState(false);
     const [savedRecipes, setSavedRecipes] = useState(false);
+    const [viewRecipes, setViewRecipes] = useState(false);
     const history = useHistory();
 
     useEffect(() => {
@@ -206,8 +207,8 @@ const UserProfile = () => {
         .then(json => {
             console.log(json);
             setSavedRecipes(json.saved_recipes); 
-            setLoading(false);
-            setSave(true);    
+            setLoading(false); 
+            setViewRecipes(!viewRecipes);
         });
     }
     
@@ -235,17 +236,18 @@ const UserProfile = () => {
             <button onClick={handleSave}>Save Changes</button>
             <button onClick={handleSignOut}>Sign Out</button>
             <div>
-            <button onClick={handleViewRecipes}>View Saved Recipes</button>
+            <button onClick={handleViewRecipes} style={{ border: "1px solid #ddd" }}>View Saved Recipes</button>
 
             {loading && <p>Loading...</p>}
-
+            {savedRecipes.length <= 1 && <div>No Saved Recipes</div>}  {/* CANNOT GET THIS TO WORK */}
             <div>
-                {Array.isArray(savedRecipes) && savedRecipes.length > 0 ? (
+                {Array.isArray(savedRecipes) && viewRecipes && (
                     savedRecipes.map((recipe, index) => (
                         <div key={index} style={{ marginBottom: "20px", border: "1px solid #ddd", padding: "10px" }}>
                             <p><strong>Recipe Name:</strong>{recipe.recipe_name}</p>
                             <p><strong>Estimated Time:</strong> {recipe.estimated_time}</p>
                             <p><strong>Skill Level:</strong> {recipe.skill_level}</p>
+                            <p><strong>Ingredients:</strong> {recipe.ingredients}</p>
 
                             <h4>Instructions:</h4>
                                 <ol style={{ paddingLeft: "20px" }}>
@@ -257,9 +259,7 @@ const UserProfile = () => {
                                 </ol>
                         </div>
                     ))
-                ) : (
-                    <p>No saved recipes found.</p>
-                )}
+                ) }
             </div>
         </div>
             <title>ChefAI</title>

@@ -484,23 +484,29 @@ def view_recipes(request):
             
             saved_recipes = user.saved_recipes.all()
             
-            # If no saved recipes, return a message
             if not saved_recipes.exists():
                return JsonResponse({"saved_recipes": "No saved recipes"}, status=200)
 
-            # Serialize the full recipe objects to return the necessary details
-            recipe_data = [
-                {
-                    "recipe_name": recipe.title,
-                    "estimated_time": recipe.estimated_time, 
-                    "skill_level": recipe.skill_level,
-                    "instructions": recipe.instructions,
-                }
-                for recipe in saved_recipes
-            ]
+            json_recipes = []
 
-            return JsonResponse({"saved_recipes": recipe_data}, status=200)
+            for recipe in saved_recipes:
+                ingredient_list = []
+                ingredients = recipe.ingredients.all()
+                for ingredient in ingredients:
+                    ingredient_list.append(ingredient.ingredient)
+
+
+                recipe_data = {
+                        "recipe_name": recipe.title,
+                        "estimated_time": recipe.estimated_time, 
+                        "skill_level": recipe.skill_level,
+                        "ingredients": ', '.join(ingredient_list),
+                        "instructions": recipe.instructions,
+                    }
+                json_recipes.append(recipe_data)
+            
+
+            return JsonResponse({"saved_recipes": json_recipes}, status=200)
 
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
-
