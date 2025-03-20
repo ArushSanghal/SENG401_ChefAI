@@ -9,6 +9,7 @@ from .services.save_manager import SaveManager
 from datetime import datetime, timedelta
 from django.utils import timezone
 import uuid
+from django.http.response import JsonResponse
 
 
 
@@ -413,3 +414,149 @@ class LogoutTest(TestCase):
         self.assertFalse(token_exists)
         
 
+class SaveManagerTest(TestCase):
+    def setUp(self):     
+        # Create a mock registered user
+        self.user = RegisteredUser.objects.create(
+            first_name="John",
+            last_name="Doe",
+            username="jd2",
+            email="jd2@gmail.com",
+            hashed_password=make_password("testing1")
+        )
+        
+        self.token = Token.objects.create(
+            user=self.user,
+            token=str(uuid.uuid4()),
+            expires_at=timezone.now() + timedelta(minutes=10)
+        )
+
+        # Create a recipe
+        self.recipe = Recipe.objects.create(
+            title="Test Recipe",
+            estimated_time="30",
+            skill_level="Beginner",
+            instructions="Test instructions"
+        )
+
+        # Instantiate the SaveManager
+        self.save_manager = SaveManager(self.user)
+        
+    def test_from_token_valid_token(self):
+        save_manager = SaveManager.from_token(self.token.token)
+        self.assertIsInstance(save_manager, SaveManager)
+        self.assertEqual(save_manager.user, self.user)
+
+    def test_from_token_invalid_token(self):
+        with self.assertRaises(ValueError) as context:
+            SaveManager.from_token("invalid_token")
+        self.assertEqual(str(context.exception), "Invalid token provided")
+
+    def test_add_to_history_success(self):
+        response = self.save_manager.add_to_history(self.recipe)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"message": "Recipe added to history successfully"})
+        self.assertTrue(self.user.last_used_recipes.filter(id=self.recipe.id).exists())
+
+    def test_add_to_history_user_not_found(self):
+        self.user.delete()
+        response = self.save_manager.add_to_history(self.recipe)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(), {"error": "User not found"})
+        
+        # Recreate the user to ensure isolation for other tests
+        self.user = RegisteredUser.objects.create(
+            first_name="John",
+            last_name="Doe",
+            username="jd2",
+            email="jd2@gmail.com",
+            hashed_password="hashed_password"
+        )
+        self.save_manager = SaveManager(self.user)
+
+    def test_save_recipe_success(self):
+        response = self.save_manager.save_recipe(self.recipe)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"message": "Recipe saved successfully"})
+        self.assertTrue(self.user.saved_recipes.filter(id=self.recipe.id).exists())
+
+    def test_save_recipe_user_not_found(self):
+        self.user.delete()
+        response = self.save_manager.save_recipe(self.recipe)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(), {"error": "User not found"})
+        
+        # Recreate the user to ensure isolation for other tests
+        self.user = RegisteredUser.objects.create(
+            first_name="John",
+            last_name="Doe",
+            username="jd2",
+            email="jd2@gmail.com",
+            hashed_password="hashed_password"
+        )
+        self.save_manager = SaveManager(self.user)
+
+    def test_remove_saved_recipe_success(self):
+        self.user.saved_recipes.add(self.recipe)
+        response = self.save_manager.remove_saved_recipe(self.recipe)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"message": "Recipe successfully removed"})
+        self.assertFalse(self.user.saved_recipes.filter(id=self.recipe.id).exists())
+
+    def test_remove_saved_recipe_not_found(self):
+        response = self.save_manager.remove_saved_recipe(self.recipe)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(), {"error": "Recipe does not exist for user"})
+
+    def test_clear_recipe_history_success(self):
+        self.user.last_used_recipes.add(self.recipe)
+        response = self.save_manager.clear_recipe_history()
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"message": "Successfully cleared history"})
+        self.assertFalse(self.user.last_used_recipes.exists())
+
+    def test_clear_recipe_history_already_empty(self):
+        response = self.save_manager.clear_recipe_history()
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {"error": "History already empty"})
+
+    def test_view_saved_recipes_success(self):
+        self.user.saved_recipes.add(self.recipe)
+        response = self.save_manager.view_saved_recipes()
+        self.assertIsInstance(response, list)
+        self.assertEqual(len(response), 1)
+        self.assertEqual(response[0]["recipe_name"], self.recipe.title)
+
+    def test_view_saved_recipes_empty(self):
+        response = self.save_manager.view_saved_recipes()
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"error": "Saved history is empty"})
+
+    def test_view_recipes_success(self):
+        self.user.last_used_recipes.add(self.recipe)
+        self.user.saved_recipes.add(self.recipe)
+        response = self.save_manager.view_recipes()
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {
+            "last_viewed": [self.recipe.title],
+            "saved_recipes": [self.recipe.title]
+        })
+
+    def test_view_recipes_empty(self):
+        response = self.save_manager.view_recipes()
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {
+            "last_viewed": [],
+            "saved_recipes": []
+        })
