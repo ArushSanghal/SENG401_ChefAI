@@ -214,6 +214,7 @@ const UserProfile = () => {
     
     return (
         <div>
+            <img src="/images/spaghetti-with-vegetables-cooking-in-a-pan.png" alt="frying pan" className="image"></img>
             <h1>Welcome, {userData.first_name}!</h1>
             <p><strong>Email:</strong> {userData.email}</p>
             <p><strong>Username:</strong> {userData.username}</p>
@@ -235,11 +236,10 @@ const UserProfile = () => {
 
             <button onClick={handleSave}>Save Changes</button>
             <button onClick={handleSignOut}>Sign Out</button>
-            <div>
             <button onClick={handleViewRecipes} style={{ border: "1px solid #ddd" }}>View Saved Recipes</button>
 
             {loading && <p>Loading...</p>}
-            {savedRecipes.length <= 1 && <div>No Saved Recipes</div>}  {/* CANNOT GET THIS TO WORK */}
+            {savedRecipes.length <= 1 }
             <div>
                 {Array.isArray(savedRecipes) && viewRecipes && (
                     savedRecipes.map((recipe, index) => (
@@ -260,12 +260,10 @@ const UserProfile = () => {
                         </div>
                     ))
                 ) }
-            </div>
         </div>
             <title>ChefAI</title>
     <meta property="og:title" content="ChefAI" />
 
-    <img src="/images/spaghetti-with-vegetables-cooking-in-a-pan.png" alt="frying pan" className="image"></img>
     <div className="thq-section-padding ">
     <div className = "formfield">
     <img
