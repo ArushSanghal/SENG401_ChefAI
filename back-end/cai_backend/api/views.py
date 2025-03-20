@@ -163,3 +163,83 @@ def logout_user(request):
             return JsonResponse({"error": "Authorization header missing or invalid"}, status=401)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
+
+@csrf_exempt
+@require_http_methods(["POST", "OPTIONS"])
+def save_button(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            token = request.headers.get("Authorization").split(" ")[1]
+
+            # db_token = Token.objects.filter(token=token).first()
+            # if not db_token:
+            #     return JsonResponse({"error": "Invalid or expired token"}, status=401)
+
+            # user = db_token.user
+            # if not user:
+            #     return JsonResponse({"error": "User not found"}, status=404)
+
+            # recipe = Recipe_Generator() 
+            # new_recipe = recipe.parse_recipe()
+
+            # Once you check if history is saving, instead of parsing from file
+            # Pull latest recipe from user history
+            parser = RecipeParser.from_file("saved_recipe.json")
+            recipe = parser.to_model() # type: ignore
+            save_manager = SaveManager.from_token(token)
+            recipe = save_manager.save_recipe(recipe)
+
+            # user.saved_recipes.add(new_recipe)
+            # user.save() 
+
+            return JsonResponse({"message": "Recipe saved successfully"}, status=200)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+        
+@csrf_exempt
+@require_http_methods(["GET", "OPTIONS"])
+def view_recipes(request):
+     if request.method == "GET":
+        try:
+            token = request.headers.get("Authorization").split(" ")[1]
+            # db_token = Token.objects.filter(token=token).first()
+            # if not db_token:
+            #     return JsonResponse({"error": "Invalid or expired token"}, status=401)
+
+            # user = db_token.user
+            # if not user:
+            #     return JsonResponse({"error": "User not found"}, status=404)
+            
+            # saved_recipes = user.saved_recipes.all()
+            
+            # if not saved_recipes.exists():
+            #    return JsonResponse({"saved_recipes": "No saved recipes"}, status=200)
+
+            # json_recipes = []
+
+            # for recipe in saved_recipes:
+            #     ingredient_list = []
+            #     ingredients = recipe.ingredients.all()
+            #     for ingredient in ingredients:
+            #         ingredient_list.append(ingredient.ingredient)
+
+
+            #     recipe_data = {
+            #             "recipe_name": recipe.title,
+            #             "estimated_time": recipe.estimated_time, 
+            #             "skill_level": recipe.skill_level,
+            #             "ingredients": ', '.join(ingredient_list),
+            #             "instructions": recipe.instructions,
+            #         }
+            #     json_recipes.append(recipe_data)
+            save_manager = SaveManager.from_token(token)
+            json_recipes = save_manager.view_saved_recipes()
+            
+
+            return JsonResponse({"saved_recipes": json_recipes}, status=200)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)

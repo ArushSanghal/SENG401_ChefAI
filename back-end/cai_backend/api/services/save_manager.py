@@ -40,6 +40,31 @@ class SaveManager:
         else:
             return JsonResponse({"error": "History already empty"}, status=400)
 
+    def view_saved_recipes(self):
+        if self.user.last_used_recipes.exists():
+            self.user.saved_recipes.all()
+            json_recipes = []
+
+            for recipe in self.user.saved_recipes.all():
+                ingredient_list = []
+                ingredients = recipe.ingredients.all()
+                for ingredient in ingredients:
+                    ingredient_list.append(ingredient.ingredient)
+
+                recipe_data = {
+                        "recipe_name": recipe.title,
+                        "estimated_time": recipe.estimated_time, 
+                        "skill_level": recipe.skill_level,
+                        "ingredients": ', '.join(ingredient_list),
+                        "instructions": recipe.instructions,
+                    }
+                json_recipes.append(recipe_data)
+                if not json_recipes:
+                    return JsonResponse({"error:" "Failed to create"})
+                return json_recipes
+        else:
+            return JsonResponse({"error:" "Saved history is empty"})
+
     def view_recipes(self, num_rows: int = 5):
         last_recipes = self.user.last_used_recipes.all().order_by('-id')[:num_rows]
         saved_recipes = self.user.saved_recipes.all()
