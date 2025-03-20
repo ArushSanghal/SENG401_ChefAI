@@ -41,7 +41,7 @@ class SaveManager:
             return JsonResponse({"error": "History already empty"}, status=400)
 
     def view_saved_recipes(self):
-        if self.user.last_used_recipes.exists():
+        if self.user.saved_recipes.exists():
             self.user.saved_recipes.all()
             json_recipes = []
 
@@ -60,7 +60,7 @@ class SaveManager:
                     }
                 json_recipes.append(recipe_data)
                 if not json_recipes:
-                    return JsonResponse({"error:" "Failed to create"})
+                    return JsonResponse({"error:" "Failed to create saved recipe json response"})
                 return json_recipes
         else:
             return JsonResponse({"error:" "Saved history is empty"})
