@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import make_password
 from .models import RegisteredUser, Recipe, Ingredients, Token, SkillLevelChoices
 # from .views import Registered
 from .services.profile_manager import ProfileManager
-from .services.authentication import Authenticator
+from .services.authenticator import Authenticator
 from .services.save_manager import SaveManager
 from datetime import datetime, timedelta
 from django.utils import timezone

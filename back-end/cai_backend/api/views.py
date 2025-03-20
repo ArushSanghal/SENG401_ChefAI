@@ -10,7 +10,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from .services.authentication import Authenticator
+from .services.authenticator import Authenticator
 from .services.profile_manager import ProfileManager
 from .services.ai_engine import AIEngine
 from .services.recipe_parser import RecipeParser
@@ -25,7 +25,7 @@ def generate_recipe(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            
+
             if not all(key in data for key in ["ingredients", "skill_level", "time"]):
                 return JsonResponse({"error": "Missing required fields"}, status=400)
             
