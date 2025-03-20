@@ -2,6 +2,8 @@ import React, { Fragment, useState, useEffect } from 'react'
 
 import './recipegenpage.css'
 import '../components/food-form.css'
+import '../components/navbar8'
+import Navbar8 from '../components/navbar8';
 
 function Recipegenpage(){
 
@@ -48,6 +50,8 @@ function Recipegenpage(){
     <>
     <title>ChefAI</title>
     <meta property="og:title" content="ChefAI" />
+
+    <Navbar8></Navbar8>
 
     <img src="/images/spaghetti-with-vegetables-cooking-in-a-pan.png" alt="frying pan" className="image"></img>
     <div className="thq-section-padding ">

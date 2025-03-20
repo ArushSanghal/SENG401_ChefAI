@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
+import Navbar8 from '../components/navbar8'
+
 const UserProfile = () => {
     const [userData, setUserData] = useState(null);
     const [skillLevel, setSkillLevel] = useState("");
@@ -217,6 +219,7 @@ const UserProfile = () => {
     
     return (
         <div>
+            <Navbar8></Navbar8>
             <img src="/images/spaghetti-with-vegetables-cooking-in-a-pan.png" alt="frying pan" className="image"></img>
             <h1>Welcome, {userData.first_name}!</h1>
             <p><strong>Email:</strong> {userData.email}</p>

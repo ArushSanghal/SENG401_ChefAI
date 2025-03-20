@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^7.1.0",
+    "craco": "^0.0.3",
     "dangerous-html": "0.1.13",
     "next": "^12.1.10",
     "prop-types": "15.7.2",

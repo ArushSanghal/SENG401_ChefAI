@@ -16,6 +16,8 @@ const Navbar8 = (props) => {
           src={props.logoSrc}
           className="navbar8-image1"
         />
+
+  
         <div data-thq="thq-navbar-nav" className="navbar8-desktop-menu">
           <nav className="navbar8-links1">
             <Link
@@ -46,67 +48,34 @@ const Navbar8 = (props) => {
                 </Fragment>
               )}
             </Link>
-            <div
-              onClick={() => setLink5DropdownVisible(!link5DropdownVisible)}
-              className="navbar8-link4-dropdown-trigger"
-            >
-              <span className="thq-link thq-body-small">
-                {props.link4 ?? (
-                  <Fragment>
-                    <span className="navbar8-text21">/General Info</span>
-                  </Fragment>
-                )}
-              </span>
-              <div className="navbar8-icon-container1">
-                {link5DropdownVisible && (
-                  <div className="navbar8-container2">
-                    <svg viewBox="0 0 1024 1024" className="navbar8-icon10">
-                      <path d="M298 426h428l-214 214z"></path>
-                    </svg>
-                  </div>
-                )}
-                {!link5DropdownVisible && (
-                  <div className="navbar8-container3">
-                    <svg viewBox="0 0 1024 1024" className="navbar8-icon12">
-                      <path d="M426 726v-428l214 214z"></path>
-                    </svg>
-                  </div>
-                )}
-              </div>
-            </div>
           </nav>
+
+
           <div className="navbar8-buttons1">
-            <Link to = "/login">
+            <Link to = "/">
             <button className="navbar8-action11 thq-button-animated thq-button-filled">
               <span>
                 {props.action1 ?? (
                   <Fragment>
-                    <span className="navbar8-text25">Login</span>
+                    <span className="navbar8-text25">Logout</span>
                   </Fragment>
                 )}
               </span>
             </button>
             </Link>
           </div>
-          <div className="navbar8-buttons1">
-            <Link to = "/cart">
-            <button className="navbar8-action11 thq-button-animated thq-button-filled">
-              <span>
-                {props.cartAction ?? (
-                  <Fragment>
-                    <span className="navbar8-text25">Cart</span>
-                  </Fragment>
-                )}
-              </span>
-            </button>
-            </Link>
-          </div>
+
         </div>
+
+
+
         <div data-thq="thq-burger-menu" className="navbar8-burger-menu">
           <svg viewBox="0 0 1024 1024" className="navbar8-icon14">
             <path d="M128 554.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667zM128 298.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667zM128 810.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667z"></path>
           </svg>
         </div>
+
+
         <div data-thq="thq-mobile-menu" className="navbar8-mobile-menu">
           <div className="navbar8-nav">
             <div className="navbar8-top">
@@ -135,7 +104,7 @@ const Navbar8 = (props) => {
               <Link to={props.link2Url} className="thq-link thq-body-small">
                 {props.link2 ?? (
                   <Fragment>
-                    <span className="navbar8-text26">/blog</span>
+                    <span className="navbar8-text26">/history</span>
                   </Fragment>
                 )}
               </Link>
@@ -145,160 +114,19 @@ const Navbar8 = (props) => {
               >
                 {props.link3 ?? (
                   <Fragment>
-                    <span className="navbar8-text20">/shop</span>
+                    <span className="navbar8-text20">/saved</span>
                   </Fragment>
                 )}
               </Link>
-              <div className="navbar8-link4-accordion">
-                <div
-                  onClick={() => setLink5AccordionOpen(!link5AccordionOpen)}
-                  className="navbar8-trigger"
-                >
-                  <span className="thq-link thq-body-small">
-                    {props.link4 ?? (
-                      <Fragment>
-                        <span className="navbar8-text21">/General Info</span>
-                      </Fragment>
-                    )}
-                  </span>
-                  <div className="navbar8-icon-container2">
-                    {link5AccordionOpen && (
-                      <div className="navbar8-container4">
-                        <svg viewBox="0 0 1024 1024" className="navbar8-icon18">
-                          <path d="M298 426h428l-214 214z"></path>
-                        </svg>
-                      </div>
-                    )}
-                    {!link5AccordionOpen && (
-                      <div className="navbar8-container5">
-                        <svg viewBox="0 0 1024 1024" className="navbar8-icon20">
-                          <path d="M426 726v-428l214 214z"></path>
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                {link5AccordionOpen && (
-                  <div className="navbar8-container6">
-                    <Link to={props.linkUrlPage1}>
-                      <div className="navbar8-menu-item1">
-                        <img
-                          alt={props.page1ImageAlt}
-                          src={props.page1ImageSrc}
-                          className="navbar8-page1-image1"
-                        />
-                        <div className="navbar8-content1">
-                          <span className="navbar8-page11 thq-body-large">
-                            {props.page1 ?? (
-                              <Fragment>
-                                <span className="navbar8-text22">Fish</span>
-                              </Fragment>
-                            )}
-                          </span>
-                          <span className="thq-body-small">
-                            {props.page1Description ?? (
-                              <Fragment>
-                                <span className="navbar8-text23">
-                                  
-                                </span>
-                              </Fragment>
-                            )}
-                          </span>
-                        </div>
-                      </div>
-                    </Link>
-                    <Link to={props.linkUrlPage2}>
-                      <div className="navbar8-menu-item2">
-                        <img
-                          alt={props.page2ImageAlt}
-                          src={props.page2ImageSrc}
-                          className="navbar8-page2-image1"
-                        />
-                        <div className="navbar8-content2">
-                          <span className="navbar8-page21 thq-body-large">
-                            {props.page2 ?? (
-                              <Fragment>
-                                <span className="navbar8-text17">Fishing Locations</span>
-                              </Fragment>
-                            )}
-                          </span>
-                          <span className="thq-body-small">
-                            {props.page2Description ?? (
-                              <Fragment>
-                                <span className="navbar8-text16">
-                                  
-                                </span>
-                              </Fragment>
-                            )}
-                          </span>
-                        </div>
-                      </div>
-                    </Link>
-                    <Link to={props.linkUrlPage3}>
-                      <div className="navbar8-menu-item3">
-                        <img
-                          alt={props.page3ImageAlt}
-                          src={props.page3ImageSrc}
-                          className="navbar8-page3-image1"
-                        />
-                        <div className="navbar8-content3">
-                          <span className="navbar8-page31 thq-body-large">
-                            {props.page3 ?? (
-                              <Fragment>
-                                <span className="navbar8-text24">Water Safety</span>
-                              </Fragment>
-                            )}
-                          </span>
-                          <span className="thq-body-small">
-                            {props.page3Description ?? (
-                              <Fragment>
-                                <span className="navbar8-text14">
-                                  
-                                </span>
-                              </Fragment>
-                            )}
-                          </span>
-                        </div>
-                      </div>
-                    </Link>
-                  </div>
-                )}
-              </div>
             </nav>
+
+
             <div className="navbar8-buttons2">
-              <button className="thq-button-filled">
-                <span>
-                  {props.action1 ?? (
-                    <Fragment>
-                      <span className="navbar8-text25">Cart</span>
-                    </Fragment>
-                  )}
-                </span>
-              </button>
-              <button className="thq-button-outline">
-                <span>
-                  {props.action2 ?? (
-                    <Fragment>
-                      <span className="navbar83-text27">Cart</span>
-                    </Fragment>
-                  )}
-                </span>
-              </button>
               <div className="navbar8-buttons1">
-            <Link to = "/cart">
-            <button className="navbar8-action11 thq-button-animated thq-button-filled">
-              <span>
-                {props.action1 ?? (
-                  <Fragment>
-                    <span className="navbar8-text25">Cart</span>
-                  </Fragment>
-                )}
-              </span>
-            </button>
-            </Link>
-          </div>
+              </div>
             </div>
           </div>
+
           <div className="navbar8-icon-group">
             <svg
               viewBox="0 0 950.8571428571428 1024"
@@ -320,198 +148,41 @@ const Navbar8 = (props) => {
             </svg>
           </div>
         </div>
-        {link5DropdownVisible && (
-          <div className="navbar8-container7 thq-box-shadow">
-            <div className="navbar8-link5-menu-list">
-              <Link to={props.linkUrlPage1}>
-                <div className="navbar8-menu-item5">
-                  <img
-                    alt={props.page1ImageAlt}
-                    src={props.page1ImageSrc}
-                    className="navbar8-page1-image2 thq-img-ratio-1-1"
-                  />
-                  <div className="navbar8-content5">
-                    <span className="navbar8-page12 thq-body-large">
-                      {props.page1 ?? (
-                        <Fragment>
-                          <span className="navbar8-text22">Home</span>
-                        </Fragment>
-                      )}
-                    </span>
-                    <span className="thq-body-small">
-                      {props.page1Description ?? (
-                        <Fragment>
-                          <span className="navbar8-text23">
-                          </span>
-                        </Fragment>
-                      )}
-                    </span>
-                  </div>
-                </div>
-              </Link>
-              <Link to={props.linkUrlPage2}>
-                <div className="navbar8-menu-item6">
-                  <img
-                    alt={props.page2ImageAlt}
-                    src={props.page2ImageSrc}
-                    className="navbar8-page2-image2 thq-img-ratio-1-1"
-                  />
-                  <div className="navbar8-content6">
-                    <span className="navbar8-page22 thq-body-large">
-                      {props.page2 ?? (
-                        <Fragment>
-                          <span className="navbar8-text17">Blog</span>
-                        </Fragment>
-                      )}
-                    </span>
-                    <span className="thq-body-small">
-                      {props.page2Description ?? (
-                        <Fragment>
-                          <span className="navbar8-text16">
-                            
-                          </span>
-                        </Fragment>
-                      )}
-                    </span>
-                  </div>
-                </div>
-              </Link>
-              <Link to={props.linkUrlPage3}>
-                <div className="navbar8-menu-item7">
-                  <img
-                    alt={props.page3ImageAlt}
-                    src={props.page3ImageSrc}
-                    className="navbar8-page3-image2 thq-img-ratio-1-1"
-                  />
-                  <div className="navbar8-content7">
-                    <span className="navbar8-page32 thq-body-large">
-                      {props.page3 ?? (
-                        <Fragment>
-                          <span className="navbar8-text24">Shop</span>
-                        </Fragment>
-                      )}
-                    </span>
-                    <span className="thq-body-small">
-                      {props.page3Description ?? (
-                        <Fragment>
-                          <span className="navbar8-text14">
-                          
-                          </span>
-                        </Fragment>
-                      )}
-                    </span>
-                  </div>
-                </div>
-              </Link>
-              <Link to={props.linkUrlPage4}>
-                <div className="navbar8-menu-item8">
-                  <img
-                    alt={props.page4ImageAlt}
-                    src={props.page4ImageSrc}
-                    className="navbar8-page4-image2 thq-img-ratio-1-1"
-                  />
-                  <div className="navbar8-content8">
-                    <span className="navbar8-page42 thq-body-large">
-                      {props.page4 ?? (
-                        <Fragment>
-                          <span className="navbar8-text13">Contact</span>
-                        </Fragment>
-                      )}
-                    </span>
-                    <span className="thq-body-small">
-                      {props.page4Description ?? (
-                        <Fragment>
-                          <span className="navbar8-text19">
-                            
-                          </span>
-                        </Fragment>
-                      )}
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          </div>
-        )}
+
       </header>
-      {link5DropdownVisible && (
-        <div
-          onClick={() => setLink5DropdownVisible(false)}
-          className="navbar8-container8"
-        ></div>
-      )}
+
     </header>
   )
 }
 
 Navbar8.defaultProps = {
   logoSrc: '/images/chefai_logo.png',
-  page4: undefined,
-  link2Url: '/blog',
-  linkUrlPage4: 'https://example.com',
-  linkUrlPage1: '/fish',
-  page3Description: undefined,
-  action2: undefined,
-  linkUrlPage2: '/locations',
-  page2ImageAlt: 'image',
-  page2Description: undefined,
-  link1Url: '/',
-  page2: undefined,
+  logoAlt: 'ChefAI Logo',
+
+  link2Url: '/saved-recipes',
+  link1Url: '/recipe',
+  link3Url: '/saved-recipes',
+
   link1: undefined,
-  page3ImageAlt: 'image',
-  page4Description: undefined,
-  page4ImageSrc:undefined, 
-  link3Url: '/shop',
-  page1ImageAlt: 'image',
-  logoAlt: 'Fishing Blog Logo',
-  page1ImageSrc: undefined, 
-  page4ImageAlt: 'image',
-  page3ImageSrc: undefined,
-  link3: undefined,
-  link4: undefined,
-  linkUrlPage3: 'https://example.com',
-  page1: undefined,
-  page1Description: undefined, 
-  page3: undefined,
-  action1: undefined,
-  cartAction: undefined,
   link2: undefined,
-  page2ImageSrc: undefined
+  link3: undefined,
+  
+  action1: undefined
 }
 
 Navbar8.propTypes = {
   logoSrc: PropTypes.string,
-  page4: PropTypes.element,
-  link2Url: PropTypes.string,
-  linkUrlPage4: PropTypes.string,
-  linkUrlPage1: PropTypes.string,
-  page3Description: PropTypes.element,
-  action2: PropTypes.element,
-  linkUrlPage2: PropTypes.string,
-  page2ImageAlt: PropTypes.string,
-  page2Description: PropTypes.element,
-  link1Url: PropTypes.string,
-  page2: PropTypes.element,
-  link1: PropTypes.element,
-  page3ImageAlt: PropTypes.string,
-  page4Description: PropTypes.element,
-  page4ImageSrc: PropTypes.string,
-  link3Url: PropTypes.string,
-  page1ImageAlt: PropTypes.string,
   logoAlt: PropTypes.string,
-  page1ImageSrc: PropTypes.string,
-  page4ImageAlt: PropTypes.string,
-  page3ImageSrc: PropTypes.string,
-  link3: PropTypes.element,
-  link4: PropTypes.element,
-  linkUrlPage3: PropTypes.string,
-  page1: PropTypes.element,
-  page1Description: PropTypes.element,
-  page3: PropTypes.element,
-  action1: PropTypes.element,
+
+  link1Url: PropTypes.string,
+  link2Url: PropTypes.string,
+  link3Url: PropTypes.string,
+  
+  link1: PropTypes.element,
   link2: PropTypes.element,
-  cartAction: PropTypes.element,
-  page2ImageSrc: PropTypes.string,
+
+  action1: PropTypes.element,
+
 }
 
 export default Navbar8

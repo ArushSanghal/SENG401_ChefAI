@@ -11,11 +11,12 @@ import './style.css'
 import Login from './views/login'
 import SignUp from './views/signup'
 import GuestHome from './views/guest-home'
-import UserProfile from './components/user-profile'
+import UserProfile from './views/user-profile'
 
 
 import NotFound from './views/not-found'
 import Recipegenpage from './views/recipegenpage'
+import SavedRecipes from './views/savedrecipes'
 
 const App = () => {
 
@@ -30,6 +31,7 @@ const App = () => {
           <Route component={Recipegenpage} exact path="/recipe" />
           <Route component={GuestHome} exact path="/guest"/>
           <Route component={UserProfile} exact path="/user-profile" />
+          <Route component={SavedRecipes} exact path ="/saved-recipes"/>
           <Route component={NotFound} path="**" />
           <Redirect to="**" />
       </Switch>
