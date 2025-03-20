@@ -1,4 +1,3 @@
-from django.utils.timezone import now
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import RegisteredUser, DietaryRestriction, Token
@@ -7,7 +6,6 @@ from .models import SkillLevelChoices
 class profileManager:
     def __init__(self, user=None):
         self.user = user
-        
     
     def get_user_data(self, token):
         db_token = Token.objects.filter(token=token).first()   #Checks token

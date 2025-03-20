@@ -12,28 +12,20 @@
 
     Go over functionality, make sure everything is present
 """
-
-
 from django.http import JsonResponse, HttpResponse
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from django.utils import timezone
-from datetime import timedelta
 import google.generativeai as genai
 import json
 
-from .models import RegisteredUser, DietaryRestriction, SkillLevelChoices, Token, Recipe, Ingredients
+from .models import Recipe, Ingredients
 
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
-import os
-
-from .authentication import Authentication
+from .authentication import Authenticator
 from .profile_manager import profileManager
-from .recipe_manager import RecipeManager
+
+import os
 
 REGISTERED_USER_EXPIRY = 30
 
@@ -58,7 +50,7 @@ class LLM:
 
         self.model = genai.GenerativeModel(
             model_name="gemini-1.5-pro",
-            generation_config=self.generation_config, # type: ignore
+            generation_config=self.generation_config,
             system_instruction=(
                 "Generate a structured JSON recipe with the following format:\n"
                 "{\n"
@@ -105,8 +97,8 @@ class LLM:
                 recipe_json = json.loads(response.text)
                 return recipe_json
             except json.JSONDecodeError:
-                return {"error": "Invalid JSON format received from API"}
-        return {"error": "No recipe generated"}
+                return JsonResponse({"error": "Invalid JSON format received from API"}, status=400)
+        return JsonResponse({"error": "No recipe generated"})
 
     def save_recipe(self, recipe_data):
         filename = "saved_recipe.json"
@@ -114,71 +106,71 @@ class LLM:
             json.dump(recipe_data, file, indent=4)
         return filename
 
-class User:
-    def __init__(self, skill_level=None, available_time=None):
-        self.skill_level = skill_level
-        self.available_time = available_time
+# class User:
+#     def __init__(self, skill_level=None, available_time=None):
+#         self.skill_level = skill_level
+#         self.available_time = available_time
 
-class Guest(User):
-    def __init__(self, skill_level=None, available_time=None):
-        super().__init__(skill_level, available_time)
+# class Guest():
+#     def __init__(self, skill_level=None, available_time=None):
+#         pass
+#         # super().__init__(skill_level, available_time)
 
-    def sign_up(self, data):
-        required_fields = ["first_name", "last_name", "username", "email", "password"]
-        if not all(key in data for key in required_fields):
-            return {"error": "Missing required fields"}, 400
+#     def sign_up(self, data):
+#         required_fields = ["first_name", "last_name", "username", "email", "password"]
+#         if not all(key in data for key in required_fields):
+#             return {"error": "Missing required fields"}, 400
 
-        if len(data["password"]) < 8:
-            return {"error": "Password must be at least 8 characters long."}, 400
+#         if len(data["password"]) < 8:
+#             return {"error": "Password must be at least 8 characters long."}, 400
 
-        if RegisteredUser.objects.filter(username=data["username"]).exists():
-            return {"error": "Username already exists. Please choose another one."}, 400
+#         if RegisteredUser.objects.filter(username=data["username"]).exists():
+#             return {"error": "Username already exists. Please choose another one."}, 400
 
-        if RegisteredUser.objects.filter(email=data["email"]).exists():
-            return {"error": "User with this email already exists."}, 400
+#         if RegisteredUser.objects.filter(email=data["email"]).exists():
+#             return {"error": "User with this email already exists."}, 400
 
-        hashed_pw = make_password(data["password"])  #Creates a hashed password
-        new_user = RegisteredUser.objects.create(
-            first_name=data["first_name"],
-            last_name=data["last_name"],
-            username=data["username"],
-            email=data["email"].strip().lower(),
-            hashed_password=hashed_pw,
-        )
+#         hashed_pw = make_password(data["password"])  #Creates a hashed password
+#         new_user = RegisteredUser.objects.create(
+#             first_name=data["first_name"],
+#             last_name=data["last_name"],
+#             username=data["username"],
+#             email=data["email"].strip().lower(),
+#             hashed_password=hashed_pw,
+#         )
 
-        return {"message": f"User {new_user.username} successfully registered"}, 201
+#         return {"message": f"User {new_user.username} successfully registered"}, 201
 
-class Admin(User):
-    def __init__(self, email_address, password):
-        super().__init__(None, None)
-        self.email_address = email_address
-        self.password = password
+# class Admin():
+#     def __init__(self, email_address, password):
+#         # super().__init__(None, None)
+#         self.email_address = email_address
+#         self.password = password
 
-    def manage_llm(self):
-        pass
+#     def manage_llm(self):
+#         pass
 
-    def manage_account(self):
-        pass
+#     def manage_account(self):
+#         pass
 
-    def manage_database(self):
-        pass
+#     def manage_database(self):
+#         pass
     
 
 """
-    It's technically not a recipe generator, but this class is good,
-    maybe add a dependency injection for the filename instead of hardcoding it
-    -- i think is done
 """
 class Recipe_Generator:
-    def __init__(self, filename="saved_recipe.json"):
-        self.filename = filename
+    def __init__(self, recipe_data=None, recipe=None):
+        self.recipe_data = recipe_data
+        self.recipe = recipe
         
-    def parse_recipe(self):
+    @classmethod
+    def from_file(cls, filename="saved_recipe.json"):
         try:
-            with open(self.filename, "r", encoding="utf-8") as f:
+            with open(filename, "r", encoding="utf-8") as f:
                 data = json.load(f)
         except FileNotFoundError:
-            return {"FileNotFound": f"{self.filename} does not exist or is in the wrong directory"}, 400
+            return {"FileNotFound": f"{filename} does not exist or is in the wrong directory"}, 400
         except PermissionError:
             return {"PermissionError": f"You do not have the correct permissions to access {self.filename}"}, 400
         except Exception as e:
@@ -188,179 +180,54 @@ class Recipe_Generator:
         required_fields = ["recipe_name", "time", "skill_level", "ingredients","steps"]
         if not all(key in recipe_data for key in required_fields):
             return JsonResponse({"error": "Missing required fields"}, status=400)
+        
+        return cls(recipe_data=recipe_data)
 
-        # Refactor, use SQL instead of django object        
+    def save_recipe(self):
+        # Save to database
+        if self.recipe_data is None:
+            return None
+        
         new_recipe = Recipe.objects.create(
-            title= recipe_data["recipe_name"],
-            estimated_time = recipe_data["time"],
-            skill_level = recipe_data["skill_level"],
-            instructions=json.dumps(recipe_data["steps"]) #saves as a json string
+            title= self.recipe_data["recipe_name"],
+            estimated_time = self.recipe_data["time"],
+            skill_level = self.recipe_data["skill_level"],
+            instructions=json.dumps(self.recipe_data["steps"])
         )
 
-        for ingredient in recipe_data["ingredients"]:
+        for ingredient in self.recipe_data["ingredients"]:
             Ingredients.objects.create(
                 ingredient = ingredient["name"],
                 recipe = new_recipe
             )
         
+        self.recipe = new_recipe
         return new_recipe
-
-"""
-Refactoring notes:
-    Currently handles
-        Authentication
-        Profile management
-        Receipe related functions
-    Follow the single responsibility principle and break this down into multiple classes
-    Potentially removing this class and creating, "controllers" for the features listed
-"""
-
-'''
-class Registered(User):
-    def __init__(self, email_address=None, password=None, user=None):
-        super().__init__(None, None)
-        self.email_address = email_address.strip().lower() if email_address else None
-        self.password = password
-        self.user = user
-
-    def sign_in(self):
-        user = RegisteredUser.objects.filter(email=self.email_address).first()
-        if user and check_password(self.password, user.hashed_password):
-            refresh = RefreshToken.for_user(user)
-            access_token = str(refresh.access_token)
-            expires_at = timezone.now() + timedelta(minutes=10)
-
-            #Token In Database
-            Token.objects.create(user=user, token=access_token, expires_at=expires_at)
-
-            return {
-                "message": f"Welcome back, {user.first_name}!",
-                "is_admin": user.is_admin,
-                "refresh": str(refresh),
-                "access": access_token,
-                "user_id": user.id,
-                "first_name": user.first_name,
-                "last_name": user.last_name,
-                "username": user.username,
-                "email": user.email,
-                "skill_level": user.skill_level,
-                "dietary_restrictions": list(user.dietary_restrictions.values_list("restriction", flat=True)),
-            }, 200
-        return {"error": "Invalid credentials"}, 401
-
-    def get_user_data(self, token):
-        db_token = Token.objects.filter(token=token).first()   #Checks token
-        if not db_token or not db_token.is_valid():
-            return {"error": "Invalid or expired token"}, 401
-
-        user = db_token.user
-        if not user:
-            return {"error": "User not found"}, 404
-
-        return {
-            "user_id": user.id,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "username": user.username,
-            "email": user.email,
-            "skill_level": user.skill_level,
-            "dietary_restrictions": list(user.dietary_restrictions.values_list("restriction", flat=True)),
-        }, 200
-
-    def update_profile(self, token, data):
-        try:
-            jwt_auth = JWTAuthentication()
-            validated_token = jwt_auth.get_validated_token(token)
-            user_id = validated_token["user_id"]
-
-            user = RegisteredUser.objects.filter(id=user_id).first()
-            if not user:
-                return {"error": "User not found"}, 404
-
-            #Skill level
-            skill_level = data.get("skill_level")
-            if skill_level and skill_level in [choice[0] for choice in SkillLevelChoices.choices]:
-                user.skill_level = skill_level
-
-            #Dietary restrictions
-            dietary_restrictions = data.get("dietary_restrictions", [])
-            user.dietary_restrictions.all().delete()
-            for restriction in dietary_restrictions:
-                DietaryRestriction.objects.create(user=user, restriction=restriction)
-
-            user.save()
-            return {"success": "Profile updated successfully"}, 200
-        except (InvalidToken, TokenError) as e:
-            print(f"Token error: {e}")
-            return {"error": "Invalid token"}, 401
-
-    def logout(self, token):
-        Token.objects.filter(token=token).delete()  #Deletes token from database
-        return {"message": "Logged out successfully"}, 200
-
-    def add_to_history(self):
-        recipe = Recipe_Generator()
-        new_recipe = recipe.parse_recipe()
-
-        try:
-            reg_user = RegisteredUser.objects.get(username=self.username)
-            reg_user.add_viewed_recipe(new_recipe)
-        except:
-            return JsonResponse({"error": "User not found"}, status=404)
-
-        return JsonResponse({"message": "Recipe saved successfully"}, status=201)
-
-
-    def save_recipe(self):
-        recipe = Recipe_Generator()
-        new_recipe = recipe.parse_recipe()
-
-        try:
-            reg_user = RegisteredUser.objects.get(username=self.username)
-            reg_user.saved_recipes.add(new_recipe)
-        except RegisteredUser.DoesNotExist:
-            return JsonResponse({"error": "User not found"}, status=404)
-
-        return JsonResponse({"message": "Recipe saved successfully"}, status=201)
-
-
-    def view_recipes(self):
-        user = RegisteredUser.objects.get(email=self.email_address)
-        last_recipes = user.last_used_recipes.all().order_by('-id')[:5]
-        saved_recipes = user.saved_recipes.all()
-        return {
-            "last_viewed": [recipe.title for recipe in last_recipes],
-            "saved_recipes": [recipe.title for recipe in saved_recipes]
-        }
-'''
-
-
-
-       
-        
-        
 
 @csrf_exempt
 @require_http_methods(["GET","POST"])
 def generate_recipe(request):
     if request.method == "POST":
+        # try:
         try:
             data = json.loads(request.body)
-            required_fields = ["ingredients", "skill_level", "time"]
-            if not all(key in data for key in required_fields):
-                return JsonResponse({"error": "Missing required fields"}, status=400)
-            
-            llm = LLM()
-            response = llm.generate_recipe(data["skill_level"], data["time"], data["dietary_restrictions"], data["ingredients"])
+        except (json.JSONDecodeError, TypeError) as je:
+            return JsonResponse({"error": f"failed to load JSON {je}"}, status=400)
+        
+        required_fields = ["ingredients", "skill_level", "time"]
 
-            llm.save_recipe(response)
-            
-            return JsonResponse(response)
-        except Exception as e:
-            print(f"Unexpected Error: {str(e)}")
-            return JsonResponse({"error": str(e)}, status=500)
+        if not all(key in data for key in required_fields):
+            return JsonResponse({"error": "Missing required fields"}, status=400)
+        
+        llm = LLM()
+        response = llm.generate_recipe(data["skill_level"], data["time"], data["dietary_restrictions"], data["ingredients"])
 
-
+        llm.save_recipe(response)
+        
+        return JsonResponse(response)
+        # except Exception as e:
+        #     print(f"Unexpected Error: {str(e)}")
+        #     return JsonResponse({"error": str(e)}, status=500)
 
 @csrf_exempt
 @require_http_methods(["POST", "OPTIONS"])
@@ -375,8 +242,8 @@ def register_user(request):
     try:
         body_unicode = request.body.decode("utf-8")
         data = json.loads(body_unicode)
-        guest = Guest()
-        response_data, status_code = guest.sign_up(data)
+        auth = Authenticator()
+        response_data, status_code = auth.sign_up(data)
         return JsonResponse(response_data, status=status_code)
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
@@ -402,7 +269,7 @@ def login_user(request):
         if not email or not password:
             return JsonResponse({"error": "Missing email or password"}, status=400)
 
-        authenticate_user = Authentication(email, password)
+        authenticate_user = Authenticator(email, password)
         response_data, status_code = authenticate_user.sign_in()
         return JsonResponse(response_data, status=status_code)
     except json.JSONDecodeError:
@@ -454,7 +321,7 @@ def logout_user(request):
         auth_header = request.headers.get("Authorization")
         if auth_header and auth_header.startswith("Bearer "):
             token = auth_header.split(" ")[1]
-            authenticate_user = Authentication()
+            authenticate_user = Authenticator()
             response_data, status_code = authenticate_user.logout(token)
             return JsonResponse(response_data, status=status_code)
         else:

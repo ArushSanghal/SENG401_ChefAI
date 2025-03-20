@@ -1,95 +1,59 @@
 {
     "recipe": {
-        "recipe_name": "Quick Chicken with Tomatoes",
-        "skill_level": "Intermediate",
+        "recipe_name": "Simple Tomato Soup",
+        "skill_level": "Beginner",
         "time": "30 minutes",
-        "dietary_restrictions": null,
+        "dietary_restrictions": "Vegan",
         "ingredients": [
             {
-                "name": "Chicken breast",
-                "amount": "2",
-                "unit": null
-            },
-            {
                 "name": "Tomatoes",
-                "amount": "2",
-                "unit": "medium"
-            },
-            {
-                "name": "Olive oil",
-                "amount": "2",
-                "unit": "tablespoons"
-            },
-            {
-                "name": "Garlic",
-                "amount": "2",
-                "unit": "cloves"
-            },
-            {
-                "name": "Salt",
-                "amount": "1/2",
-                "unit": "teaspoon"
-            },
-            {
-                "name": "Black pepper",
-                "amount": "1/4",
-                "unit": "teaspoon"
-            },
-            {
-                "name": "Basil",
-                "amount": "1/4",
-                "unit": "cup"
+                "amount": "4",
+                "unit": "large"
             },
             {
                 "name": "Onion",
-                "amount": "1/2",
+                "amount": "1",
                 "unit": "medium"
+            },
+            {
+                "name": "Vegetable Soup",
+                "amount": "400",
+                "unit": "ml"
             }
         ],
         "steps": [
             {
                 "step": 1,
-                "instruction": "Dice the onion and mince the garlic."
+                "instruction": "Dice the onion and tomatoes."
             },
             {
                 "step": 2,
-                "instruction": "Cut the chicken breasts into bite-sized pieces."
+                "instruction": "Saut\u00e9 the diced onion in a pot with a little oil until softened."
             },
             {
                 "step": 3,
-                "instruction": "Heat the olive oil in a pan over medium-high heat. Add the chicken and cook until browned on all sides."
+                "instruction": "Add the diced tomatoes and vegetable soup to the pot."
             },
             {
                 "step": 4,
-                "instruction": "Add the onion and garlic to the pan and cook until softened, about 5 minutes."
+                "instruction": "Bring the mixture to a boil, then reduce heat and simmer for 15-20 minutes."
             },
             {
                 "step": 5,
-                "instruction": "Chop the tomatoes and add them to the pan. Season with salt, pepper, and basil."
-            },
-            {
-                "step": 6,
-                "instruction": "Reduce heat to low, cover, and simmer for 15 minutes, or until the chicken is cooked through and the tomatoes have broken down into a sauce."
-            },
-            {
-                "step": 7,
-                "instruction": "Serve hot with rice or pasta."
+                "instruction": "Optionally, blend the soup for a smoother consistency."
             }
         ],
         "prep_time": "10 minutes",
         "cook_time": "20 minutes",
         "servings": "2",
         "tips": [
-            "For extra flavor, add a pinch of red pepper flakes."
+            "Add a pinch of sugar to balance the acidity of the tomatoes.",
+            "For a richer flavor, use vegetable broth instead of water."
         ],
         "substitutions": [
             {
-                "ingredient": "Chicken breast",
-                "substitute": "Chicken thighs"
-            },
-            {
-                "ingredient": "Basil",
-                "substitute": "Oregano"
+                "ingredient": "Vegetable Soup",
+                "substitute": "Vegetable Broth"
             }
         ]
     }
