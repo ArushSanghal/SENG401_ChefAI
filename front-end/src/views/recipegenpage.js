@@ -51,7 +51,7 @@ function Recipegenpage(){
     <title>ChefAI</title>
     <meta property="og:title" content="ChefAI" />
 
-    {/* <Navbar8></Navbar8> */}
+
     <NavbarGuest></NavbarGuest>
 
     <img src="/images/spaghetti-with-vegetables-cooking-in-a-pan.png" alt="frying pan" className="image"></img>
@@ -110,10 +110,9 @@ function Recipegenpage(){
                 <input type = "radio" name= "time" value = "120"/>120 minutes
             </label>
         </p>
-        <div className = "recipe-button">
-        <button type="submit" >Generate Recipe!</button>
-        </div>
-        </div> 
+    
+        <button className="thq-button-animated thq-button-filled-big thq-heading-3" type="submit" >Generate Recipe!</button>        </div>
+
         
         </form>
         </div>
