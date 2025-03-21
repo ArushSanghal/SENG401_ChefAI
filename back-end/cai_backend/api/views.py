@@ -187,7 +187,7 @@ def view_recipes(request):
         try:
             token = request.headers.get("Authorization").split(" ")[1]
             save_manager = SaveManager.from_token(token)
-            json_recipes = save_manager.view_saved_recipes()
+            json_recipes = save_manager.view_saved_recipes("saved")
             
             return JsonResponse({"saved_recipes": json_recipes}, status=200)
 
