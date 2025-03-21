@@ -6,10 +6,14 @@ from .models import RegisteredUser, Recipe, Ingredients, Token, SkillLevelChoice
 from .services.profile_manager import ProfileManager
 from .services.authenticator import Authenticator
 from .services.save_manager import SaveManager
+from .services.recipe_parser import RecipeParser
 from datetime import datetime, timedelta
 from django.utils import timezone
 import uuid
-
+from django.http.response import JsonResponse
+import tempfile
+import os
+import json
 
 
 # class SaveRecipeTestCase(TestCase):
@@ -413,3 +417,246 @@ class LogoutTest(TestCase):
         self.assertFalse(token_exists)
         
 
+class SaveManagerTest(TestCase):
+    def setUp(self):     
+        # Create a mock registered user
+        self.user = RegisteredUser.objects.create(
+            first_name="John",
+            last_name="Doe",
+            username="jd2",
+            email="jd2@gmail.com",
+            hashed_password=make_password("testing1")
+        )
+        
+        self.token = Token.objects.create(
+            user=self.user,
+            token=str(uuid.uuid4()),
+            expires_at=timezone.now() + timedelta(minutes=10)
+        )
+
+        # Create a recipe
+        self.recipe = Recipe.objects.create(
+            title="Test Recipe",
+            estimated_time="30",
+            skill_level="Beginner",
+            instructions="Test instructions"
+        )
+
+        # Instantiate the SaveManager
+        self.save_manager = SaveManager(self.user)
+        
+    def test_from_token_valid_token(self):
+        save_manager = SaveManager.from_token(self.token.token)
+        self.assertIsInstance(save_manager, SaveManager)
+        self.assertEqual(save_manager.user, self.user)
+
+    def test_from_token_invalid_token(self):
+        with self.assertRaises(ValueError) as context:
+            SaveManager.from_token("invalid_token")
+        self.assertEqual(str(context.exception), "Invalid token provided")
+
+    def test_add_to_history_success(self):
+        response = self.save_manager.add_to_history(self.recipe)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"message": "Recipe added to history successfully"})
+        self.assertTrue(self.user.last_used_recipes.filter(id=self.recipe.id).exists())
+
+    def test_add_to_history_user_not_found(self):
+        self.user.delete()
+        response = self.save_manager.add_to_history(self.recipe)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(), {"error": "User not found"})
+        
+        # Recreate the user to ensure isolation for other tests
+        self.user = RegisteredUser.objects.create(
+            first_name="John",
+            last_name="Doe",
+            username="jd2",
+            email="jd2@gmail.com",
+            hashed_password="hashed_password"
+        )
+        self.save_manager = SaveManager(self.user)
+
+    def test_save_recipe_success(self):
+        response = self.save_manager.save_recipe(self.recipe)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"message": "Recipe saved successfully"})
+        self.assertTrue(self.user.saved_recipes.filter(id=self.recipe.id).exists())
+
+    def test_save_recipe_user_not_found(self):
+        self.user.delete()
+        response = self.save_manager.save_recipe(self.recipe)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(), {"error": "User not found"})
+        
+        # Recreate the user to ensure isolation for other tests
+        self.user = RegisteredUser.objects.create(
+            first_name="John",
+            last_name="Doe",
+            username="jd2",
+            email="jd2@gmail.com",
+            hashed_password="hashed_password"
+        )
+        self.save_manager = SaveManager(self.user)
+
+    def test_remove_saved_recipe_success(self):
+        self.user.saved_recipes.add(self.recipe)
+        response = self.save_manager.remove_saved_recipe(self.recipe)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"message": "Recipe successfully removed"})
+        self.assertFalse(self.user.saved_recipes.filter(id=self.recipe.id).exists())
+
+    def test_remove_saved_recipe_not_found(self):
+        response = self.save_manager.remove_saved_recipe(self.recipe)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(), {"error": "Recipe does not exist for user"})
+
+    def test_clear_recipe_history_success(self):
+        self.user.last_used_recipes.add(self.recipe)
+        response = self.save_manager.clear_recipe_history()
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"message": "Successfully cleared history"})
+        self.assertFalse(self.user.last_used_recipes.exists())
+
+    def test_clear_recipe_history_already_empty(self):
+        response = self.save_manager.clear_recipe_history()
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {"error": "History already empty"})
+
+    def test_view_saved_recipes_success(self):
+        self.user.saved_recipes.add(self.recipe)
+        response = self.save_manager.view_saved_recipes()
+        self.assertIsInstance(response, list)
+        self.assertEqual(len(response), 1)
+        self.assertEqual(response[0]["recipe_name"], self.recipe.title)
+
+    def test_view_saved_recipes_empty(self):
+        response = self.save_manager.view_saved_recipes()
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"error": "Saved history is empty"})
+
+    def test_view_recipes_success(self):
+        self.user.last_used_recipes.add(self.recipe)
+        self.user.saved_recipes.add(self.recipe)
+        response = self.save_manager.view_recipes()
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {
+            "last_viewed": [self.recipe.title],
+            "saved_recipes": [self.recipe.title]
+        })
+
+    def test_view_recipes_empty(self):
+        response = self.save_manager.view_recipes()
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {
+            "last_viewed": [],
+            "saved_recipes": []
+        })
+        
+
+class RecipeParserTest(TestCase):
+    def setUp(self):
+        # Sample recipe data for testing
+        self.valid_recipe_data = {
+            "recipe": {
+                "recipe_name": "Test Recipe",
+                "time": "30",
+                "skill_level": "Beginner",
+                "ingredients": [{"name": "Ingredient 1"}, {"name": "Ingredient 2"}],
+                "steps": ["Step 1", "Step 2"]
+            }
+        }
+
+        # Create a temporary file for testing
+        self.temp_file = tempfile.NamedTemporaryFile(delete=False, mode="w", encoding="utf-8")
+        json.dump(self.valid_recipe_data, self.temp_file)
+        self.temp_file.close()
+
+    def tearDown(self):
+        # Clean up the temporary file
+        os.unlink(self.temp_file.name)
+
+    def test_from_file_valid(self):
+        parser = RecipeParser.from_file(self.temp_file.name)
+        self.assertIsInstance(parser, RecipeParser)
+        self.assertEqual(parser.recipe_data, self.valid_recipe_data["recipe"])
+
+    def test_from_file_missing_fields(self):
+        invalid_recipe_data = {
+            "recipe": {
+                "recipe_name": "Test Recipe",
+                "time": "30",
+                # Missing "skill_level", "ingredients", and "steps"
+            }
+        }
+
+        with open(self.temp_file.name, "w", encoding="utf-8") as f:
+            json.dump(invalid_recipe_data, f)
+
+        response = RecipeParser.from_file(self.temp_file.name)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {"error": "Missing required fields"})
+
+    def test_from_file_file_not_found(self):
+        response = RecipeParser.from_file("nonexistent_file.json")
+        self.assertEqual(response, ({"FileNotFound": "nonexistent_file.json does not exist or is in the wrong directory"}, 400))
+
+    def test_from_file_permission_error(self):
+        # Create a file with no read permissions
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8") as temp_file:
+            temp_file_path = temp_file.name
+            os.chmod(temp_file_path, 0o000)  # Remove all permissions
+
+            response = RecipeParser.from_file(temp_file_path)
+            self.assertEqual(response, ({"PermissionError": f"You do not have the correct permissions to access {temp_file_path}"}, 400))
+
+            # Restore permissions to allow cleanup
+            os.chmod(temp_file_path, 0o644)
+
+    def test_to_model_valid(self):
+        parser = RecipeParser(self.valid_recipe_data["recipe"])
+        recipe = parser.to_model()
+
+        self.assertIsInstance(recipe, Recipe)
+        self.assertEqual(recipe.title, self.valid_recipe_data["recipe"]["recipe_name"])
+        self.assertEqual(recipe.estimated_time, self.valid_recipe_data["recipe"]["time"])
+        self.assertEqual(recipe.skill_level, self.valid_recipe_data["recipe"]["skill_level"])
+        self.assertEqual(json.loads(recipe.instructions), self.valid_recipe_data["recipe"]["steps"])
+
+        # Check ingredients
+        ingredients = Ingredients.objects.filter(recipe=recipe)
+        self.assertEqual(ingredients.count(), 2)
+        self.assertEqual(ingredients[0].ingredient, "Ingredient 1")
+        self.assertEqual(ingredients[1].ingredient, "Ingredient 2")
+
+    def test_to_model_no_recipe_data(self):
+        parser = RecipeParser()
+        with self.assertRaises(ValueError) as context:
+            parser.to_model()
+        self.assertEqual(str(context.exception), "No recipe data found in parser object.")
+
+    def test_update_data_valid(self):
+        parser = RecipeParser(self.valid_recipe_data["recipe"])
+
+        new_recipe_data = {
+            "recipe_name": "Updated Recipe",
+            "time": "45",
+            "skill_level": "Intermediate",
+            "ingredients": [{"name": "Updated Ingredient"}],
+            "steps": ["Updated Step 1", "Updated Step 2"]
+        }
+
+        parser.update_data(new_recipe_data)
+        self.assertEqual(parser.recipe_data, new_recipe_data)
