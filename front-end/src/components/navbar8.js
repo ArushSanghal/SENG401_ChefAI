@@ -8,6 +8,32 @@ import { Link } from 'react-router-dom/cjs/react-router-dom'
 const Navbar8 = (props) => {
   const [link5DropdownVisible, setLink5DropdownVisible] = useState(false)
   const [link5AccordionOpen, setLink5AccordionOpen] = useState(false)
+
+  const handleSignOut = async () => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+        history.push("/");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/logout/", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+        if (response.ok) {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            history.push("/");
+        } else {
+            alert("Error logging out.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+};
   return (
     <header className="navbar8-container1">
       <header data-thq="thq-navbar" className="navbar8-navbar-interactive">
@@ -53,7 +79,7 @@ const Navbar8 = (props) => {
 
           <div className="navbar8-buttons1">
             <Link to = "/">
-            <button className="navbar8-action11 thq-button-animated thq-button-filled">
+            <button onClick={handleSignOut}className="navbar8-action11 thq-button-animated thq-button-filled">
               <span>
                 {props.action1 ?? (
                   <Fragment>
@@ -159,7 +185,7 @@ Navbar8.defaultProps = {
   logoSrc: '/images/chefai_logo.png',
   logoAlt: 'ChefAI Logo',
 
-  link2Url: '/saved-recipes',
+  link2Url: '/history',
   link1Url: '/recipe',
   link3Url: '/saved-recipes',
 

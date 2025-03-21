@@ -16,7 +16,6 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #f9f9f9;
-  overflow: hidden; /* Clearfix for floated elements */
 }
 
 .recipe-image {
@@ -30,7 +29,6 @@
 
 .recipe-content {
   flex: 1;
-  overflow: hidden; /* Ensure text wraps around the image */
 }
 
 .blog-text24, .blog-text25, .blog-text27, .blog-text28 {

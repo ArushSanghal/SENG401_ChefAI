@@ -83,31 +83,6 @@ const UserProfile = () => {
         .catch(error => console.log(error));
     };
 
-    const handleSignOut = async () => {
-        const token = localStorage.getItem("access_token");
-        if (!token) {
-            history.push("/");
-            return;
-        }
-    
-        try {
-            const response = await fetch("http://127.0.0.1:8000/logout/", {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                },
-            });
-            if (response.ok) {
-                localStorage.removeItem("access_token");
-                localStorage.removeItem("refresh_token");
-                history.push("/");
-            } else {
-                alert("Error logging out.");
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
 
     if (!userData) {
         return <div>Loading...</div>;
@@ -190,32 +165,6 @@ const UserProfile = () => {
             console.log(json);
         });
     }
-
-    function handleViewRecipes(e){
-        e.preventDefault();
-        
-        const token = localStorage.getItem("access_token");
-            if (!token) {
-                history.push("/");
-                return;
-        }
-        setLoading(true);
-        fetch("http://127.0.0.1:8000/view_recipes/", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-            },      
-        })
-        // Converting to JSON
-        .then(response => response.json())
-        // Displaying results to console
-        .then(json => {
-            console.log(json);
-            setSavedRecipes(json.saved_recipes); 
-            setLoading(false); 
-            setViewRecipes(!viewRecipes);
-        });
-    }
     
     return (
         <div>
@@ -240,9 +189,8 @@ const UserProfile = () => {
                 placeholder="Enter dietary restrictions, separated by commas"
             />
 
-            <button onClick={handleSave}>Save Changes</button>
-            <button onClick={handleSignOut}>Sign Out</button>
-            <button onClick={handleViewRecipes} style={{ border: "1px solid #ddd" }}>View Saved Recipes</button>
+            <button onClick={handleSave} style={{ border: "1px solid #ddd" }}>Save Changes</button>
+
 
             {loading && <p>Loading...</p>}
             <div>

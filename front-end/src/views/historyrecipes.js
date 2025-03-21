@@ -7,7 +7,7 @@ import './savedrecipes.css';
 import Banner11 from '../components/banner11';
 import { Link } from 'react-router-dom/cjs/react-router-dom';
 
-const SavedRecipes = (props) => {
+const HistoryRecipes = (props) => {
   const [content, setContent] = useState(null);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const SavedRecipes = (props) => {
       return;
     }
 
-    fetch("http://127.0.0.1:8000/view_recipes/?type=saved", {
+    fetch("http://127.0.0.1:8000/view_recipes/?type=history", {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -71,13 +71,13 @@ const SavedRecipes = (props) => {
       <Banner11
         heading1={
           <Fragment>
-            <span className="banner11-text5">Saved Recipes</span>
+            <span className="banner11-text5">Recipe History</span>
           </Fragment>
         }
         content1={
           <Fragment>
             <span className="banner11-text3">
-              View your previously saved recipes and re-create classic masterpieces!
+              View your previously generated recipes in case you hadn't saved them!
             </span>
           </Fragment>
         }
@@ -113,4 +113,4 @@ const SavedRecipes = (props) => {
   );
 };
 
-export default SavedRecipes;
+export default HistoryRecipes;

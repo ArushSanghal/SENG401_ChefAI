@@ -17,6 +17,7 @@ import UserProfile from './views/user-profile'
 import NotFound from './views/not-found'
 import Recipegenpage from './views/recipegenpage'
 import SavedRecipes from './views/savedrecipes'
+import HistoryRecipes from './views/historyrecipes'
 
 const App = () => {
 
@@ -32,6 +33,7 @@ const App = () => {
           <Route component={GuestHome} exact path="/guest"/>
           <Route component={UserProfile} exact path="/user-profile" />
           <Route component={SavedRecipes} exact path ="/saved-recipes"/>
+          <Route component={HistoryRecipes} exact path ="/history"/>
           <Route component={NotFound} path="**" />
           <Redirect to="**" />
       </Switch>
