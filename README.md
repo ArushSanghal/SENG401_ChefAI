@@ -43,22 +43,30 @@ ChefAI is a smart, user-friendly recipe generation web application that uses a L
 
 1. **Clone the repository:**
     ```
-    git clone https://github.com/yourusername/chefai.git
+    git clone https://github.com/ArushSanghal/SENG401_ChefAI.git
     cd chefai
    ```
-   
+  
 2. **Install Requirements:**
     Within a virtual environment run:
     ```
     pip install -r requirements.txt
     ```
 
-3. **Open two terminals**
+3. **Generate Gemini API Key:**
+    Go to https://ai.google.dev/gemini-api/docs/
+    and generate a gemini API key.  
+
+4. **Create a .env file**.
+    Open the folder you will clone the repository to.
+    Create a file called .env.
+    Insert GEMINI_API_KEY=<your_newly_generated_key>
+
+6. **Open Two Terminals:**
     ```bash
     cd back-end/cai_backend
     $ python manage.py runserver
     ```
-    Open the second terminal
     ```bash
     cd front-end
     npm start
