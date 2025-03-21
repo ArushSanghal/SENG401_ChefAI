@@ -245,7 +245,6 @@ const UserProfile = () => {
             <button onClick={handleViewRecipes} style={{ border: "1px solid #ddd" }}>View Saved Recipes</button>
 
             {loading && <p>Loading...</p>}
-            {savedRecipes.length <= 1 }
             <div>
                 {Array.isArray(savedRecipes) && viewRecipes && (
                     savedRecipes.map((recipe, index) => (
