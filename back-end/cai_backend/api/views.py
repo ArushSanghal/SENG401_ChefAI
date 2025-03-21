@@ -183,11 +183,25 @@ def save_button(request):
 @csrf_exempt
 @require_http_methods(["GET", "OPTIONS"])
 def view_recipes(request):
+    if request.method == "GET":
+        try:
+            token = request.headers.get("Authorization").split(" ")[1]
+            save_manager = SaveManager.from_token(token)
+            recipe_type = request.GET.get("type", "saved")
+            json_recipes = save_manager.view_saved_recipes(recipe_type)
+            return JsonResponse({"saved_recipes": json_recipes}, status=200)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+        
+        
+@csrf_exempt
+@require_http_methods(["GET", "OPTIONS"])
+def view_recipes_h(request):
      if request.method == "GET":
         try:
             token = request.headers.get("Authorization").split(" ")[1]
             save_manager = SaveManager.from_token(token)
-            json_recipes = save_manager.view_saved_recipes("saved")
+            json_recipes = save_manager.view_saved_recipes("history")
             
             return JsonResponse({"saved_recipes": json_recipes}, status=200)
 
