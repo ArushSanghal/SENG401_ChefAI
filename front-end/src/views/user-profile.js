@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import Navbar8 from '../components/navbar8'
 
 const UserProfile = () => {
+    const [showButton, setShowButton] = useState(true);
     const [userData, setUserData] = useState(null);
     const [skillLevel, setSkillLevel] = useState("");
     const [dietaryRestrictions, setDietaryRestrictions] = useState("");
@@ -163,7 +164,8 @@ const UserProfile = () => {
         .then(json => {
             console.log("Username and Email has been sent to the backend");
             console.log(json);
-        });
+        })
+        .then(setShowButton(false), alert("Recipe Saved Succesfully"));
     }
     
     return (
@@ -272,7 +274,6 @@ const UserProfile = () => {
         <div className="generated-recipe">
             <h1 >Recipes! </h1>
             {loading && <h1>Loading.....</h1>}
-            {save && <button onClick= {handleSaveButton}>SAVE RECIPE</button>}
             {recipe && (
                 <div>
                 <h4>Title: {recipe.recipe.recipe_name}</h4>
@@ -296,6 +297,7 @@ const UserProfile = () => {
                 </ol>
                 </div>
             )}
+            {save && showButton && <button onClick={ handleSaveButton }>Save Recipe</button>}
         </div>
 
     </div>
