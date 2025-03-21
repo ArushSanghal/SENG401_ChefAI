@@ -43,7 +43,7 @@ const SignIn1 = (props) => {
                 console.log("Refresh Token:", localStorage.getItem("refresh_token"));
     
                 // Redirect to user profile
-                alert("Login successful!");
+                // alert("Login successful!");
                 history.push("/user-profile");
             } else {
                 console.log("Details:", data)

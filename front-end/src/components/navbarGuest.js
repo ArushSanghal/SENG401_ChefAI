@@ -56,24 +56,6 @@ const NavbarGuest = (props) => {
                 </Fragment>
               )}
             </Link>
-            {/* <Link to={props.link2Url} className="thq-link thq-body-small">
-              {props.link2 ?? (
-                <Fragment>
-                  <span className="navbar8-text26">/history</span>
-                </Fragment>
-              )}
-            </Link>
-            <Link
-              to={props.link3Url}
-              rel="noreferrer noopener"
-              className="navbar8-link31 thq-link thq-body-small"
-            >
-              {props.link3 ?? (
-                <Fragment>
-                  <span className="navbar8-text20">/saved</span>
-                </Fragment>
-              )}
-            </Link> */}
           </nav>
 
 
@@ -127,7 +109,7 @@ const NavbarGuest = (props) => {
                   </Fragment>
                 )}
               </Link>
-              <Link to={props.link2Url} className="thq-link thq-body-small">
+              {/* <Link to={props.link2Url} className="thq-link thq-body-small">
                 {props.link2 ?? (
                   <Fragment>
                     <span className="navbar8-text26">/history</span>
@@ -143,13 +125,24 @@ const NavbarGuest = (props) => {
                     <span className="navbar8-text20">/saved</span>
                   </Fragment>
                 )}
-              </Link>
+              </Link> */}
             </nav>
 
 
             <div className="navbar8-buttons2">
-              <div className="navbar8-buttons1">
-              </div>
+            <div className="navbar8-buttons1">
+            <Link to = "/">
+            <button className="navbar8-action11 thq-button-animated thq-button-filled">
+              <span>
+                {props.action1 ?? (
+                  <Fragment>
+                    <span className="navbar8-text25">Login</span>
+                  </Fragment>
+                )}
+              </span>
+            </button>
+            </Link>
+          </div>
             </div>
           </div>
 
