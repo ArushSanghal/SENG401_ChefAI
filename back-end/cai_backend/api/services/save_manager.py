@@ -42,9 +42,9 @@ class SaveManager:
 
     def view_saved_recipes(self, recipe_type="saved"):
         if recipe_type == "saved":
-            recipes = self.user.saved_recipes.all()
+            recipes = self.user.saved_recipes.all().order_by('-id')
         elif recipe_type == "history":
-            recipes = self.user.last_used_recipes.all()
+            recipes = self.user.last_used_recipes.all().order_by('-id')
         else:
             return JsonResponse({"error": "Invalid recipe type provided"}, status=400)
 
