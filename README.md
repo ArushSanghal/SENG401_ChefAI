@@ -1,5 +1,5 @@
 # ChefAI
-![ChefAI Logo](frontend/public/images/chefai_logo.png)
+![ChefAI Logo](front-end/public/images/chefai_logo.png)
 
 ChefAI is a smart, user-friendly recipe generation web application that uses a Large Language Model (LLM) to suggest personalized recipes based on ingredients, dietary restrictions, cooking skill, and time availability. Users can interact with the platform either as guests or through a registered profile for enhanced features.
 
@@ -39,7 +39,7 @@ ChefAI is a smart, user-friendly recipe generation web application that uses a L
 
 ---
 
-## 🧪 Installation
+## Installation
 
 1. **Clone the repository:**
     ```
@@ -60,7 +60,7 @@ ChefAI is a smart, user-friendly recipe generation web application that uses a L
     ```
     Open the second terminal
     ```bash
-    cd frontend
+    cd front-end
     npm start
     ```
 
