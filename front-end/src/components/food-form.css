@@ -1,0 +1,97 @@
+.food-form-contact9 {
+    display: flex;
+    position: relative;
+    align-items: center;
+    flex-direction: column;
+  }
+  .food-form-image1 {
+    flex: 1;
+    width: auto;
+    height: auto;
+    max-width: 640px;
+    border-radius: var(--dl-radius-radius-radius4);
+  }
+  .food-form-content1 {
+    gap: 0;
+    flex: 1;
+    align-items: stretch;
+  }
+  .food-form-section-title {
+    gap: var(--dl-space-space-unit);
+    height: 128px;
+    display: flex;
+    align-self: stretch;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .food-form-content2 {
+    gap: var(--dl-space-space-oneandhalfunits);
+    display: flex;
+    align-self: stretch;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .food-form-input1 {
+    gap: var(--dl-space-space-halfunit);
+    display: flex;
+    align-self: stretch;
+    flex-direction: column;
+  }
+  .food-form-input2 {
+    gap: var(--dl-space-space-halfunit);
+    display: flex;
+    align-self: stretch;
+    flex-direction: column;
+  }
+  .food-form-input3 {
+    gap: var(--dl-space-space-halfunit);
+    display: flex;
+    align-self: stretch;
+    flex-direction: column;
+  }
+  .food-form-container {
+    gap: var(--dl-space-space-halfunit);
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .food-form-checkbox1 {
+    gap: var(--dl-space-space-unit);
+    display: flex;
+    align-items: center;
+  }
+  .food-form-text5 {
+    height: auto;
+    font-size: 14px;
+    font-style: Regular;
+    text-align: left;
+    font-family: Roboto;
+    font-weight: 400;
+    line-height: 150%;
+    font-stretch: normal;
+    text-decoration: none;
+  }
+  .food-form-button {
+    align-self: flex-start;
+  }
+  .food-form-text6 {
+    display: inline-block;
+  }
+  .food-form-text7 {
+    display: inline-block;
+  }
+  @media(max-width: 991px) {
+    .food-form-max-width {
+      flex-direction: column;
+    }
+    .food-form-content1 {
+      width: 100%;
+    }
+  }
+  @media(max-width: 767px) {
+    .food-form-image1 {
+      width: 100%;
+    }
+  }
+  

@@ -1,17 +1,46 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, {Fragment, useState, useEffect} from 'react'
+import ReactDOM from 'react-dom'
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from 'react-router-dom'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+import './style.css'
+import Login from './views/login'
+import SignUp from './views/signup'
+import GuestHome from './views/guest-home'
+import UserProfile from './views/user-profile'
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+
+import NotFound from './views/not-found'
+import Recipegenpage from './views/recipegenpage'
+import SavedRecipes from './views/savedrecipes'
+import HistoryRecipes from './views/historyrecipes'
+
+const App = () => {
+
+  const [currentUser, setCurrentUser] = useState(null);
+
+
+  return (
+    <Router>
+      <Switch>
+          <Route component={Login} exact path="/" />
+          <Route component={SignUp} exact path="/signup" />
+          <Route component={Recipegenpage} exact path="/recipe" />
+          <Route component={GuestHome} exact path="/guest"/>
+          <Route component={UserProfile} exact path="/user-profile" />
+          <Route component={SavedRecipes} exact path ="/saved-recipes"/>
+          <Route component={HistoryRecipes} exact path ="/history"/>
+          <Route component={NotFound} path="**" />
+          <Redirect to="**" />
+      </Switch>
+    </Router>
+  )
+
+}
+
+
+ReactDOM.render(<App />, document.getElementById('app'))
