@@ -350,6 +350,7 @@ class LogoutTest(TestCase):
         self.assertFalse(token_exists)
         
 
+# All tests passed                
 class SaveManagerTest(TestCase):
     def setUp(self):     
         # Create a mock registered user
@@ -396,24 +397,6 @@ class SaveManagerTest(TestCase):
         self.assertEqual(response_data['message'], "Recipe added to history successfully")
         self.assertTrue(self.user.last_used_recipes.filter(id=self.recipe.id).exists())
 
-    # def test_add_to_history_user_not_found(self):
-    #     self.user.delete()
-    #     response = self.save_manager.add_to_history(self.recipe)
-    #     self.assertIsInstance(response, JsonResponse)
-    #     self.assertEqual(response.status_code, 404)
-    #     response_data = json.loads(response.content)
-    #     self.assertEqual(response_data['error'], "User not found")
-                
-    #     # Recreate the user to ensure isolation for other tests
-    #     self.user = RegisteredUser.objects.create(
-    #         first_name="John",
-    #         last_name="Doe",
-    #         username="jd2",
-    #         email="jd2@gmail.com",
-    #         hashed_password="hashed_password"
-    #     )
-    #     self.save_manager = SaveManager(self.user)
-
     def test_save_recipe_success(self):
         response = self.save_manager.save_recipe(self.recipe)
         self.assertIsInstance(response, JsonResponse)
@@ -421,24 +404,6 @@ class SaveManagerTest(TestCase):
         response_data = json.loads(response.content)
         self.assertEqual(response_data['message'], "Recipe saved successfully")
         self.assertTrue(self.user.saved_recipes.filter(id=self.recipe.id).exists())
-
-    # def test_save_recipe_user_not_found(self):
-    #     self.user.delete()
-    #     response = self.save_manager.save_recipe(self.recipe)
-    #     self.assertIsInstance(response, JsonResponse)
-    #     self.assertEqual(response.status_code, 404)
-    #     response_data = json.loads(response.content)
-    #     self.assertEqual(response_data['error'], "User not found")
-        
-    #     # Recreate the user to ensure isolation for other tests
-    #     self.user = RegisteredUser.objects.create(
-    #         first_name="John",
-    #         last_name="Doe",
-    #         username="jd2",
-    #         email="jd2@gmail.com",
-    #         hashed_password="hashed_password"
-    #     )
-    #     self.save_manager = SaveManager(self.user)
 
     def test_remove_saved_recipe_success(self):
         self.user.saved_recipes.add(self.recipe)
@@ -472,19 +437,24 @@ class SaveManagerTest(TestCase):
         response_data = json.loads(response.content)
         self.assertEqual(response_data['error'], "History already empty")
 
-    # def test_view_saved_recipes_success(self):
-    #     self.user.saved_recipes.add(self.recipe)
-    #     response = self.save_manager.view_saved_recipes()
-    #     self.assertIsInstance(response, list)
-    #     self.assertEqual(len(response), 1)
-    #     self.assertEqual(response[0]["recipe_name"], self.recipe.title)
+    def test_view_saved_recipes_success(self):
+        self.user.saved_recipes.add(self.recipe)
+        response = self.save_manager.view_saved_recipes("saved")
+        self.assertIsInstance(response, list)
+        self.assertEqual(len(response), 1)
+        self.assertEqual(response[0]["recipe_name"], self.recipe.title)
 
-    # def test_view_saved_recipes_empty(self):
-    #     response = self.save_manager.view_saved_recipes()
-    #     self.assertIsInstance(response, JsonResponse)
-    #     self.assertEqual(response.status_code, 200)
-    #     response_data = json.loads(response.content)
-    #     self.assertEqual(response_data["error"], "Saved history is empty")
+    def test_view_saved_recipes_empty(self):
+        response = self.save_manager.view_saved_recipes("saved")
+        self.assertIsInstance(response, JsonResponse)
+        response_data = json.loads(response.content)
+        self.assertEqual(response_data["error"], "Saved recipes are empty")
+        
+    def test_view_saved_recipes_history_empty(self):
+        response = self.save_manager.view_saved_recipes("history")
+        self.assertIsInstance(response, JsonResponse)
+        response_data = json.loads(response.content)
+        self.assertEqual(response_data["error"], "History is empty")
 
     def test_view_recipes_success(self):
         self.user.last_used_recipes.add(self.recipe)
