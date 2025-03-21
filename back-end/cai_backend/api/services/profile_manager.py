@@ -49,6 +49,6 @@ class ProfileManager:
             user.save()
             return {"success": "Profile updated successfully"}, 200
         except (InvalidToken, TokenError) as e:
-            print(f"Token error: {e}")
+            # print(f"Token error: {e}") # Error checking
             return {"error": "Invalid token"}, 401
  
