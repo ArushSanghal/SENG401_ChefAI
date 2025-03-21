@@ -9,31 +9,6 @@ const NavbarGuest = (props) => {
   const [link5DropdownVisible, setLink5DropdownVisible] = useState(false)
   const [link5AccordionOpen, setLink5AccordionOpen] = useState(false)
 
-//   const handleSignOut = async () => {
-//     const token = localStorage.getItem("access_token");
-//     if (!token) {
-//         history.push("/");
-//         return;
-//     }
-
-//     try {
-//         const response = await fetch("http://127.0.0.1:8000/logout/", {
-//             method: "POST",
-//             headers: {
-//                 "Authorization": `Bearer ${token}`,
-//             },
-//         });
-//         if (response.ok) {
-//             localStorage.removeItem("access_token");
-//             localStorage.removeItem("refresh_token");
-//             history.push("/");
-//         } else {
-//             alert("Error logging out.");
-//         }
-//     } catch (error) {
-//         console.error("Error:", error);
-//     }
-// };
   return (
     <header className="navbar8-container1">
       <header data-thq="thq-navbar" className="navbar8-navbar-interactive">
@@ -109,23 +84,6 @@ const NavbarGuest = (props) => {
                   </Fragment>
                 )}
               </Link>
-              {/* <Link to={props.link2Url} className="thq-link thq-body-small">
-                {props.link2 ?? (
-                  <Fragment>
-                    <span className="navbar8-text26">/history</span>
-                  </Fragment>
-                )}
-              </Link>
-              <Link
-                to={props.link3Url}
-                className="navbar8-link32 thq-link thq-body-small"
-              >
-                {props.link3 ?? (
-                  <Fragment>
-                    <span className="navbar8-text20">/saved</span>
-                  </Fragment>
-                )}
-              </Link> */}
             </nav>
 
 

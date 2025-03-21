@@ -24,12 +24,6 @@ const FoodForm = (props) => {
             "Content-Type": "application/json"
         }
       })
-        /*.then((response) => response.json())
-        .then((data) => {
-          setContent(data);
-          console.log(data);
-        })
-        .catch((error) => console.log(error));*/
     }
 
 
