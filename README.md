@@ -1,5 +1,5 @@
 # ChefAI
-![ChefAI Logo](front-end/public/images/chefai_logo.png)
+<img src="front-end/public/images/chefai_logo.png" alt="front-end/public/images/chefai_logo.png" width="360"/>
 
 ChefAI is a smart, user-friendly recipe generation web application that uses a Large Language Model (LLM) to suggest personalized recipes based on ingredients, dietary restrictions, cooking skill, and time availability. Users can interact with the platform either as guests or through a registered profile for enhanced features.
 
