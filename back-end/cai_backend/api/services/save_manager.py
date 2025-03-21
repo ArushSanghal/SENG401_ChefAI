@@ -40,30 +40,47 @@ class SaveManager:
         else:
             return JsonResponse({"error": "History already empty"}, status=400)
 
-    def view_saved_recipes(self):
-        if self.user.saved_recipes.exists():
-            self.user.saved_recipes.all()
-            json_recipes = []
+    def view_saved_recipes(self, case:str):
+        match case:
+            case "saved":
+                if self.user.saved_recipes.exists():
+                    recipe_query = self.user.saved_recipes.all()
+                else:
+                    return JsonResponse({"error:" "Saved recipes are empty"})
+            case "history":
+                if self.user.last_used_recipes.exists():
+                    recipe_query = self.user.last_used_recipes.all()
+                else:
+                    return JsonResponse({"error:" "History is empty"})
+            case _:
+                recipe_query = None
 
-            for recipe in self.user.saved_recipes.all():
-                ingredient_list = []
-                ingredients = recipe.ingredients.all()
-                for ingredient in ingredients:
-                    ingredient_list.append(ingredient.ingredient)
+        if not recipe_query:
+            return JsonResponse({"error:" "Incorrect case string passed in to view_saved_recipes."})
 
-                recipe_data = {
-                        "recipe_name": recipe.title,
-                        "estimated_time": recipe.estimated_time, 
-                        "skill_level": recipe.skill_level,
-                        "ingredients": ', '.join(ingredient_list),
-                        "instructions": recipe.instructions,
-                    }
-                json_recipes.append(recipe_data)
-            if not json_recipes:
-                return JsonResponse({"error:" "Failed to create saved recipe json response"})
-            return json_recipes
-        else:
-            return JsonResponse({"error:" "Saved history is empty"})
+        # if self.user.saved_recipes.exists():
+        #     self.user.saved_recipes.all()
+        json_recipes = []
+
+        for recipe in recipe_query:
+            ingredient_list = []
+            ingredients = recipe.ingredients.all()
+            for ingredient in ingredients:
+                ingredient_list.append(ingredient.ingredient)
+
+            recipe_data = {
+                    "recipe_name": recipe.title,
+                    "estimated_time": recipe.estimated_time, 
+                    "skill_level": recipe.skill_level,
+                    "ingredients": ', '.join(ingredient_list),
+                    "instructions": recipe.instructions,
+                }
+            json_recipes.append(recipe_data)
+        if not json_recipes:
+            return JsonResponse({"error:" "Failed to create saved recipe json response"})
+        return json_recipes
+        # else:
+        #     return JsonResponse({"error:" "Saved history is empty"})
 
     def save_last_viewed_recipe(self):
         if self.user.last_used_recipes.exists():
