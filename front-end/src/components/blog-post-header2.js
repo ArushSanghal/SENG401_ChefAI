@@ -126,8 +126,7 @@ BlogPostHeader2.defaultProps = {
   category: undefined,
   avatarName: undefined,
   blogPostImageAlt: 'Fishing tips for beginners',
-  blogPostImageSrc:
-    'https://images.unsplash.com/photo-1676911613288-f3fd49e0f0d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTMyMXwwfDF8cmFuZG9tfHx8fHx8fHx8MTczMjY1MTg3Nnw&ixlib=rb-4.0.3&q=80&w=1080',
+  blogPostImageSrc: '/images/recipe-card.jpg'
 }
 
 BlogPostHeader2.propTypes = {
