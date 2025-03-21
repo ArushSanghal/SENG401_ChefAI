@@ -448,13 +448,13 @@ class SaveManagerTest(TestCase):
         response = self.save_manager.view_saved_recipes("saved")
         self.assertIsInstance(response, JsonResponse)
         response_data = json.loads(response.content)
-        self.assertEqual(response_data["error"], "Saved recipes are empty")
+        self.assertEqual(response_data["error"], "No saved recipes found")
         
     def test_view_saved_recipes_history_empty(self):
         response = self.save_manager.view_saved_recipes("history")
         self.assertIsInstance(response, JsonResponse)
         response_data = json.loads(response.content)
-        self.assertEqual(response_data["error"], "History is empty")
+        self.assertEqual(response_data["error"], "No history recipes found")
 
     def test_view_recipes_success(self):
         self.user.last_used_recipes.add(self.recipe)
