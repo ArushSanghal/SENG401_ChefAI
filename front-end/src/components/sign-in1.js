@@ -90,7 +90,6 @@ const SignIn1 = (props) => {
                                     </Fragment>
                                 )}
                             </h2>
-                            {/* Add a wrapper for success message */}
                             <div className="sign-in1-success-message-wrapper">
                                 {successMessage && (
                                     <p className="sign-in1-success-message">
@@ -149,33 +148,8 @@ const SignIn1 = (props) => {
                             </button>
                         </form>
                         <div className="sign-in1-container3">
-                            <div className="sign-in1-container4">
-                                <div className="sign-in1-terms-agree">
-                                    <p className="thq-body-large">
-                                        <span>
-                                            By continuing, you agree to the Terms of use and Privacy Policy.
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="sign-in1-container5">
-                                <a
-                                    href="https://example.com"
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                    className="sign-in1-link1 thq-body-small"
-                                >
-                                    Issues with Sign in
-                                </a>
-                                <a
-                                    href="https://example.com"
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                    className="sign-in1-link2 thq-body-small"
-                                >
-                                    Forgot password
-                                </a>
-                            </div>
+                            
+                            
                         </div>
                     </div>
                 </div>
