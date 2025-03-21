@@ -172,27 +172,34 @@ const UserProfile = () => {
         <div>
             <Navbar8></Navbar8>
             <img src="/images/spaghetti-with-vegetables-cooking-in-a-pan.png" alt="frying pan" className="image"></img>
-            <h1>Welcome, {userData.first_name}!</h1>
-            <p><strong>Email:</strong> {userData.email}</p>
-            <p><strong>Username:</strong> {userData.username}</p>
+            <div className="thq-flex-row thq-flex-column">
+                <h1>Welcome, {userData.first_name}!</h1>
+                <p><strong>Email:</strong> {userData.email}</p>
+                <p><strong>Username:</strong> {userData.username}</p>
 
-            <label>Skill Level:</label>
-            <select value={skillLevel} onChange={(e) => setSkillLevel(e.target.value)}>
-                <option value="Beginner">Beginner</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advanced">Advanced</option>
-            </select>
+                <label>Skill Level:</label>
+                <select value={skillLevel} onChange={(e) => setSkillLevel(e.target.value)}>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+                <div>
+                </div>
+                <label>Dietary Restrictions:</label>
+                <div className="thq-section-padding-smaller">
+                </div>
+                <input 
+                    className="thq-input"
+                    type="text"
+                    value={dietaryRestrictions}
+                    onChange={(e) => setDietaryRestrictions(e.target.value)}
+                    placeholder="Separated by commas"
+                />
+                <div className="thq-section-padding-smaller">
+                </div>
 
-            <label>Dietary Restrictions:</label>
-            <input 
-                type="text"
-                value={dietaryRestrictions}
-                onChange={(e) => setDietaryRestrictions(e.target.value)}
-                placeholder="Enter dietary restrictions, separated by commas"
-            />
-
-            <button onClick={handleSave} style={{ border: "1px solid #ddd" }}>Save Changes</button>
-
+                <button className="thq-button-animate thq-button-filled" onClick={handleSave} style={{ border: "1px solid #ddd" }}>Save Changes</button>
+            </div>
 
             {loading && <p>Loading...</p>}
             <div>
@@ -263,20 +270,18 @@ const UserProfile = () => {
                 <input type = "radio" name= "time" value = "120"/>120 minutes
             </label>
         </p>
-        <div className = "recipe-button">
-        <button type="submit" >Generate Recipe!</button>
-        </div>
+        <button className="thq-button-animated thq-button-filled-big thq-heading-3" type="submit" >Generate Recipe!</button>
         </div> 
         
         </form>
         </div>
         </div>
         <div className="generated-recipe">
-            <h1 >Recipes! </h1>
+            <h1 className="thq-heading-1">Recipe! </h1>
             {loading && <h1>Loading.....</h1>}
             {recipe && (
                 <div>
-                <h4>Title: {recipe.recipe.recipe_name}</h4>
+                <h4 className="thq-heading-2">Title: {recipe.recipe.recipe_name}</h4>
                 <h5>Skill Level: {recipe.recipe.skill_level}</h5>
                 <h5>Total Time: {recipe.recipe.time}</h5>
                 <h5>Prep Time: {recipe.recipe.prep_time}</h5>
@@ -297,7 +302,7 @@ const UserProfile = () => {
                 </ol>
                 </div>
             )}
-            {save && showButton && <button onClick={ handleSaveButton }>Save Recipe</button>}
+            {save && showButton && <button className="thq-button-animated thq-button-filled" onClick={ handleSaveButton }>Save Recipe</button>}
         </div>
 
     </div>
