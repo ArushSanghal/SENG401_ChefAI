@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from 'react'
 
 import './recipegenpage.css'
 import '../components/food-form.css'
-// import '../components/navbar8'
 import NavbarGuest from '../components/navbarGuest';
 
 function Recipegenpage(){
@@ -51,7 +50,6 @@ function Recipegenpage(){
     <title>ChefAI</title>
     <meta property="og:title" content="ChefAI" />
 
-    {/* <Navbar8></Navbar8> */}
     <NavbarGuest></NavbarGuest>
 
     <img src="/images/spaghetti-with-vegetables-cooking-in-a-pan.png" alt="frying pan" className="image"></img>
