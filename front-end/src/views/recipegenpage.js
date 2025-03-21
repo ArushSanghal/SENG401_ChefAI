@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from 'react'
 
 import './recipegenpage.css'
 import '../components/food-form.css'
-// import '../components/navbar8'
 import NavbarGuest from '../components/navbarGuest';
 
 function Recipegenpage(){
