@@ -5,35 +5,35 @@ import PropTypes from 'prop-types'
 import './navbar8.css'
 import { Link } from 'react-router-dom/cjs/react-router-dom'
 
-const Navbar8 = (props) => {
+const NavbarGuest = (props) => {
   const [link5DropdownVisible, setLink5DropdownVisible] = useState(false)
   const [link5AccordionOpen, setLink5AccordionOpen] = useState(false)
 
-  const handleSignOut = async () => {
-    const token = localStorage.getItem("access_token");
-    if (!token) {
-        history.push("/");
-        return;
-    }
+//   const handleSignOut = async () => {
+//     const token = localStorage.getItem("access_token");
+//     if (!token) {
+//         history.push("/");
+//         return;
+//     }
 
-    try {
-        const response = await fetch("http://127.0.0.1:8000/logout/", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-            },
-        });
-        if (response.ok) {
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("refresh_token");
-            history.push("/");
-        } else {
-            alert("Error logging out.");
-        }
-    } catch (error) {
-        console.error("Error:", error);
-    }
-};
+//     try {
+//         const response = await fetch("http://127.0.0.1:8000/logout/", {
+//             method: "POST",
+//             headers: {
+//                 "Authorization": `Bearer ${token}`,
+//             },
+//         });
+//         if (response.ok) {
+//             localStorage.removeItem("access_token");
+//             localStorage.removeItem("refresh_token");
+//             history.push("/");
+//         } else {
+//             alert("Error logging out.");
+//         }
+//     } catch (error) {
+//         console.error("Error:", error);
+//     }
+// };
   return (
     <header className="navbar8-container1">
       <header data-thq="thq-navbar" className="navbar8-navbar-interactive">
@@ -56,7 +56,7 @@ const Navbar8 = (props) => {
                 </Fragment>
               )}
             </Link>
-            <Link to={props.link2Url} className="thq-link thq-body-small">
+            {/* <Link to={props.link2Url} className="thq-link thq-body-small">
               {props.link2 ?? (
                 <Fragment>
                   <span className="navbar8-text26">/history</span>
@@ -73,17 +73,17 @@ const Navbar8 = (props) => {
                   <span className="navbar8-text20">/saved</span>
                 </Fragment>
               )}
-            </Link>
+            </Link> */}
           </nav>
 
 
           <div className="navbar8-buttons1">
             <Link to = "/">
-            <button onClick={handleSignOut}className="navbar8-action11 thq-button-animated thq-button-filled">
+            <button className="navbar8-action11 thq-button-animated thq-button-filled">
               <span>
                 {props.action1 ?? (
                   <Fragment>
-                    <span className="navbar8-text25">Logout</span>
+                    <span className="navbar8-text25">Login</span>
                   </Fragment>
                 )}
               </span>
@@ -181,12 +181,12 @@ const Navbar8 = (props) => {
   )
 }
 
-Navbar8.defaultProps = {
+NavbarGuest.defaultProps = {
   logoSrc: '/images/chefai_logo.png',
   logoAlt: 'ChefAI Logo',
 
   link2Url: '/history',
-  link1Url: '/user-profile',
+  link1Url: '/recipe',
   link3Url: '/saved-recipes',
 
   link1: undefined,
@@ -196,7 +196,7 @@ Navbar8.defaultProps = {
   action1: undefined
 }
 
-Navbar8.propTypes = {
+NavbarGuest.propTypes = {
   logoSrc: PropTypes.string,
   logoAlt: PropTypes.string,
 
@@ -211,4 +211,4 @@ Navbar8.propTypes = {
 
 }
 
-export default Navbar8
+export default NavbarGuest
