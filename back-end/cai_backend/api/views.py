@@ -39,9 +39,9 @@ def generate_recipe(request):
             )
 
             # Could also index inside the parser object
-            parser = RecipeParser(recipe_json)
-            parser.to_file("saved_recipe.json")
-            parser.update_data(recipe_json["recipe"])
+            parser = RecipeParser(recipe_json["recipe"])
+            # parser.to_file("saved_recipe.json")
+            # parser.update_data(recipe_json)
 
         except (json.JSONDecodeError, TypeError) as je:
             return JsonResponse({"error": f"failed to load JSON {je}"}, status=400)
@@ -54,7 +54,6 @@ def generate_recipe(request):
         auth_header = request.headers.get("Authorization")
         if auth_header and auth_header.startswith("Bearer "):
             token = auth_header.split(" ")[1]
-            print(token)
             if token:
                 save_manager = SaveManager.from_token(token)
                 recipe = parser.to_model()
@@ -173,15 +172,10 @@ def save_button(request):
     if request.method == "POST":
         try:
             token = request.headers.get("Authorization").split(" ")[1]
-
-            # Once you check if history is saving, instead of parsing from file
-            # Pull latest recipe from user history
-            parser = RecipeParser.from_file("saved_recipe.json")
-            recipe = parser.to_model() # type: ignore
             save_manager = SaveManager.from_token(token)
-            recipe = save_manager.save_recipe(recipe)
+            response = save_manager.save_last_viewed_recipe()
 
-            return JsonResponse({"message": "Recipe saved successfully"}, status=200)
+            return response
 
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)

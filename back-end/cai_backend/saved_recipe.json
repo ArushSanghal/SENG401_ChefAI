@@ -1,107 +1,59 @@
 {
     "recipe": {
-        "recipe_name": "Plankton P\u00e2t\u00e9",
-        "skill_level": "Advanced",
-        "time": "90 minutes",
-        "dietary_restrictions": "Beef-Free",
+        "recipe_name": "Simple Tomato Vegetable Soup",
+        "skill_level": "Beginner",
+        "time": "30 minutes",
+        "dietary_restrictions": "Vegan, Pescatarian",
         "ingredients": [
             {
-                "name": "Plankton (freshly harvested)",
+                "name": "Tomatoes",
+                "amount": "4",
+                "unit": "medium"
+            },
+            {
+                "name": "Onion",
                 "amount": "1",
-                "unit": "cup"
+                "unit": "medium"
             },
             {
-                "name": "Shallots (finely minced)",
-                "amount": "2",
-                "unit": null
-            },
-            {
-                "name": "Garlic (minced)",
-                "amount": "2",
-                "unit": "cloves"
-            },
-            {
-                "name": "Butter (unsalted)",
-                "amount": "2",
-                "unit": "tablespoons"
-            },
-            {
-                "name": "Heavy cream",
-                "amount": "1/4",
-                "unit": "cup"
-            },
-            {
-                "name": "Lemon juice",
-                "amount": "1",
-                "unit": "tablespoon"
-            },
-            {
-                "name": "Sea salt",
-                "amount": "to taste",
-                "unit": null
-            },
-            {
-                "name": "White pepper",
-                "amount": "to taste",
-                "unit": null
-            },
-            {
-                "name": "Chives (chopped, for garnish)",
-                "amount": "2",
-                "unit": "tablespoons"
-            },
-            {
-                "name": "Crusty bread or crackers",
-                "amount": "as needed",
-                "unit": null
+                "name": "Vegetable Soup",
+                "amount": "400",
+                "unit": "ml"
             }
         ],
         "steps": [
             {
                 "step": 1,
-                "instruction": "Carefully rinse the plankton in a fine-mesh sieve to remove any impurities."
+                "instruction": "Dice the onion and tomatoes."
             },
             {
                 "step": 2,
-                "instruction": "In a small saucepan, melt the butter over medium heat. Saut\u00e9 the shallots and garlic until softened, about 5 minutes. Be careful not to brown them."
+                "instruction": "Saut\u00e9 the diced onion in a pot with a little oil until softened."
             },
             {
                 "step": 3,
-                "instruction": "Add the rinsed plankton to the saucepan and cook for 2-3 minutes, stirring constantly, until the plankton is just heated through."
+                "instruction": "Add the diced tomatoes and vegetable soup to the pot."
             },
             {
                 "step": 4,
-                "instruction": "Reduce the heat to low and stir in the heavy cream and lemon juice. Season with sea salt and white pepper to taste. Simmer for 5 minutes, allowing the flavors to meld."
+                "instruction": "Bring the soup to a boil, then reduce heat and simmer for 15-20 minutes."
             },
             {
                 "step": 5,
-                "instruction": "Remove the saucepan from the heat and let the mixture cool slightly. Transfer the mixture to a food processor or blender and blend until smooth. For a coarser p\u00e2t\u00e9, pulse the mixture instead of blending continuously."
-            },
-            {
-                "step": 6,
-                "instruction": "Taste and adjust seasonings as needed. Transfer the p\u00e2t\u00e9 to a serving dish, cover, and refrigerate for at least 30 minutes to allow it to firm up."
-            },
-            {
-                "step": 7,
-                "instruction": "Garnish with chopped chives before serving. Serve chilled with crusty bread or crackers."
+                "instruction": "Season with salt and pepper to taste."
             }
         ],
-        "prep_time": "20 minutes",
+        "prep_time": "10 minutes",
         "cook_time": "20 minutes",
-        "servings": "4-6",
+        "servings": "2",
         "tips": [
-            "For a richer flavor, use clarified butter instead of regular butter.",
-            "If fresh plankton is unavailable, you can substitute with high-quality dried plankton. Rehydrate the dried plankton in warm water before using.",
-            "For a vegan option, substitute the heavy cream with coconut cream and the butter with a vegan butter alternative."
+            "For a richer flavor, use vegetable broth instead of water.",
+            "Add other vegetables like carrots, celery, or zucchini for added nutrients."
         ],
         "substitutions": [
             {
-                "ingredient": "Heavy cream",
-                "substitute": "Coconut cream"
-            },
-            {
-                "ingredient": "Butter",
-                "substitute": "Vegan butter"
+                "ingredient": "Vegetable Soup",
+                "substitute": "Vegetable Broth"
             }
         ]
     }

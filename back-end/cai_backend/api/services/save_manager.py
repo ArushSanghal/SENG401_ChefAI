@@ -59,11 +59,18 @@ class SaveManager:
                         "instructions": recipe.instructions,
                     }
                 json_recipes.append(recipe_data)
-                if not json_recipes:
-                    return JsonResponse({"error:" "Failed to create saved recipe json response"})
-                return json_recipes
+            if not json_recipes:
+                return JsonResponse({"error:" "Failed to create saved recipe json response"})
+            return json_recipes
         else:
             return JsonResponse({"error:" "Saved history is empty"})
+
+    def save_last_viewed_recipe(self):
+        if self.user.last_used_recipes.exists():
+            self.user.saved_recipes.add(self.user.last_used_recipes.order_by('-id').first())
+            return JsonResponse({"message": "Successfully added recipe to favourites."}, status=200)
+        else:
+            return JsonResponse({"error": "Failed to find any recipes in history."}, status=400)
 
     def view_recipes(self, num_rows: int = 5):
         last_recipes = self.user.last_used_recipes.all().order_by('-id')[:num_rows]
