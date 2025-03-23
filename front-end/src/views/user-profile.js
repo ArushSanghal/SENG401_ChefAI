@@ -12,6 +12,7 @@ const UserProfile = () => {
     const [loading, setLoading] = useState(null);
     const [increment, setIncrement] = useState(0);
     const [save, setSave] = useState(false);
+    const [showUserInfo, setShowUserInfo] = useState(false);
     const [savedRecipes, setSavedRecipes] = useState(false);
     const [viewRecipes, setViewRecipes] = useState(false);
     const history = useHistory();
@@ -125,6 +126,7 @@ const UserProfile = () => {
             setRecipe(json);
             setLoading(false);
             setSave(true);
+            setShowButton(true);
         });
 
     }
@@ -136,15 +138,6 @@ const UserProfile = () => {
         e.preventDefault();
 
         const token = localStorage.getItem("access_token");
-            if (!token) {
-                history.push("/");
-                return;
-            }
-
-        const useremail = userData.email
-        const username = userData.username
-
-        console.log(useremail)
         console.log(token)
 
         fetch("http://127.0.0.1:8000/save_button/", {
@@ -152,17 +145,13 @@ const UserProfile = () => {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`,
-            },    
-            body: JSON.stringify({
-                useremail: useremail,
-                username: username,
-        }),  
+            }
         })
         // Converting to JSON
         .then(response => response.json())
         // Displaying results to console
         .then(json => {
-            console.log("Username and Email has been sent to the backend");
+            console.log("Token sent to the backend.");
             console.log(json);
         })
         .then(setShowButton(false), alert("Recipe Saved Succesfully"));
@@ -174,31 +163,41 @@ const UserProfile = () => {
             <img src="/images/spaghetti-with-vegetables-cooking-in-a-pan.png" alt="frying pan" className="image"></img>
             <div className="thq-flex-row thq-flex-column">
                 <h1>Welcome, {userData.first_name}!</h1>
-                <p><strong>Email:</strong> {userData.email}</p>
-                <p><strong>Username:</strong> {userData.username}</p>
-
-                <label>Skill Level:</label>
-                <select value={skillLevel} onChange={(e) => setSkillLevel(e.target.value)}>
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Advanced">Advanced</option>
-                </select>
-                <div>
-                </div>
-                <label>Dietary Restrictions:</label>
-                <div className="thq-section-padding-smaller">
-                </div>
-                <input 
-                    className="thq-input"
-                    type="text"
-                    value={dietaryRestrictions}
-                    onChange={(e) => setDietaryRestrictions(e.target.value)}
-                    placeholder="Separated by commas"
-                />
-                <div className="thq-section-padding-smaller">
-                </div>
-
-                <button className="thq-button-animate thq-button-filled" onClick={handleSave} style={{ border: "1px solid #ddd" }}>Save Changes</button>
+                <button
+                    className="thq-button-animate thq-button-outline"
+                    onClick={() => setShowUserInfo(prev => !prev)}
+                >
+                    {showUserInfo ? 'Close Menu': 'Edit Preferences'}
+                </button>
+                {showUserInfo && (
+                    <>
+                        <p><strong>Email:</strong> {userData.email}</p>
+                        <p><strong>Username:</strong> {userData.username}</p>
+        
+                        <label>Skill Level:</label>
+                        <select value={skillLevel} onChange={(e) => setSkillLevel(e.target.value)}>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                        <div>
+                        </div>
+                        <label>Dietary Restrictions:</label>
+                        <div className="thq-section-padding-smaller">
+                        </div>
+                        <input 
+                            className="thq-input"
+                            type="text"
+                            value={dietaryRestrictions}
+                            onChange={(e) => setDietaryRestrictions(e.target.value)}
+                            placeholder="Separated by commas"
+                        />
+                        <div className="thq-section-padding-smaller">
+                        </div>
+        
+                        <button className="thq-button-animate thq-button-filled" onClick={handleSave} style={{ border: "1px solid #ddd" }}>Save Changes</button>
+                    </>
+                )}
             </div>
 
             {loading && <p>Loading...</p>}
